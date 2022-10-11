@@ -8,8 +8,8 @@
     int aux = 0;
 %}
 
-INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
-VALIDESCAPES ()
+INTLIT      ([1-9]([0-9]|"_")*[0-9])|[1-9]
+VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
 
 %X COMMENT
 %X STRING
@@ -23,10 +23,11 @@ VALIDESCAPES ()
 
 
 
-"\""                        {BEGIN STRING;col += yyleng;}
-<STRING>(\\.|[^"\\])*\" {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
-<STRING><<EOF>>             {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
-<STRING>"\n"                {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;line++;}
+"\""                                    {BEGIN STRING;col += yyleng;}
+<STRING>({VALIDESCAPES}|[^"\\])*"\""    {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
+<STRING><<EOF>>                         {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
+<STRING>.*(\\.)                           {printf("Line <%d>, col <%d>: invalid escape sequence (%s)\n", line, col, yytext);BEGIN 0;col += yyleng;}
+<STRING>"\n"                            {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;line++;}
 
 ("true"|"false")            {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;}
 "&&"                        {if(aux == 0) printf("AND\n");col += yyleng;}
@@ -71,9 +72,9 @@ VALIDESCAPES ()
 "String"                    {if(aux == 0) printf("STRING\n");col += yyleng;}
 "void"                      {if(aux == 0) printf("VOID\n");col += yyleng;}
 "while"                     {if(aux == 0) printf("WHILE\n");col += yyleng;}
-{INTLIT}                                                {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
-{INTLIT}*"."?{INTLIT}*((e|E)("+"|"-")?{INTLIT}+)*       {if(aux == 0) printf("REALLIT\n");col += yyleng;}    
-([a-z]|[A-Z]|"$"|"_")+                                  {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
+{INTLIT}|0                                               {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
+{INTLIT}*"."?({INTLIT}|0)*((e|E)("+"|"-")?({INTLIT}|0)+)*       {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
+([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*               {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
 ("++"|"--"|"null"|"Integer"|"System")                   {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
 
 
