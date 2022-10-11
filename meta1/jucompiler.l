@@ -20,6 +20,9 @@ INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
 <COMMENT><<EOF>>            {printf("Line <%d>, col <%d>: unterminated comment\n", line, col);BEGIN 0;col += yyleng;}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
+"//".*"\n"                  {printf("COM(%s)\n", yytext);col += yyleng;line++;}
+"//".*                      {;}
+
 "\""                        {BEGIN STRING;col += yyleng;}
 <STRING>(.)*"\""            {if(aux == 0) printf("STRLIT\n");BEGIN 0;col += yyleng;}
 <STRING><<EOF>>             {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
@@ -74,10 +77,11 @@ INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
 ("++"|"--"|"null"|"Integer"|"System")                   {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
 
 
-"//"(.)*"\n"                {printf("COM\n");col += yyleng;}
 
-"\n"                   {line++;col = 1;}
+
+
 (" "|"\t"|"\r"|"\f")   {;col += yyleng;}
+"\n"                   {line++;col = 1;}
 (\\.)                  {printf("Line <%d>, col <%d>: invalid escape sequence (%s)\n", line, col, yytext);col += yyleng;}     
 .                      {printf("Line <%d>, col <%d>: illegal character (<%s>)\n", line, col, yytext);col += yyleng;}
 
