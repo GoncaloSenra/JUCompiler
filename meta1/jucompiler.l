@@ -20,15 +20,14 @@ INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
 <COMMENT><<EOF>>            {printf("Line <%d>, col <%d>: unterminated comment\n", line, col);BEGIN 0;col += yyleng;}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
-"//".*"\n"                  {printf("COM(%s)\n", yytext);col += yyleng;line++;}
-"//".*                      {;}
+
 
 "\""                        {BEGIN STRING;col += yyleng;}
 <STRING>(.)*"\""            {if(aux == 0) printf("STRLIT\n");BEGIN 0;col += yyleng;}
 <STRING><<EOF>>             {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
 <STRING>"\n"                {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;line++;}
 
-("true"|"false")            {if(aux == 0) printf("BOOLLIT\n");col += yyleng;}
+("true"|"false")            {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;}
 "&&"                        {if(aux == 0) printf("AND\n");col += yyleng;}
 "="                         {if(aux == 0) printf("ASSIGN\n");col += yyleng;}
 "*"                         {if(aux == 0) printf("STAR\n");col += yyleng;}
@@ -77,10 +76,12 @@ INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
 ("++"|"--"|"null"|"Integer"|"System")                   {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
 
 
+(" "|"\t"|"\r"|"\f"|"\r\n")   {;col += yyleng;}
+
+"//".*"\n"                  {col += yyleng;line++;}
+"//".*                      {;}
 
 
-
-(" "|"\t"|"\r"|"\f")   {;col += yyleng;}
 "\n"                   {line++;col = 1;}
 (\\.)                  {printf("Line <%d>, col <%d>: invalid escape sequence (%s)\n", line, col, yytext);col += yyleng;}     
 .                      {printf("Line <%d>, col <%d>: illegal character (<%s>)\n", line, col, yytext);col += yyleng;}
@@ -97,6 +98,7 @@ int main(int argc, char * argv[])
         else if (strcmp(argv[1], "-e1") == 0)
             aux = 0;
     }
+    
 
     yylex();
     return 0;

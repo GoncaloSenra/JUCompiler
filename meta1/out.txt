@@ -1,7 +1,3 @@
 RESERVED(--)
-COM(// cenas  ** // coisas 
-)
 MOD
 MOD
-COM(//test
-)
