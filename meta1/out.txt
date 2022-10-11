@@ -1,3 +1,45 @@
-RESERVED(--)
-MOD
-MOD
+STRLIT("")
+STRLIT("\\")
+STRLIT("\"")
+STRLIT("This is a string")
+STRLIT("This is a ")
+PLUS
+STRLIT("two-line strin\g")
+CLASS
+ID(Small)
+Line <9>, col <437>: illegal character (#)
+PUBLIC
+STATIC
+VOID
+ID(main)
+LPAR
+STRING
+LSQ
+RSQ
+ID(args)
+RPAR
+LBRACE
+RBRACE
+Line <12>, col <1>: illegal character (#)
+STRLIT("Hello /\\\\**/ boyyyy")
+ID(vari)
+REALLIT
+ID(able)
+INTLIT(02)
+REALLIT
+\STRLIT("
+")
+Line <19>, col <4>: invalid escape sequence (\\)
+STRLIT("
+")
+ID(hey)
+Line <19>, col <12>: illegal character (\)
+STRLIT("\\")
+ID(asd)
+REALLIT
+ID(a)
+MINUS
+REALLIT
+REALLIT
+REALLIT
+Line <28>, col <80>: unterminated comment

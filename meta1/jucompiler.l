@@ -9,6 +9,7 @@
 %}
 
 INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
+VALIDESCAPES ()
 
 %X COMMENT
 %X STRING
@@ -23,7 +24,7 @@ INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
 
 
 "\""                        {BEGIN STRING;col += yyleng;}
-<STRING>(.)*"\""            {if(aux == 0) printf("STRLIT\n");BEGIN 0;col += yyleng;}
+<STRING>(\\.|[^"\\])*\" {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
 <STRING><<EOF>>             {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
 <STRING>"\n"                {printf("Line <%d>, col <%d>: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;line++;}
 
@@ -84,7 +85,7 @@ INTLIT      ([0-9]([0-9]|"_")*[0-9])|[0-9]
 
 "\n"                   {line++;col = 1;}
 (\\.)                  {printf("Line <%d>, col <%d>: invalid escape sequence (%s)\n", line, col, yytext);col += yyleng;}     
-.                      {printf("Line <%d>, col <%d>: illegal character (<%s>)\n", line, col, yytext);col += yyleng;}
+.                      {printf("Line <%d>, col <%d>: illegal character (%s)\n", line, col, yytext);col += yyleng;}
 
 %%
 
@@ -94,9 +95,9 @@ int main(int argc, char * argv[])
 {
     if (argc == 2) {
         if (strcmp(argv[1], "-l") == 0)
-            aux = 1;
-        else if (strcmp(argv[1], "-e1") == 0)
             aux = 0;
+        else if (strcmp(argv[1], "-e1") == 0)
+            aux = 1;
     }
     
 
