@@ -1,4 +1,19 @@
-Line 22, col 32: invalid escape sequence (\h)
-Line 22, col 29: unterminated string literal
-Line 28, col 31: invalid escape sequence (\d)
-Line 32, col 5: unterminated comment
+STRLIT("Esta e uma string valida")
+Line 2, col 1: unterminated string literal
+CLASS
+ID(Main)
+LBRACE
+Line 4, col 2: unterminated string literal
+PUBLIC
+STATIC
+INT
+ID(soma)
+LPAR
+INT
+ID(n)
+RPAR
+LBRACE
+Line 6, col 2: illegal character (?)
+Line 6, col 3: illegal character (#)
+Line 9, col 1: unterminated string literal
+Line 10, col 1: unterminated comment
