@@ -13,7 +13,7 @@ INTLIT4     ([0-9][0-9]*)|([0-9]("_"|[0-9])*[0-9])
 
 VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
 
-RESERVED_WORDS  ("++"|"--"|"null"|"Integer"|"System"|"break"|"byte"|"case"|"catch"|"char"|"const"|"enum"|"extends"|"final"|"finally"|"float"|"for"|"implements"|"import"|"instanceof"|"interface"|"long"|"native"|"new"|"protected"|"short"|"strictfp"|"super"|"this"|"throw"|"throws"|"transient"|"try"|"volatile")
+RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"synchronized"|"do"|"goto"|"private"|"++"|"--"|"null"|"Integer"|"System"|"break"|"byte"|"case"|"catch"|"char"|"const"|"enum"|"extends"|"final"|"finally"|"float"|"for"|"implements"|"import"|"instanceof"|"interface"|"long"|"native"|"new"|"protected"|"short"|"strictfp"|"super"|"this"|"throw"|"throws"|"transient"|"try"|"volatile")
 
 %X COMMENT
 %X STRING
@@ -21,16 +21,17 @@ RESERVED_WORDS  ("++"|"--"|"null"|"Integer"|"System"|"break"|"byte"|"case"|"catc
 %%
                           
 "/*"                        {BEGIN COMMENT;col += yyleng;}
-<COMMENT>.|"\n"             {;col += yyleng;}
+<COMMENT>"\n"               {line++;col =1;}
+<COMMENT>.                  {col += yyleng;}
 <COMMENT><<EOF>>            {printf("Line %d, col %d: unterminated comment\n", line, col);BEGIN 0;col += yyleng;}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
 
-"\""                                    {BEGIN STRING;col += yyleng;}
-<STRING>({VALIDESCAPES}|[^\\\r\n\"])*"\""    {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
-<STRING>({VALIDESCAPES}|[^\\\r\n\"])(\\)                           {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);BEGIN 0;col += yyleng;}
-<STRING>"\n"                            {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col = 1;line++;}
-<STRING><<EOF>>                         {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
+"\""                                                                    {BEGIN STRING;col += yyleng;}
+<STRING>({VALIDESCAPES}|[^\\\r\n\"])*(\\)([^nfrt"\\\n\r])?                 {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);BEGIN 0;col += yyleng;}
+<STRING>({VALIDESCAPES}|[^\\\r\n\"])*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
+<STRING>("\n"|"\r"|"\r\n")                                   {printf("Line %d, col %d: unterminated string literal--\n", line, col);BEGIN 0;col = 1;line++;}
+<STRING><<EOF>>                                                         {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
 
 
 ("true"|"false")            {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;}
