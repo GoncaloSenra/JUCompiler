@@ -1039,7 +1039,7 @@ YY_RULE_SETUP
 case 8:
 YY_RULE_SETUP
 #line 38 "jucompiler.l"
-{if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;}
+{if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */

@@ -34,7 +34,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 "\""                                                                    {auxline = line; auxcol= col;BEGIN STRING;col += yyleng;}
 <STRING>({VALIDESCAPES}|[^\\\r\n\"])*(\\)([^nfrt"\\\n\r])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
 <STRING>({VALIDESCAPES}|[^\\\r\n\"])*(\\)                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);BEGIN STRING2;}
-<STRING>({VALIDESCAPES}|[^\\\r\n\"])*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;}
+<STRING>({VALIDESCAPES}|[^\\\r\n\"])*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;}
 <STRING>({VALIDESCAPES}|[^\\\r\n\"])*("\n"|"\r"|"\r\n")                                   {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
 <STRING><<EOF>>                                                         {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
