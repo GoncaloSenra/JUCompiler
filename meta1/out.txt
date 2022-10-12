@@ -1,31 +1,36 @@
-RESERVED(break)
-RESERVED(byte)
-RESERVED(case)
-RESERVED(catch)
-RESERVED(char)
-RESERVED(const)
-RESERVED(enum)
-RESERVED(extends)
-RESERVED(final)
-RESERVED(finally)
-RESERVED(float)
-RESERVED(for)
-RESERVED(implements)
-RESERVED(import)
-RESERVED(instanceof)
-RESERVED(interface)
-RESERVED(long)
-RESERVED(native)
-RESERVED(new)
-RESERVED(protected)
-RESERVED(short)
-RESERVED(strictfp)
-RESERVED(super)
-RESERVED(this)
-RESERVED(throw)
-RESERVED(throws)
-RESERVED(transient)
-RESERVED(try)
-RESERVED(volatile)
-RESERVED(Integer)
-RESERVED(System)
+CLASS
+ID(Compiladores2020)
+DIV
+INTLIT(2019)
+STAR
+STAR
+DIV
+WHILE
+ID(e)
+MINUS
+INTLIT(1)
+RESERVED(++)
+PRINT
+LPAR
+ Nao deu em nada \STRLIT("
+")
+Line 5, col 22: invalid escape sequence (\\)
+STRLIT(")
+")
+ID(no)
+ID(token)
+DOTLENGTH
+Line 5, col 47: invalid escape sequence (\n)
+Line 5, col 50: invalid escape sequence (\f)
+Line 5, col 53: invalid escape sequence (\	)
+REALLIT(0.0e0)
+REALLIT(.0e0)
+REALLIT(.0)
+REALLIT(123.123e123)
+ID(e)
+RESERVED(--)
+INTLIT(123)
+ARROW
+ID(reallit)
+Line 8, col 29: illegal character (?)
+STRLIT(" \\\\\n 	")
