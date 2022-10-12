@@ -8,7 +8,11 @@
     int aux = 0;
 %}
 
-INTLIT      ([1-9]([0-9]|"_")*[0-9])|[1-9]
+INTLIT3     ([1-9][0-9]*)|([1-9]("_"|[0-9])*[0-9])|0
+INTLIT4     ([0-9][0-9]*)|([0-9]("_"|[0-9])*[0-9])
+
+INTLIT2      ([1-9]([0-9]|"_")*[0-9])|[1-9]
+INTLIT      ([0-9]([0-9]|"_")*[0-9])|[1-9]
 VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
 
 %X COMMENT
@@ -72,10 +76,10 @@ VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
 "String"                    {if(aux == 0) printf("STRING\n");col += yyleng;}
 "void"                      {if(aux == 0) printf("VOID\n");col += yyleng;}
 "while"                     {if(aux == 0) printf("WHILE\n");col += yyleng;}
-{INTLIT}|0                                               {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
-{INTLIT}*"."?({INTLIT}|0)*((e|E)("+"|"-")?({INTLIT}|0)+)*       {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
-([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*               {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
-("++"|"--"|"null"|"Integer"|"System")                   {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
+{INTLIT3}                                                       {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
+{INTLIT3}?(("."{INTLIT4}*)?((e|E)("+"|"-")?{INTLIT4}+)?)     {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
+([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*                   {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
+("++"|"--"|"null"|"Integer"|"System")                               {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
 
 
 (" "|"\t"|"\r"|"\f"|"\r\n")   {;col += yyleng;}
