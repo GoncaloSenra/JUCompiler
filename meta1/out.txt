@@ -1,36 +1,117 @@
+PUBLIC
 CLASS
-ID(Compiladores2020)
-DIV
-INTLIT(2019)
-STAR
-STAR
-DIV
-WHILE
-ID(e)
-MINUS
-INTLIT(1)
-RESERVED(++)
+ID(SimpleClass)
+LBRACE
+PUBLIC
+STATIC
+VOID
+ID(main)
+LPAR
+STRING
+LSQ
+RSQ
+ID(args)
+RPAR
+LBRACE
+INT
+ID(n)
+ASSIGN
+INTLIT(0)
+SEMICOLON
+BOOL
+ID(print)
+ASSIGN
+BOOLLIT(true)
+SEMICOLON
+BOOL
+ID(empty)
+ASSIGN
+BOOLLIT(true)
+SEMICOLON
+STRING
+LSQ
+RSQ
+ID(albums)
+ASSIGN
+LBRACE
+STRLIT("Cowboys From Hell")
+COMMA
+STRLIT("Vulgar Display Of Power")
+COMMA
+STRLIT("Far Beyond Driven")
+COMMA
+STRLIT("The Great Southern Trendkill")
+COMMA
+STRLIT("Reinventing The Steel")
+RBRACE
+SEMICOLON
 PRINT
 LPAR
- Nao deu em nada \STRLIT("
-")
-Line 5, col 22: invalid escape sequence (\\)
-STRLIT(")
-")
-ID(no)
-ID(token)
+STRLIT("Albums:\n")
+RPAR
+SEMICOLON
+RESERVED(for)
+LPAR
+INT
+ID(i)
+ASSIGN
+INTLIT(0)
+SEMICOLON
+ID(i)
+LT
+ID(albums)
 DOTLENGTH
-Line 5, col 47: invalid escape sequence (\n)
-Line 5, col 50: invalid escape sequence (\f)
-Line 5, col 53: invalid escape sequence (\	)
-REALLIT(0.0e0)
-REALLIT(.0e0)
-REALLIT(.0)
-REALLIT(123.123e123)
-ID(e)
-RESERVED(--)
-INTLIT(123)
-ARROW
-ID(reallit)
-Line 8, col 29: illegal character (?)
-STRLIT(" \\\\\n 	")
+SEMICOLON
+ID(i)
+RESERVED(++)
+RPAR
+LBRACE
+ID(n)
+RESERVED(++)
+SEMICOLON
+PRINT
+LPAR
+ID(albums)
+LSQ
+ID(i)
+RSQ
+PLUS
+STRLIT(": ")
+PLUS
+ID(n)
+PLUS
+STRLIT("\n")
+RPAR
+SEMICOLON
+RBRACE
+IF
+LPAR
+ID(n)
+GT
+INTLIT(0)
+RPAR
+LBRACE
+ID(empty)
+ASSIGN
+BOOLLIT(false)
+SEMICOLON
+RBRACE
+IF
+LPAR
+ID(print)
+AND
+NOT
+ID(empty)
+RPAR
+LBRACE
+PRINT
+ID(ln)
+LPAR
+STRLIT("Total albums: ")
+PLUS
+ID(n)
+RPAR
+SEMICOLON
+RBRACE
+RBRACE
+RBRACE

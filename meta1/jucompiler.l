@@ -26,12 +26,12 @@ RESERVED_WORDS  ("++"|"--"|"null"|"Integer"|"System"|"break"|"byte"|"case"|"catc
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
 
-
 "\""                                    {BEGIN STRING;col += yyleng;}
-<STRING>({VALIDESCAPES}|[^"\\])*"\""    {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
-<STRING><<EOF>>                         {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
-<STRING>.*(\\.)                           {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);BEGIN 0;col += yyleng;}
+<STRING>({VALIDESCAPES}|[^\\\r\n\"])*"\""    {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
+<STRING>({VALIDESCAPES}|[^\\\r\n\"])(\\)                           {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);BEGIN 0;col += yyleng;}
 <STRING>"\n"                            {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col = 1;line++;}
+<STRING><<EOF>>                         {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
+
 
 ("true"|"false")            {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;}
 "&&"                        {if(aux == 0) printf("AND\n");col += yyleng;}
@@ -96,7 +96,7 @@ RESERVED_WORDS  ("++"|"--"|"null"|"Integer"|"System"|"break"|"byte"|"case"|"catc
 %%
 
 
-
+    
 int main(int argc, char * argv[])
 {
     if (argc == 2) {
