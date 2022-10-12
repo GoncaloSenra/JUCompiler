@@ -11,9 +11,9 @@
 INTLIT3     ([1-9][0-9]*)|([1-9]("_"|[0-9])*[0-9])|0
 INTLIT4     ([0-9][0-9]*)|([0-9]("_"|[0-9])*[0-9])
 
-INTLIT2      ([1-9]([0-9]|"_")*[0-9])|[1-9]
-INTLIT      ([0-9]([0-9]|"_")*[0-9])|[1-9]
 VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
+
+RESERVED_WORDS  ("++"|"--"|"null"|"Integer"|"System"|"break"|"byte"|"case"|"catch"|"char"|"const"|"enum"|"extends"|"final"|"finally"|"float"|"for"|"implements"|"import"|"instanceof"|"interface"|"long"|"native"|"new"|"protected"|"short"|"strictfp"|"super"|"this"|"throw"|"throws"|"transient"|"try"|"volatile")
 
 %X COMMENT
 %X STRING
@@ -76,10 +76,11 @@ VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
 "String"                    {if(aux == 0) printf("STRING\n");col += yyleng;}
 "void"                      {if(aux == 0) printf("VOID\n");col += yyleng;}
 "while"                     {if(aux == 0) printf("WHILE\n");col += yyleng;}
-{INTLIT3}                                                       {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
-{INTLIT3}?(("."{INTLIT4}*)?((e|E)("+"|"-")?{INTLIT4}+)?)     {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
+{INTLIT3}                                                           {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
+{INTLIT3}?(("."{INTLIT4}*)?((e|E)("+"|"-")?{INTLIT4}+)?)             {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
+{RESERVED_WORDS}                                                    {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
 ([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*                   {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
-("++"|"--"|"null"|"Integer"|"System")                               {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
+
 
 
 (" "|"\t"|"\r"|"\f"|"\r\n")   {;col += yyleng;}
