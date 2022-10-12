@@ -6,6 +6,9 @@
     int line = 1;
     int col = 1;
     int aux = 0;
+
+    int auxline=0;
+    int auxcol=0;
 %}
 
 INTLIT3     ([1-9][0-9]*)|([1-9]("_"|[0-9])*[0-9])|0
@@ -20,17 +23,17 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 
 %%
                           
-"/*"                        {BEGIN COMMENT;col += yyleng;}
+"/*"                        {auxline = line; auxcol= col;BEGIN COMMENT;col += yyleng;}
 <COMMENT>"\n"               {line++;col =1;}
 <COMMENT>.                  {col += yyleng;}
-<COMMENT><<EOF>>            {printf("Line %d, col %d: unterminated comment\n", line, col);BEGIN 0;col += yyleng;}
+<COMMENT><<EOF>>            {printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);BEGIN 0;col += yyleng;}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
 
 "\""                                                                    {BEGIN STRING;col += yyleng;}
 <STRING>({VALIDESCAPES}|[^\\\r\n\"])*(\\)([^nfrt"\\\n\r])?                 {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);BEGIN 0;col += yyleng;}
 <STRING>({VALIDESCAPES}|[^\\\r\n\"])*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);BEGIN 0;col += yyleng;}
-<STRING>("\n"|"\r"|"\r\n")                                   {printf("Line %d, col %d: unterminated string literal--\n", line, col);BEGIN 0;col = 1;line++;}
+<STRING>("\n"|"\r"|"\r\n")                                   {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col = 1;line++;}
 <STRING><<EOF>>                                                         {printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;col += yyleng;}
 
 
