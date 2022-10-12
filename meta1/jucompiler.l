@@ -103,7 +103,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 
 
 ("\n"|"\r\n"|"\r")          {line++;col = 1;}
-(\\(.)?)               {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);col += yyleng;}     
+(\\(.))               {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);col += yyleng;}     
 .                      {printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext);col += yyleng;}
 
 %%
