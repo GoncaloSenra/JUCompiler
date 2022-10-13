@@ -19,8 +19,10 @@ VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
 RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"synchronized"|"do"|"goto"|"private"|"++"|"--"|"null"|"Integer"|"System"|"break"|"byte"|"case"|"catch"|"char"|"const"|"enum"|"extends"|"final"|"finally"|"float"|"for"|"implements"|"import"|"instanceof"|"interface"|"long"|"native"|"new"|"protected"|"short"|"strictfp"|"super"|"this"|"throw"|"throws"|"transient"|"try"|"volatile")
 
 %X COMMENT
+%X COMMENT2
 %X STRING
 %X STRING2
+
 
 %%
                           
@@ -30,6 +32,9 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 <COMMENT><<EOF>>            {col += yyleng;printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);BEGIN 0;}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
+"//"                                                        {BEGIN COMMENT2;col += yyleng;}
+<COMMENT2>[^\n\r]*("\n"|"\r"|"\r\n")          {;col = 1;line++;BEGIN 0;}
+<COMMENT2>[^\n\r]*                            {;}
 
 "\""                                                                    {auxline = line; auxcol= col;BEGIN STRING;col += yyleng;}
 <STRING>({VALIDESCAPES}|[^\\\r\n\"])*(\\)([^nfrt"\\\n\r])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
@@ -100,12 +105,8 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 
 (" "|"\t"|"\f")   {;col += yyleng;}
 
-"//".*"\n"                  {col = 1;line++;}
-"//".*                      {;}
-
 
 ("\n"|"\r\n"|"\r")          {line++;col = 1;}
-(\\)([^nfrt"\\\n\r])               {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, &yytext[yyleng-2]);col += yyleng;}     
 .                      {printf("Line %d, col %d: illegal character (%s)\n", line, col, &yytext[yyleng-1]);col += yyleng;}
 
 %%
