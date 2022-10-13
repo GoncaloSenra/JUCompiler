@@ -29,7 +29,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 %%
                           
 "/*"                        {auxline = line; auxcol= col;BEGIN COMMENT;col += yyleng;}
-<COMMENT>"\n"               {line++;col =1;}
+<COMMENT>"\n"|"\r"|"\r\n"   {line++;col =1;}
 <COMMENT>.                  {col += yyleng;}
 <COMMENT><<EOF>>            {col += yyleng;printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);BEGIN 0;}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
