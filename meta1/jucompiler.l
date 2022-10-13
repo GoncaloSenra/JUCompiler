@@ -12,7 +12,7 @@
 %}
 
 INTLIT3     ([1-9][0-9]*)|([1-9]("_"|[0-9])*[0-9])|0
-INTLIT4     ([0-9][0-9]*)|([0-9]("_"|[0-9])*[0-9])
+INTLIT4     ([0-9][0-9]*)|([0-9]("_"|[0-9])*[0-9])|0
 
 VALIDESCAPES ("\\"("n"|"r"|"t"|"f"|"\""|"\\"))
 
@@ -90,11 +90,12 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 "void"                      {if(aux == 0) printf("VOID\n");col += yyleng;}
 "while"                     {if(aux == 0) printf("WHILE\n");col += yyleng;}
 {INTLIT3}                                                           {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
-{INTLIT3}(("."{INTLIT4}*)?((e|E)("+"|"-")?{INTLIT4}+)?)|{INTLIT3}?(("."{INTLIT4}+)((e|E)("+"|"-")?{INTLIT4}+)?)            {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
+{INTLIT4}((e|E)("+"|"-")?{INTLIT4}+)|{INTLIT4}(("."{INTLIT4}?)((e|E)("+"|"-")?{INTLIT4}+)?)|{INTLIT4}?(("."{INTLIT4})((e|E)("+"|"-")?{INTLIT4}+)?)            {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
+
+
+
 {RESERVED_WORDS}                                                    {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
 ([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*                   {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
-
-
 
 (" "|"\t"|"\f")   {;col += yyleng;}
 
