@@ -44,7 +44,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 <STRING2>(\\)                                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);}
 <STRING2>"\""                                {col += yyleng; BEGIN 0;}
 <STRING2>({VALIDESCAPES}|[^\\\r\n\"])*        {col += yyleng;}
-<STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", line, col);BEGIN 0;}
+<STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
 
 ("true"|"false")            {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;}
@@ -105,8 +105,8 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 
 
 ("\n"|"\r\n"|"\r")          {line++;col = 1;}
-(\\(.))               {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, yytext);col += yyleng;}     
-.                      {printf("Line %d, col %d: illegal character (%s)\n", line, col, yytext);col += yyleng;}
+(\\)([^nfrt"\\\n\r])               {printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col, &yytext[yyleng-2]);col += yyleng;}     
+.                      {printf("Line %d, col %d: illegal character (%s)\n", line, col, &yytext[yyleng-1]);col += yyleng;}
 
 %%
 
