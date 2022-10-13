@@ -1,4 +1,6 @@
 %{
+    //Gonçalo Senra 2020213750
+    //Henrique Costa 2020214120
     #include <stdio.h>
     #include <string.h>
     #include <stdlib.h>
@@ -37,18 +39,18 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 <COMMENT2>[^\n\r]*                            {;}
 
 "\""                                                                    {auxline = line; auxcol= col;BEGIN STRING;col += yyleng;}
-<STRING>({VALIDESCAPES}|[^\\\r\n\"])*(\\)([^nfrt"\\\n\r])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
-<STRING>({VALIDESCAPES}|[^\\\r\n\"])*(\\)                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);BEGIN STRING2;}
-<STRING>({VALIDESCAPES}|[^\\\r\n\"])*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;}
-<STRING>({VALIDESCAPES}|[^\\\r\n\"])*("\n"|"\r"|"\r\n")                                   {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)([^nftr\\\r\n"])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);BEGIN STRING2;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*("\n"|"\r"|"\r\n")                                   {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
 <STRING>.                                                               {;}
 <STRING><<EOF>>                                                         {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
 <STRING2>("\n"|"\r"|"\r\n")                  {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
-<STRING2>(\\)([^nfrt"\\\n\r])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);}
+<STRING2>(\\)([^nftr\\\r\n"])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);}
 <STRING2>(\\)                                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);}
 <STRING2>"\""                                {col += yyleng; BEGIN 0;}
-<STRING2>({VALIDESCAPES}|[^\\\r\n\"])*        {col += yyleng;}
+<STRING2>([^\\\r\n\"]|{VALIDESCAPES})*        {col += yyleng;}
 <STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
 
