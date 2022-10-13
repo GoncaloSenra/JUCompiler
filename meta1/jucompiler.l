@@ -34,15 +34,15 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 <COMMENT><<EOF>>            {col += yyleng;printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);BEGIN 0;}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
-"//"                                                        {BEGIN COMMENT2;col += yyleng;}
+"//"                                          {BEGIN COMMENT2;col += yyleng;}
 <COMMENT2>[^\n\r]*("\n"|"\r"|"\r\n")          {;col = 1;line++;BEGIN 0;}
 <COMMENT2>[^\n\r]*                            {;}
 
 "\""                                                                    {auxline = line; auxcol= col;BEGIN STRING;col += yyleng;}
-<STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)([^nftr\\\r\n"])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
-<STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);BEGIN STRING2;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)([^nftr\\\r\n"])               {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)                               {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);BEGIN STRING2;}
 <STRING>([^\\\r\n\"]|{VALIDESCAPES})*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;}
-<STRING>([^\\\r\n\"]|{VALIDESCAPES})*("\n"|"\r"|"\r\n")                                   {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*("\n"|"\r"|"\r\n")                 {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
 <STRING>.                                                               {;}
 <STRING><<EOF>>                                                         {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
@@ -50,7 +50,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 <STRING2>(\\)([^nftr\\\r\n"])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);}
 <STRING2>(\\)                                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);}
 <STRING2>"\""                                {col += yyleng; BEGIN 0;}
-<STRING2>([^\\\r\n\"]|{VALIDESCAPES})*        {col += yyleng;}
+<STRING2>([^\\\r\n\"]|{VALIDESCAPES})*       {col += yyleng;}
 <STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
 
@@ -100,16 +100,12 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 {INTLIT3}                                                           {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
 {INTLIT4}((e|E)("+"|"-")?{INTLIT4}+)|{INTLIT4}(("."{INTLIT4}?)((e|E)("+"|"-")?{INTLIT4}+)?)|{INTLIT4}?(("."{INTLIT4})((e|E)("+"|"-")?{INTLIT4}+)?)            {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
 
-
-
 {RESERVED_WORDS}                                                    {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
 ([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*                   {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
 
-(" "|"\t"|"\f")   {;col += yyleng;}
-
-
+(" "|"\t"|"\f")             {;col += yyleng;}
 ("\n"|"\r\n"|"\r")          {line++;col = 1;}
-.                      {printf("Line %d, col %d: illegal character (%s)\n", line, col, &yytext[yyleng-1]);col += yyleng;}
+.                           {printf("Line %d, col %d: illegal character (%s)\n", line, col, &yytext[yyleng-1]);col += yyleng;}
 
 %%
 
@@ -124,7 +120,6 @@ int main(int argc, char * argv[])
             aux = 1;
     }
     
-
     yylex();
     return 0;
 }
