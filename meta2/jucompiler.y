@@ -134,45 +134,45 @@ Statement                   :   LBRACE RBRACE   {printf("Statement\n");}
                             |   PRINT LPAR STRLIT RPAR SEMICOLON    {printf("Statement\n");}
                             ;
 
-MethodInvocation            :   ID LPAR RPAR
-                            |   ID LPAR Expr MethodInvocation RPAR
-                            |   MethodInvocation COMMA Expr
+MethodInvocation            :   ID LPAR RPAR                            {printf("MethodInvocation\n");}
+                            |   ID LPAR Expr MethodInvocation RPAR      {printf("MethodInvocation\n");}
+                            |   MethodInvocation COMMA Expr             {printf("MethodInvocation\n");}
                             ;
 
-Assignment                  :   ID ASSIGN Expr
+Assignment                  :   ID ASSIGN Expr                          {printf("Assign\n");}
                             ;
 
-ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR
+ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR      {printf("ParseArgs\n");}
                             ;
 
-Expr                        :   Expr PLUS Expr
-                            |   Expr MINUS Expr
-                            |   Expr STAR Expr
-                            |   Expr DIV Expr
-                            |   Expr MOD Expr
-                            |   Expr AND Expr
-                            |   Expr OR Expr
-                            |   Expr XOR Expr
-                            |   Expr LSHIFT Expr
-                            |   Expr RSHIFT Expr
-                            |   Expr EQ Expr
-                            |   Expr GE Expr
-                            |   Expr GT Expr
-                            |   Expr LE Expr
-                            |   Expr LT Expr
-                            |   Expr NE Expr
-                            |   MINUS Expr
-                            |   NOT Expr
-                            |   PLUS Expr
-                            |   LPAR Expr RPAR
-                            |   MethodInvocation
-                            |   Assignment
-                            |   ParseArgs
-                            |   ID
-                            |   ID DOTLENGTH
-                            |   INTLIT                  {printf("INTLIT");}
-                            |   REALLIT                 {printf("REALLIT");}
-                            |   BOOLLIT                 {printf("BoolLit(%s)", $1);}
+Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
+                            |   Expr MINUS Expr         {printf("Expr\n");}
+                            |   Expr STAR Expr          {printf("Expr\n");}
+                            |   Expr DIV Expr           {printf("Expr\n");}
+                            |   Expr MOD Expr           {printf("Expr\n");}
+                            |   Expr AND Expr           {printf("Expr\n");}
+                            |   Expr OR Expr            {printf("Expr\n");}
+                            |   Expr XOR Expr           {printf("Expr\n");}
+                            |   Expr LSHIFT Expr        {printf("Expr\n");}
+                            |   Expr RSHIFT Expr        {printf("Expr\n");}
+                            |   Expr EQ Expr            {printf("Expr\n");}
+                            |   Expr GE Expr            {printf("Expr\n");}
+                            |   Expr GT Expr            {printf("Expr\n");}
+                            |   Expr LE Expr            {printf("Expr\n");}
+                            |   Expr LT Expr            {printf("Expr\n");}
+                            |   Expr NE Expr            {printf("Expr\n");}
+                            |   MINUS Expr              {printf("Expr\n");}
+                            |   NOT Expr                {printf("Expr\n");}
+                            |   PLUS Expr               {printf("Expr\n");}
+                            |   LPAR Expr RPAR          {printf("Expr\n");}
+                            |   MethodInvocation        {printf("MethodInvocation\n");}
+                            |   Assignment              {printf("Assign\n");}
+                            |   ParseArgs               {printf("ParseArgs\n");}
+                            |   ID                      {printf("Id(%s)\n", $1);}
+                            |   ID DOTLENGTH            {printf("Length\n");}
+                            |   INTLIT                  {printf("IntLit(%s)\n", $1);}
+                            |   REALLIT                 {printf("RealLit(%s)\n", $1);}
+                            |   BOOLLIT                 {printf("BoolLit(%s)\n", $1);}
                             ;
 
 
