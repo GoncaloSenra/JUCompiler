@@ -80,58 +80,58 @@
 
 
 %%
-Program                     :   CLASS ID LBRACE RBRACE                                    
-                            |   Program MethodDecl RBRACE
-                            |   Program FieldDecl RBRACE
-                            |   Program SEMICOLON RBRACE
+Program                     :   CLASS ID LBRACE RBRACE         {printf("Program\n");}                           
+                            |   Program MethodDecl RBRACE       {printf("Program\n");}
+                            |   Program FieldDecl RBRACE        {printf("Program\n");}
+                            |   Program SEMICOLON RBRACE        {printf("Program\n");}
                             ;
 
-MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody
+MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody   {printf("MethodDecl\n");}
                             ;
 
-FieldDecl                   :   PUBLIC STATIC Type ID SEMICOLON
-                            |   FieldDecl COMMA ID SEMICOLON
+FieldDecl                   :   PUBLIC STATIC Type ID SEMICOLON     {printf("FieldDecl\n");}
+                            |   FieldDecl COMMA ID SEMICOLON        {printf("FieldDecl\n");}
                             ;
 
-Type                        :   BOOL
-                            |   INT
-                            |   DOUBLE
+Type                        :   BOOL    {printf("Bool\n");}
+                            |   INT     {printf("Int\n");}
+                            |   DOUBLE  {printf("Double\n");}
                             ;
 
-MethodHeader                :   Type
-                            |   VOID
-                            |   MethodHeader ID LPAR RPAR
-                            |   MethodHeader ID LPAR FormalParams RPAR 
+MethodHeader                :   Type    {printf("Type\n");}
+                            |   VOID    {printf("Void\n");}
+                            |   MethodHeader ID LPAR RPAR   {printf("MethodHeader\n");}
+                            |   MethodHeader ID LPAR FormalParams RPAR {printf("MethodHeader\n");}
                             ;
 
-FormalParams                :   Type ID
-                            |   FormalParams COMMA Type ID
-                            |   STRING LSQ RSQ ID
+FormalParams                :   Type ID {printf("FormalParams\n");}
+                            |   FormalParams COMMA Type ID  {printf("FormalParams\n");}
+                            |   STRING LSQ RSQ ID   {printf("FormalParams\n");}
                             ;
 
-MethodBody                  :   LBRACE RBRACE
-                            |   MethodBody Statement RBRACE
-                            |   MethodBody VarDecl RBRACE
+MethodBody                  :   LBRACE RBRACE   {printf("MethodBody\n");}
+                            |   MethodBody Statement RBRACE {printf("MethodBody\n");}
+                            |   MethodBody VarDecl RBRACE   {printf("MethodBody\n");}
                             ;
                         
-VarDecl                     :   Type ID SEMICOLON
-                            |   VarDecl COMMA ID SEMICOLON
+VarDecl                     :   Type ID SEMICOLON   {printf("VarDecl\n");}
+                            |   VarDecl COMMA ID SEMICOLON {printf("VarDecl\n");}
                             ;
 
-Statement                   :   LBRACE RBRACE
-                            |   Statement RBRACE
-                            |   IF LPAR Expr RPAR Statement
-                            |   IF LPAR Expr RPAR Statement ELSE Statement
-                            |   WHILE LPAR Expr RPAR Statement
-                            |   RETURN SEMICOLON
-                            |   RETURN Expr SEMICOLON
-                            |   SEMICOLON
-                            |   MethodInvocation SEMICOLON
-                            |   Assignment SEMICOLON
-                            |   ParseArgs SEMICOLON
-                            |   PRINT LPAR RPAR SEMICOLON
-                            |   PRINT LPAR Expr RPAR SEMICOLON
-                            |   PRINT LPAR STRLIT RPAR SEMICOLON
+Statement                   :   LBRACE RBRACE   {printf("Statement\n");}
+                            |   Statement RBRACE    {printf("Statement\n");}
+                            |   IF LPAR Expr RPAR Statement {printf("Statement\n");}
+                            |   IF LPAR Expr RPAR Statement ELSE Statement  {printf("Statement\n");}
+                            |   WHILE LPAR Expr RPAR Statement  {printf("Statement\n");}
+                            |   RETURN SEMICOLON    {printf("Statement\n");}
+                            |   RETURN Expr SEMICOLON   {printf("Statement\n");}
+                            |   SEMICOLON   {printf("Statement\n");}
+                            |   MethodInvocation SEMICOLON  {printf("Statement\n");}
+                            |   Assignment SEMICOLON    {printf("Statement\n");}
+                            |   ParseArgs SEMICOLON {printf("Statement\n");}
+                            |   PRINT LPAR RPAR SEMICOLON   {printf("Statement\n");}
+                            |   PRINT LPAR Expr RPAR SEMICOLON  {printf("Statement\n");}
+                            |   PRINT LPAR STRLIT RPAR SEMICOLON    {printf("Statement\n");}
                             ;
 
 MethodInvocation            :   ID LPAR RPAR
