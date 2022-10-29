@@ -177,3 +177,13 @@ Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
 
 
 %%
+
+
+int main() {
+  yyparse();
+  return 0;
+}
+
+void yyerror (const char *s) { 
+  printf ("%s: %s\n", s, yytext);
+}
