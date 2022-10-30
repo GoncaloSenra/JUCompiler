@@ -2406,7 +2406,7 @@ void yyfree (void * ptr )
     
 int main(int argc, char * argv[])
 {
-    
+    /*
     if (argc == 2) {
         if (strcmp(argv[1], "-l") == 0)
             aux = 0;
@@ -2415,11 +2415,17 @@ int main(int argc, char * argv[])
     }
     
     yylex();
-    
+    */
+    yyparse();
     return 0;
 }
 
 int yywrap()
 {
     return 1;
+}
+
+void yyerror (char *s)
+{
+    printf ("%s\n", s);
 }

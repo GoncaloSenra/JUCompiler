@@ -133,3 +133,8 @@ int yywrap()
 {
     return 1;
 }
+
+void yyerror (char *s)
+{
+    printf ("%s\n", s);
+}

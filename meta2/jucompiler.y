@@ -5,12 +5,10 @@
     //Henrique Costa  2020214120
     
     #include <stdio.h>
-
     
     int yylex(void);
 
     void yyerror (const char *s);
-    char* yytext;
 %}
 
 %{
