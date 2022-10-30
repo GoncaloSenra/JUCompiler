@@ -78,65 +78,103 @@
 %token WHILE
 %token RESERVED
 
+%left   COMMA
+%right  ASSIGN
+%left   OR
+%left   AND
+%left   XOR
+%left   EQ NE
+%left   LE LT GE GT
+%left   PLUS MINUS
+%left   MUL DIV MOD
+%right  NOT
+%left   LPAR
+%left   RPAR
+
+%nonassoc LOWER
+%nonassoc ELSE
+%nonassoc HIGHER
 
 %%
-Program                     :   CLASS ID LBRACE RBRACE         {printf("Program\n");}                           
-                            |   Program MethodDecl RBRACE       {printf("Program\n");}
-                            |   Program FieldDecl RBRACE        {printf("Program\n");}
-                            |   Program SEMICOLON RBRACE        {printf("Program\n");}
+Program                     :   CLASS ID LBRACE recPR RBRACE    {printf("Program\n");}                           
+                            |   CLASS ID LBRACE RBRACE              {printf("Program\n");}
+                            ;
+
+recPR                       :   MethodDecl
+                            |   FieldDecl
+                            |   SEMICOLON
+                            |   recPR MethodDecl
+                            |   recPR FieldDecl
+                            |   recPR SEMICOLON
                             ;
 
 MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody   {printf("MethodDecl\n");}
                             ;
 
-FieldDecl                   :   PUBLIC STATIC Type ID SEMICOLON     {printf("FieldDecl\n");}
-                            |   FieldDecl COMMA ID SEMICOLON        {printf("FieldDecl\n");}
+FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      {printf("FieldDecl\n");}
+                            |   PUBLIC STATIC Type ID SEMICOLON                 {printf("FieldDecl\n");}
                             ;
 
-Type                        :   BOOL    {printf("Bool\n");}
-                            |   INT     {printf("Int\n");}
-                            |   DOUBLE  {printf("Double\n");}
+recCOMMAID                  :   COMMA ID
+                            |   recCOMMAID COMMA ID
                             ;
 
-MethodHeader                :   Type    {printf("Type\n");}
-                            |   VOID    {printf("Void\n");}
-                            |   MethodHeader ID LPAR RPAR   {printf("MethodHeader\n");}
-                            |   MethodHeader ID LPAR FormalParams RPAR {printf("MethodHeader\n");}
+Type                        :   BOOL                                {printf("Bool\n");}
+                            |   INT                                 {printf("Int\n");}
+                            |   DOUBLE                              {printf("Double\n");}
                             ;
 
-FormalParams                :   Type ID {printf("FormalParams\n");}
-                            |   FormalParams COMMA Type ID  {printf("FormalParams\n");}
-                            |   STRING LSQ RSQ ID   {printf("FormalParams\n");}
+MethodHeader                :   Type ID LPAR FormalParams RPAR      {printf("Type\n");}
+                            |   Type ID LPAR RPAR                   {printf("Void\n");}
+                            |   VOID ID LPAR FormalParams RPAR      {printf("MethodHeader\n");}
+                            |   VOID ID LPAR RPAR                   {printf("MethodHeader\n");}
                             ;
 
-MethodBody                  :   LBRACE RBRACE   {printf("MethodBody\n");}
-                            |   MethodBody Statement RBRACE {printf("MethodBody\n");}
-                            |   MethodBody VarDecl RBRACE   {printf("MethodBody\n");}
+FormalParams                :   Type ID recFP                       {printf("FormalParams\n");}
+                            |   Type ID                             {printf("FormalParams\n");}
+                            |   STRING LSQ RSQ ID                   {printf("FormalParams\n");}
+                            ;
+
+recFP                       :   COMMA Type ID
+                            |   recFP COMMA Type ID
+                            ;
+
+MethodBody                  :   LBRACE recMD RBRACE                 {printf("MethodBody\n");}
+                            |   LBRACE RBRACE                       {printf("MethodBody\n");}
+                            ;
+
+recMD                       :   Statement
+                            |   VarDecl
+                            |   recMD Statement
+                            |   recMD VarDecl
                             ;
                         
-VarDecl                     :   Type ID SEMICOLON   {printf("VarDecl\n");}
-                            |   VarDecl COMMA ID SEMICOLON {printf("VarDecl\n");}
+VarDecl                     :   Type ID recCOMMAID SEMICOLON        {printf("VarDecl\n");}
+                            |   Type ID SEMICOLON                   {printf("VarDecl\n");}
                             ;
 
-Statement                   :   LBRACE RBRACE   {printf("Statement\n");}
-                            |   Statement RBRACE    {printf("Statement\n");}
+Statement                   :   LBRACE Statement RBRACE     {printf("Statement\n");}
+                            |   LBRACE RBRACE               {printf("Statement\n");}
+                            |   IF LPAR Expr RPAR Statement ELSE Statement  {printf("Statement\n");}                            
                             |   IF LPAR Expr RPAR Statement {printf("Statement\n");}
-                            |   IF LPAR Expr RPAR Statement ELSE Statement  {printf("Statement\n");}
                             |   WHILE LPAR Expr RPAR Statement  {printf("Statement\n");}
+                            |   RETURN Expr SEMICOLON   {printf("Statement\n");}                            
                             |   RETURN SEMICOLON    {printf("Statement\n");}
-                            |   RETURN Expr SEMICOLON   {printf("Statement\n");}
-                            |   SEMICOLON   {printf("Statement\n");}
                             |   MethodInvocation SEMICOLON  {printf("Statement\n");}
                             |   Assignment SEMICOLON    {printf("Statement\n");}
                             |   ParseArgs SEMICOLON {printf("Statement\n");}
-                            |   PRINT LPAR RPAR SEMICOLON   {printf("Statement\n");}
+                            |   SEMICOLON   {printf("Statement\n");}                            
                             |   PRINT LPAR Expr RPAR SEMICOLON  {printf("Statement\n");}
                             |   PRINT LPAR STRLIT RPAR SEMICOLON    {printf("Statement\n");}
+                            |   PRINT LPAR RPAR SEMICOLON   {printf("Statement\n");}                            
                             ;
 
-MethodInvocation            :   ID LPAR RPAR                            {printf("MethodInvocation\n");}
-                            |   ID LPAR Expr MethodInvocation RPAR      {printf("MethodInvocation\n");}
-                            |   MethodInvocation COMMA Expr             {printf("MethodInvocation\n");}
+MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                            {printf("MethodInvocation\n");}
+                            |   ID LPAR RPAR
+                            ;
+
+recCOMMAEXP                 :   COMMA Expr
+                            |   recCOMMAEXP COMMA Expr
                             ;
 
 Assignment                  :   ID ASSIGN Expr                          {printf("Assign\n");}
@@ -168,11 +206,11 @@ Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
                             |   MethodInvocation        {printf("MethodInvocation\n");}
                             |   Assignment              {printf("Assign\n");}
                             |   ParseArgs               {printf("ParseArgs\n");}
-                            |   ID                      {printf("Id(%s)\n", $1);}
+                            |   ID                      {printf("Id()\n");}
                             |   ID DOTLENGTH            {printf("Length\n");}
-                            |   INTLIT                  {printf("IntLit(%s)\n", $1);}
-                            |   REALLIT                 {printf("RealLit(%s)\n", $1);}
-                            |   BOOLLIT                 {printf("BoolLit(%s)\n", $1);}
+                            |   INTLIT                  {printf("IntLit()\n");}
+                            |   REALLIT                 {printf("RealLit()\n");}
+                            |   BOOLLIT                 {printf("BoolLit()\n");}
                             ;
 
 
