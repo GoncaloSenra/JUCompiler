@@ -5,8 +5,10 @@
     //Henrique Costa  2020214120
     
     #include <stdio.h>
+
     
     int yylex(void);
+
     void yyerror (const char *s);
     char* yytext;
 %}
@@ -32,7 +34,7 @@
 %token  <id> ID
 %token  <id> INTLIT
 %token  <id> STRLIT
-%token  <id> REALLIT    /* %token  <reallit> REALLIT*/
+%token  <id> REALLIT    
 %token BOOLLIT
 %token AND
 %token ASSIGN
@@ -87,6 +89,7 @@
 %left   LE LT GE GT
 %left   PLUS MINUS
 %left   MUL DIV MOD
+%left   STAR LSHIFT RSHIFT
 %right  NOT
 %left   LPAR
 %left   RPAR
@@ -94,6 +97,12 @@
 %nonassoc LOWER
 %nonassoc ELSE
 %nonassoc HIGHER
+
+%union{
+    char* id;
+    int intlit;
+    float reallit;
+};
 
 %%
 Program                     :   CLASS ID LBRACE recPR RBRACE    {printf("Program\n");}                           
@@ -217,11 +226,3 @@ Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
 %%
 
 
-int main() {
-  yyparse();
-  return 0;
-}
-
-void yyerror (const char *s) { 
-  printf ("%s: %s\n", s, yytext);
-}

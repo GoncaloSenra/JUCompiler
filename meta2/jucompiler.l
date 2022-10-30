@@ -5,6 +5,8 @@
     #include <string.h>
     #include <stdlib.h>
 
+    int yyparse(void);
+
     int line = 1;
     int col = 1;
     int aux = 0;
@@ -113,6 +115,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
     
 int main(int argc, char * argv[])
 {
+    /*
     if (argc == 2) {
         if (strcmp(argv[1], "-l") == 0)
             aux = 0;
@@ -121,6 +124,8 @@ int main(int argc, char * argv[])
     }
     
     yylex();
+    */
+    yyparse();
     return 0;
 }
 

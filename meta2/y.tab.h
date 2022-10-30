@@ -166,6 +166,22 @@ extern int yydebug;
 #define HIGHER 308
 
 /* Value type.  */
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+union YYSTYPE
+{
+#line 101 "jucompiler.y"
+
+    char* id;
+    int intlit;
+    float reallit;
+
+#line 179 "y.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
+#endif
 
 
 extern YYSTYPE yylval;

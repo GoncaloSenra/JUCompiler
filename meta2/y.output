@@ -7,28 +7,6 @@ Terminals unused in grammar
     HIGHER
 
 
-State 90 conflicts: 3 shift/reduce
-State 101 conflicts: 3 shift/reduce
-State 102 conflicts: 3 shift/reduce
-State 103 conflicts: 3 shift/reduce
-State 135 conflicts: 3 shift/reduce
-State 136 conflicts: 16 shift/reduce
-State 137 conflicts: 3 shift/reduce
-State 138 conflicts: 3 shift/reduce
-State 139 conflicts: 3 shift/reduce
-State 140 conflicts: 3 shift/reduce
-State 141 conflicts: 3 shift/reduce
-State 142 conflicts: 3 shift/reduce
-State 143 conflicts: 3 shift/reduce
-State 144 conflicts: 3 shift/reduce
-State 145 conflicts: 3 shift/reduce
-State 146 conflicts: 3 shift/reduce
-State 147 conflicts: 3 shift/reduce
-State 148 conflicts: 16 shift/reduce
-State 149 conflicts: 16 shift/reduce
-State 150 conflicts: 3 shift/reduce
-
-
 Grammar
 
     0 $accept: Program $end
@@ -1228,9 +1206,6 @@ State 90
     RSHIFT  shift, and go to state 119
     XOR     shift, and go to state 120
 
-    STAR      [reduce using rule 52 (Assignment)]
-    LSHIFT    [reduce using rule 52 (Assignment)]
-    RSHIFT    [reduce using rule 52 (Assignment)]
     $default  reduce using rule 52 (Assignment)
 
 
@@ -1461,9 +1436,6 @@ State 101
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 70 (Expr)]
-    LSHIFT    [reduce using rule 70 (Expr)]
-    RSHIFT    [reduce using rule 70 (Expr)]
     $default  reduce using rule 70 (Expr)
 
 
@@ -1487,13 +1459,6 @@ State 102
    69     | Expr • NE Expr
    71     | NOT Expr •
 
-    STAR    shift, and go to state 105
-    LSHIFT  shift, and go to state 118
-    RSHIFT  shift, and go to state 119
-
-    STAR      [reduce using rule 71 (Expr)]
-    LSHIFT    [reduce using rule 71 (Expr)]
-    RSHIFT    [reduce using rule 71 (Expr)]
     $default  reduce using rule 71 (Expr)
 
 
@@ -1523,9 +1488,6 @@ State 103
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 72 (Expr)]
-    LSHIFT    [reduce using rule 72 (Expr)]
-    RSHIFT    [reduce using rule 72 (Expr)]
     $default  reduce using rule 72 (Expr)
 
 
@@ -2071,9 +2033,6 @@ State 135
     RSHIFT  shift, and go to state 119
     XOR     shift, and go to state 120
 
-    STAR      [reduce using rule 59 (Expr)]
-    LSHIFT    [reduce using rule 59 (Expr)]
-    RSHIFT    [reduce using rule 59 (Expr)]
     $default  reduce using rule 59 (Expr)
 
 
@@ -2097,39 +2056,6 @@ State 136
    68     | Expr • LT Expr
    69     | Expr • NE Expr
 
-    AND     shift, and go to state 104
-    STAR    shift, and go to state 105
-    DIV     shift, and go to state 106
-    EQ      shift, and go to state 107
-    GE      shift, and go to state 108
-    GT      shift, and go to state 109
-    LE      shift, and go to state 110
-    LT      shift, and go to state 111
-    MINUS   shift, and go to state 112
-    MOD     shift, and go to state 113
-    NE      shift, and go to state 114
-    OR      shift, and go to state 115
-    PLUS    shift, and go to state 116
-    LSHIFT  shift, and go to state 118
-    RSHIFT  shift, and go to state 119
-    XOR     shift, and go to state 120
-
-    AND       [reduce using rule 56 (Expr)]
-    STAR      [reduce using rule 56 (Expr)]
-    DIV       [reduce using rule 56 (Expr)]
-    EQ        [reduce using rule 56 (Expr)]
-    GE        [reduce using rule 56 (Expr)]
-    GT        [reduce using rule 56 (Expr)]
-    LE        [reduce using rule 56 (Expr)]
-    LT        [reduce using rule 56 (Expr)]
-    MINUS     [reduce using rule 56 (Expr)]
-    MOD       [reduce using rule 56 (Expr)]
-    NE        [reduce using rule 56 (Expr)]
-    OR        [reduce using rule 56 (Expr)]
-    PLUS      [reduce using rule 56 (Expr)]
-    LSHIFT    [reduce using rule 56 (Expr)]
-    RSHIFT    [reduce using rule 56 (Expr)]
-    XOR       [reduce using rule 56 (Expr)]
     $default  reduce using rule 56 (Expr)
 
 
@@ -2157,9 +2083,6 @@ State 137
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 57 (Expr)]
-    LSHIFT    [reduce using rule 57 (Expr)]
-    RSHIFT    [reduce using rule 57 (Expr)]
     $default  reduce using rule 57 (Expr)
 
 
@@ -2195,9 +2118,6 @@ State 138
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 64 (Expr)]
-    LSHIFT    [reduce using rule 64 (Expr)]
-    RSHIFT    [reduce using rule 64 (Expr)]
     $default  reduce using rule 64 (Expr)
 
 
@@ -2229,9 +2149,6 @@ State 139
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 65 (Expr)]
-    LSHIFT    [reduce using rule 65 (Expr)]
-    RSHIFT    [reduce using rule 65 (Expr)]
     $default  reduce using rule 65 (Expr)
 
 
@@ -2263,9 +2180,6 @@ State 140
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 66 (Expr)]
-    LSHIFT    [reduce using rule 66 (Expr)]
-    RSHIFT    [reduce using rule 66 (Expr)]
     $default  reduce using rule 66 (Expr)
 
 
@@ -2297,9 +2211,6 @@ State 141
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 67 (Expr)]
-    LSHIFT    [reduce using rule 67 (Expr)]
-    RSHIFT    [reduce using rule 67 (Expr)]
     $default  reduce using rule 67 (Expr)
 
 
@@ -2331,9 +2242,6 @@ State 142
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 68 (Expr)]
-    LSHIFT    [reduce using rule 68 (Expr)]
-    RSHIFT    [reduce using rule 68 (Expr)]
     $default  reduce using rule 68 (Expr)
 
 
@@ -2363,9 +2271,6 @@ State 143
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 55 (Expr)]
-    LSHIFT    [reduce using rule 55 (Expr)]
-    RSHIFT    [reduce using rule 55 (Expr)]
     $default  reduce using rule 55 (Expr)
 
 
@@ -2393,9 +2298,6 @@ State 144
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 58 (Expr)]
-    LSHIFT    [reduce using rule 58 (Expr)]
-    RSHIFT    [reduce using rule 58 (Expr)]
     $default  reduce using rule 58 (Expr)
 
 
@@ -2431,9 +2333,6 @@ State 145
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 69 (Expr)]
-    LSHIFT    [reduce using rule 69 (Expr)]
-    RSHIFT    [reduce using rule 69 (Expr)]
     $default  reduce using rule 69 (Expr)
 
 
@@ -2473,9 +2372,6 @@ State 146
     RSHIFT  shift, and go to state 119
     XOR     shift, and go to state 120
 
-    STAR      [reduce using rule 60 (Expr)]
-    LSHIFT    [reduce using rule 60 (Expr)]
-    RSHIFT    [reduce using rule 60 (Expr)]
     $default  reduce using rule 60 (Expr)
 
 
@@ -2505,9 +2401,6 @@ State 147
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 54 (Expr)]
-    LSHIFT    [reduce using rule 54 (Expr)]
-    RSHIFT    [reduce using rule 54 (Expr)]
     $default  reduce using rule 54 (Expr)
 
 
@@ -2531,39 +2424,6 @@ State 148
    68     | Expr • LT Expr
    69     | Expr • NE Expr
 
-    AND     shift, and go to state 104
-    STAR    shift, and go to state 105
-    DIV     shift, and go to state 106
-    EQ      shift, and go to state 107
-    GE      shift, and go to state 108
-    GT      shift, and go to state 109
-    LE      shift, and go to state 110
-    LT      shift, and go to state 111
-    MINUS   shift, and go to state 112
-    MOD     shift, and go to state 113
-    NE      shift, and go to state 114
-    OR      shift, and go to state 115
-    PLUS    shift, and go to state 116
-    LSHIFT  shift, and go to state 118
-    RSHIFT  shift, and go to state 119
-    XOR     shift, and go to state 120
-
-    AND       [reduce using rule 62 (Expr)]
-    STAR      [reduce using rule 62 (Expr)]
-    DIV       [reduce using rule 62 (Expr)]
-    EQ        [reduce using rule 62 (Expr)]
-    GE        [reduce using rule 62 (Expr)]
-    GT        [reduce using rule 62 (Expr)]
-    LE        [reduce using rule 62 (Expr)]
-    LT        [reduce using rule 62 (Expr)]
-    MINUS     [reduce using rule 62 (Expr)]
-    MOD       [reduce using rule 62 (Expr)]
-    NE        [reduce using rule 62 (Expr)]
-    OR        [reduce using rule 62 (Expr)]
-    PLUS      [reduce using rule 62 (Expr)]
-    LSHIFT    [reduce using rule 62 (Expr)]
-    RSHIFT    [reduce using rule 62 (Expr)]
-    XOR       [reduce using rule 62 (Expr)]
     $default  reduce using rule 62 (Expr)
 
 
@@ -2587,39 +2447,6 @@ State 149
    68     | Expr • LT Expr
    69     | Expr • NE Expr
 
-    AND     shift, and go to state 104
-    STAR    shift, and go to state 105
-    DIV     shift, and go to state 106
-    EQ      shift, and go to state 107
-    GE      shift, and go to state 108
-    GT      shift, and go to state 109
-    LE      shift, and go to state 110
-    LT      shift, and go to state 111
-    MINUS   shift, and go to state 112
-    MOD     shift, and go to state 113
-    NE      shift, and go to state 114
-    OR      shift, and go to state 115
-    PLUS    shift, and go to state 116
-    LSHIFT  shift, and go to state 118
-    RSHIFT  shift, and go to state 119
-    XOR     shift, and go to state 120
-
-    AND       [reduce using rule 63 (Expr)]
-    STAR      [reduce using rule 63 (Expr)]
-    DIV       [reduce using rule 63 (Expr)]
-    EQ        [reduce using rule 63 (Expr)]
-    GE        [reduce using rule 63 (Expr)]
-    GT        [reduce using rule 63 (Expr)]
-    LE        [reduce using rule 63 (Expr)]
-    LT        [reduce using rule 63 (Expr)]
-    MINUS     [reduce using rule 63 (Expr)]
-    MOD       [reduce using rule 63 (Expr)]
-    NE        [reduce using rule 63 (Expr)]
-    OR        [reduce using rule 63 (Expr)]
-    PLUS      [reduce using rule 63 (Expr)]
-    LSHIFT    [reduce using rule 63 (Expr)]
-    RSHIFT    [reduce using rule 63 (Expr)]
-    XOR       [reduce using rule 63 (Expr)]
     $default  reduce using rule 63 (Expr)
 
 
@@ -2657,9 +2484,6 @@ State 150
     LSHIFT  shift, and go to state 118
     RSHIFT  shift, and go to state 119
 
-    STAR      [reduce using rule 61 (Expr)]
-    LSHIFT    [reduce using rule 61 (Expr)]
-    RSHIFT    [reduce using rule 61 (Expr)]
     $default  reduce using rule 61 (Expr)
 
 
