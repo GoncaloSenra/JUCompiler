@@ -43,7 +43,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 "\""                                                                    {auxline = line; auxcol= col;BEGIN STRING;col += yyleng;}
 <STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)([^nftr\\\r\n"])               {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
 <STRING>([^\\\r\n\"]|{VALIDESCAPES})*(\\)                               {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);BEGIN STRING2;}
-<STRING>([^\\\r\n\"]|{VALIDESCAPES})*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;}
+<STRING>([^\\\r\n\"]|{VALIDESCAPES})*"\""                               {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;return STRLIT;}
 <STRING>([^\\\r\n\"]|{VALIDESCAPES})*("\n"|"\r"|"\r\n")                 {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
 <STRING>.                                                               {;}
 <STRING><<EOF>>                                                         {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
@@ -56,39 +56,39 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 <STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
 
-("true"|"false")            {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;}
-"&&"                        {if(aux == 0) printf("AND\n");col += yyleng;}
-"="                         {if(aux == 0) printf("ASSIGN\n");col += yyleng;}
-"*"                         {if(aux == 0) printf("STAR\n");col += yyleng;}
-","                         {if(aux == 0) printf("COMMA\n");col += yyleng;}
-"/"                         {if(aux == 0) printf("DIV\n");col += yyleng;}
-"=="                        {if(aux == 0) printf("EQ\n");col += yyleng;}        
-">="                        {if(aux == 0) printf("GE\n");col += yyleng;}
-">"                         {if(aux == 0) printf("GT\n");col += yyleng;}
-"{"                         {if(aux == 0) printf("LBRACE\n");col += yyleng;}
-"<="                        {if(aux == 0) printf("LE\n");col += yyleng;}
-"("                         {if(aux == 0) printf("LPAR\n");col += yyleng;}
-"["                         {if(aux == 0) printf("LSQ\n");col += yyleng;}
-"<"                         {if(aux == 0) printf("LT\n");col += yyleng;}
-"-"                         {if(aux == 0) printf("MINUS\n");col += yyleng;}
-"%"                         {if(aux == 0) printf("MOD\n");col += yyleng;}
-"!="                        {if(aux == 0) printf("NE\n");col += yyleng;}
-"!"                         {if(aux == 0) printf("NOT\n");col += yyleng;}
-"||"                        {if(aux == 0) printf("OR\n");col += yyleng;}
-"+"                         {if(aux == 0) printf("PLUS\n");col += yyleng;}
-"}"                         {if(aux == 0) printf("RBRACE\n");col += yyleng;}
-")"                         {if(aux == 0) printf("RPAR\n");col += yyleng;}
-"]"                         {if(aux == 0) printf("RSQ\n");col += yyleng;}
-";"                         {if(aux == 0) printf("SEMICOLON\n");col += yyleng;}
-"->"                        {if(aux == 0) printf("ARROW\n");col += yyleng;}
-"<<"                        {if(aux == 0) printf("LSHIFT\n");col += yyleng;}
-">>"                        {if(aux == 0) printf("RSHIFT\n");col += yyleng;}
-"^"                         {if(aux == 0) printf("XOR\n");col += yyleng;}
-"boolean"                   {if(aux == 0) printf("BOOL\n");col += yyleng;}
-"class"                     {if(aux == 0) printf("CLASS\n");col += yyleng;}
-".length"                   {if(aux == 0) printf("DOTLENGTH\n");col += yyleng;}
-"double"                    {if(aux == 0) printf("DOUBLE\n");col += yyleng;}
-"else"                      {if(aux == 0) printf("ELSE\n");col += yyleng;}
+("true"|"false")            {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;return BOOLLIT;}
+"&&"                        {if(aux == 0) printf("AND\n");col += yyleng;return AND;}
+"="                         {if(aux == 0) printf("ASSIGN\n");col += yyleng;return ASSIGN;}
+"*"                         {if(aux == 0) printf("STAR\n");col += yyleng;return STAR;}
+","                         {if(aux == 0) printf("COMMA\n");col += yyleng;return COMMA;}
+"/"                         {if(aux == 0) printf("DIV\n");col += yyleng;return DIV;}
+"=="                        {if(aux == 0) printf("EQ\n");col += yyleng;return EQ;}        
+">="                        {if(aux == 0) printf("GE\n");col += yyleng;return GE;}
+">"                         {if(aux == 0) printf("GT\n");col += yyleng;return GT;}
+"{"                         {if(aux == 0) printf("LBRACE\n");col += yyleng;return LBRACE;}
+"<="                        {if(aux == 0) printf("LE\n");col += yyleng;return LE;}
+"("                         {if(aux == 0) printf("LPAR\n");col += yyleng;return LPAR;}
+"["                         {if(aux == 0) printf("LSQ\n");col += yyleng;return LSQ;}
+"<"                         {if(aux == 0) printf("LT\n");col += yyleng;return LT;}
+"-"                         {if(aux == 0) printf("MINUS\n");col += yyleng;return MINUS;}
+"%"                         {if(aux == 0) printf("MOD\n");col += yyleng;return MOD;}
+"!="                        {if(aux == 0) printf("NE\n");col += yyleng;return NE;}
+"!"                         {if(aux == 0) printf("NOT\n");col += yyleng;return NOT;}
+"||"                        {if(aux == 0) printf("OR\n");col += yyleng;return OR;}
+"+"                         {if(aux == 0) printf("PLUS\n");col += yyleng;return PLUS;}
+"}"                         {if(aux == 0) printf("RBRACE\n");col += yyleng;return RBRACE;}
+")"                         {if(aux == 0) printf("RPAR\n");col += yyleng;return RPAR;}
+"]"                         {if(aux == 0) printf("RSQ\n");col += yyleng;return RSQ;}
+";"                         {if(aux == 0) printf("SEMICOLON\n");col += yyleng;return SEMICOLON;}
+"->"                        {if(aux == 0) printf("ARROW\n");col += yyleng;return ARROW;}
+"<<"                        {if(aux == 0) printf("LSHIFT\n");col += yyleng;return LSHIFT;}
+">>"                        {if(aux == 0) printf("RSHIFT\n");col += yyleng;return RSHIFT;}
+"^"                         {if(aux == 0) printf("XOR\n");col += yyleng;return XOR;}
+"boolean"                   {if(aux == 0) printf("BOOL\n");col += yyleng;return BOOL;}
+"class"                     {if(aux == 0) printf("CLASS\n");col += yyleng;return CLASS;}
+".length"                   {if(aux == 0) printf("DOTLENGTH\n");col += yyleng;return DOTLENGTH;}
+"double"                    {if(aux == 0) printf("DOUBLE\n");col += yyleng;return DOUBLE;}
+"else"                      {if(aux == 0) printf("ELSE\n");col += yyleng;return ELSE;}
 "if"                        {if(aux == 0) printf("IF\n");col += yyleng;}
 "int"                       {if(aux == 0) printf("INT\n");col += yyleng;}
 "System.out.print"          {if(aux == 0) printf("PRINT\n");col += yyleng;}
