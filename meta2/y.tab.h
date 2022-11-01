@@ -169,7 +169,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 99 "jucompiler.y"
+#line 104 "jucompiler.y"
 
     char* id;
     int intlit;

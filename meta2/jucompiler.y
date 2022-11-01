@@ -9,8 +9,8 @@
     int yylex(void);
 
     void yyerror (const char *s);
-%}
 
+/*
 %define parse.error verbose
 
 
@@ -27,6 +27,11 @@
 %type <id> Assignment
 %type <id> ParseArgs
 %type <id> Expr
+*/
+%}
+
+%define parse.error verbose
+
 
 
 %token  <id> ID
@@ -120,6 +125,7 @@ MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody   {printf(
 
 FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      {printf("FieldDecl\n");}
                             |   PUBLIC STATIC Type ID SEMICOLON                 {printf("FieldDecl\n");}
+                            |   error SEMICOLON
                             ;
 
 recCOMMAID                  :   COMMA ID
@@ -174,10 +180,12 @@ Statement                   :   LBRACE Statement RBRACE     {printf("Statement\n
                             |   PRINT LPAR Expr RPAR SEMICOLON  {printf("Statement\n");}
                             |   PRINT LPAR STRLIT RPAR SEMICOLON    {printf("Statement\n");}
                             |   PRINT LPAR RPAR SEMICOLON   {printf("Statement\n");}                            
+                            |   error SEMICOLON
                             ;
 
 MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                            {printf("MethodInvocation\n");}
                             |   ID LPAR RPAR
+                            |   ID LPAR error RPAR
                             ;
 
 recCOMMAEXP                 :   COMMA Expr
@@ -188,6 +196,7 @@ Assignment                  :   ID ASSIGN Expr                          {printf(
                             ;
 
 ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR      {printf("ParseArgs\n");}
+                            |   PARSEINT LPAR error RPAR
                             ;
 
 Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
@@ -218,6 +227,7 @@ Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
                             |   INTLIT                  {printf("IntLit()\n");}
                             |   REALLIT                 {printf("RealLit()\n");}
                             |   BOOLLIT                 {printf("BoolLit()\n");}
+                            |   LPAR error RPAR
                             ;
 
 
