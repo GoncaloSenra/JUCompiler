@@ -89,21 +89,21 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
 ".length"                   {if(aux == 0) printf("DOTLENGTH\n");col += yyleng;return DOTLENGTH;}
 "double"                    {if(aux == 0) printf("DOUBLE\n");col += yyleng;return DOUBLE;}
 "else"                      {if(aux == 0) printf("ELSE\n");col += yyleng;return ELSE;}
-"if"                        {if(aux == 0) printf("IF\n");col += yyleng;}
-"int"                       {if(aux == 0) printf("INT\n");col += yyleng;}
-"System.out.print"          {if(aux == 0) printf("PRINT\n");col += yyleng;}
-"Integer.parseInt"          {if(aux == 0) printf("PARSEINT\n");col += yyleng;}
-"public"                    {if(aux == 0) printf("PUBLIC\n");col += yyleng;}
-"return"                    {if(aux == 0) printf("RETURN\n");col += yyleng;}
-"static"                    {if(aux == 0) printf("STATIC\n");col += yyleng;}
-"String"                    {if(aux == 0) printf("STRING\n");col += yyleng;}
-"void"                      {if(aux == 0) printf("VOID\n");col += yyleng;}
-"while"                     {if(aux == 0) printf("WHILE\n");col += yyleng;}
-{INTLIT3}                                                           {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;} 
-{INTLIT4}((e|E)("+"|"-")?{INTLIT4}+)|{INTLIT4}(("."{INTLIT4}?)((e|E)("+"|"-")?{INTLIT4}+)?)|{INTLIT4}?(("."{INTLIT4})((e|E)("+"|"-")?{INTLIT4}+)?)            {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;}    
+"if"                        {if(aux == 0) printf("IF\n");col += yyleng;return IF;}
+"int"                       {if(aux == 0) printf("INT\n");col += yyleng;return INT;}
+"System.out.print"          {if(aux == 0) printf("PRINT\n");col += yyleng;return PRINT;}
+"Integer.parseInt"          {if(aux == 0) printf("PARSEINT\n");col += yyleng;return PARSEINT;}
+"public"                    {if(aux == 0) printf("PUBLIC\n");col += yyleng;return PUBLIC;}
+"return"                    {if(aux == 0) printf("RETURN\n");col += yyleng;return RETURN;}
+"static"                    {if(aux == 0) printf("STATIC\n");col += yyleng;return STATIC;}
+"String"                    {if(aux == 0) printf("STRING\n");col += yyleng;return STRING;}
+"void"                      {if(aux == 0) printf("VOID\n");col += yyleng;return VOID;}
+"while"                     {if(aux == 0) printf("WHILE\n");col += yyleng;return WHILE;}
+{INTLIT3}                                                           {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;return INTLIT;} 
+{INTLIT4}((e|E)("+"|"-")?{INTLIT4}+)|{INTLIT4}(("."{INTLIT4}?)((e|E)("+"|"-")?{INTLIT4}+)?)|{INTLIT4}?(("."{INTLIT4})((e|E)("+"|"-")?{INTLIT4}+)?)            {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;return REALLIT;}    
 
-{RESERVED_WORDS}                                                    {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;}
-([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*                   {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;}
+{RESERVED_WORDS}                                                    {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;return RESERVED;}
+([a-z]|[A-Z]|"_"|"$")([a-z]|[A-Z]|"$"|"_"|[0-9])*                   {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;return ID;}
 
 (" "|"\t"|"\f")             {;col += yyleng;}
 ("\n"|"\r\n"|"\r")          {line++;col = 1;}
