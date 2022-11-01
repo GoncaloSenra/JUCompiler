@@ -115,7 +115,7 @@ RESERVED_WORDS  ("abstract"|"continue"|"switch"|"assert"|"default"|"package"|"sy
     
 int main(int argc, char * argv[])
 {
-    /*
+    
     if (argc == 2) {
         if (strcmp(argv[1], "-l") == 0)
             aux = 0;
@@ -124,8 +124,10 @@ int main(int argc, char * argv[])
     }
     
     yylex();
-    */
-    yyparse();
+    
+    int val = yyparse();
+
+    printf("--->%d\n", val);
     return 0;
 }
 

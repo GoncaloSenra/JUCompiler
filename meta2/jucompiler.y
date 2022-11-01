@@ -11,23 +11,23 @@
     void yyerror (const char *s);
 %}
 
-%{
-    /*
-%type <node> Program
-%type <node> MethodDecl
-%type <node> FieldDecl
-%type <node> Type
-%type <node> MethodHeader
-%type <node> FormalParams
-%type <node> MethodBody
-%type <node> VarDecl
-%type <node> Statement
-%type <node> MethodInvocation
-%type <node> Assignment
-%type <node> ParseArgs
-%type <node> Expr
-    */
-%}
+%define parse.error verbose
+
+
+%type <id> Program
+%type <id> MethodDecl
+%type <id> FieldDecl
+%type <id> Type
+%type <id> MethodHeader
+%type <id> FormalParams
+%type <id> MethodBody
+%type <id> VarDecl
+%type <id> Statement
+%type <id> MethodInvocation
+%type <id> Assignment
+%type <id> ParseArgs
+%type <id> Expr
+
 
 %token  <id> ID
 %token  <id> INTLIT

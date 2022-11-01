@@ -78,25 +78,8 @@
     int yylex(void);
 
     void yyerror (const char *s);
-#line 14 "jucompiler.y"
 
-    /*
-%type <node> Program
-%type <node> MethodDecl
-%type <node> FieldDecl
-%type <node> Type
-%type <node> MethodHeader
-%type <node> FormalParams
-%type <node> MethodBody
-%type <node> VarDecl
-%type <node> Statement
-%type <node> MethodInvocation
-%type <node> Assignment
-%type <node> ParseArgs
-%type <node> Expr
-    */
-
-#line 100 "y.tab.c"
+#line 83 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -261,7 +244,7 @@ union YYSTYPE
     int intlit;
     float reallit;
 
-#line 265 "y.tab.c"
+#line 248 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -551,7 +534,7 @@ typedef int yy_state_fast_t;
 
 #define YY_ASSERT(E) ((void) (0 && (E)))
 
-#if !defined yyoverflow
+#if 1
 
 /* The parser invokes alloca or malloc; define the necessary symbols.  */
 
@@ -616,7 +599,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 # endif
-#endif /* !defined yyoverflow */
+#endif /* 1 */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
@@ -759,7 +742,7 @@ static const yytype_uint8 yyrline[] =
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if YYDEBUG || 0
+#if 1
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
 static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
@@ -1218,8 +1201,275 @@ int yydebug;
 #endif
 
 
+/* Context of a parse error.  */
+typedef struct
+{
+  yy_state_t *yyssp;
+  yysymbol_kind_t yytoken;
+} yypcontext_t;
+
+/* Put in YYARG at most YYARGN of the expected tokens given the
+   current YYCTX, and return the number of tokens stored in YYARG.  If
+   YYARG is null, return the number of expected tokens (guaranteed to
+   be less than YYNTOKENS).  Return YYENOMEM on memory exhaustion.
+   Return 0 if there are more than YYARGN expected tokens, yet fill
+   YYARG up to YYARGN. */
+static int
+yypcontext_expected_tokens (const yypcontext_t *yyctx,
+                            yysymbol_kind_t yyarg[], int yyargn)
+{
+  /* Actual size of YYARG. */
+  int yycount = 0;
+  int yyn = yypact[+*yyctx->yyssp];
+  if (!yypact_value_is_default (yyn))
+    {
+      /* Start YYX at -YYN if negative to avoid negative indexes in
+         YYCHECK.  In other words, skip the first -YYN actions for
+         this state because they are default actions.  */
+      int yyxbegin = yyn < 0 ? -yyn : 0;
+      /* Stay within bounds of both yycheck and yytname.  */
+      int yychecklim = YYLAST - yyn + 1;
+      int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
+      int yyx;
+      for (yyx = yyxbegin; yyx < yyxend; ++yyx)
+        if (yycheck[yyx + yyn] == yyx && yyx != YYSYMBOL_YYerror
+            && !yytable_value_is_error (yytable[yyx + yyn]))
+          {
+            if (!yyarg)
+              ++yycount;
+            else if (yycount == yyargn)
+              return 0;
+            else
+              yyarg[yycount++] = YY_CAST (yysymbol_kind_t, yyx);
+          }
+    }
+  if (yyarg && yycount == 0 && 0 < yyargn)
+    yyarg[0] = YYSYMBOL_YYEMPTY;
+  return yycount;
+}
 
 
+
+
+#ifndef yystrlen
+# if defined __GLIBC__ && defined _STRING_H
+#  define yystrlen(S) (YY_CAST (YYPTRDIFF_T, strlen (S)))
+# else
+/* Return the length of YYSTR.  */
+static YYPTRDIFF_T
+yystrlen (const char *yystr)
+{
+  YYPTRDIFF_T yylen;
+  for (yylen = 0; yystr[yylen]; yylen++)
+    continue;
+  return yylen;
+}
+# endif
+#endif
+
+#ifndef yystpcpy
+# if defined __GLIBC__ && defined _STRING_H && defined _GNU_SOURCE
+#  define yystpcpy stpcpy
+# else
+/* Copy YYSRC to YYDEST, returning the address of the terminating '\0' in
+   YYDEST.  */
+static char *
+yystpcpy (char *yydest, const char *yysrc)
+{
+  char *yyd = yydest;
+  const char *yys = yysrc;
+
+  while ((*yyd++ = *yys++) != '\0')
+    continue;
+
+  return yyd - 1;
+}
+# endif
+#endif
+
+#ifndef yytnamerr
+/* Copy to YYRES the contents of YYSTR after stripping away unnecessary
+   quotes and backslashes, so that it's suitable for yyerror.  The
+   heuristic is that double-quoting is unnecessary unless the string
+   contains an apostrophe, a comma, or backslash (other than
+   backslash-backslash).  YYSTR is taken from yytname.  If YYRES is
+   null, do not copy; instead, return the length of what the result
+   would have been.  */
+static YYPTRDIFF_T
+yytnamerr (char *yyres, const char *yystr)
+{
+  if (*yystr == '"')
+    {
+      YYPTRDIFF_T yyn = 0;
+      char const *yyp = yystr;
+      for (;;)
+        switch (*++yyp)
+          {
+          case '\'':
+          case ',':
+            goto do_not_strip_quotes;
+
+          case '\\':
+            if (*++yyp != '\\')
+              goto do_not_strip_quotes;
+            else
+              goto append;
+
+          append:
+          default:
+            if (yyres)
+              yyres[yyn] = *yyp;
+            yyn++;
+            break;
+
+          case '"':
+            if (yyres)
+              yyres[yyn] = '\0';
+            return yyn;
+          }
+    do_not_strip_quotes: ;
+    }
+
+  if (yyres)
+    return yystpcpy (yyres, yystr) - yyres;
+  else
+    return yystrlen (yystr);
+}
+#endif
+
+
+static int
+yy_syntax_error_arguments (const yypcontext_t *yyctx,
+                           yysymbol_kind_t yyarg[], int yyargn)
+{
+  /* Actual size of YYARG. */
+  int yycount = 0;
+  /* There are many possibilities here to consider:
+     - If this state is a consistent state with a default action, then
+       the only way this function was invoked is if the default action
+       is an error action.  In that case, don't check for expected
+       tokens because there are none.
+     - The only way there can be no lookahead present (in yychar) is if
+       this state is a consistent state with a default action.  Thus,
+       detecting the absence of a lookahead is sufficient to determine
+       that there is no unexpected or expected token to report.  In that
+       case, just report a simple "syntax error".
+     - Don't assume there isn't a lookahead just because this state is a
+       consistent state with a default action.  There might have been a
+       previous inconsistent state, consistent state with a non-default
+       action, or user semantic action that manipulated yychar.
+     - Of course, the expected token list depends on states to have
+       correct lookahead information, and it depends on the parser not
+       to perform extra reductions after fetching a lookahead from the
+       scanner and before detecting a syntax error.  Thus, state merging
+       (from LALR or IELR) and default reductions corrupt the expected
+       token list.  However, the list is correct for canonical LR with
+       one exception: it will still contain any token that will not be
+       accepted due to an error action in a later state.
+  */
+  if (yyctx->yytoken != YYSYMBOL_YYEMPTY)
+    {
+      int yyn;
+      if (yyarg)
+        yyarg[yycount] = yyctx->yytoken;
+      ++yycount;
+      yyn = yypcontext_expected_tokens (yyctx,
+                                        yyarg ? yyarg + 1 : yyarg, yyargn - 1);
+      if (yyn == YYENOMEM)
+        return YYENOMEM;
+      else
+        yycount += yyn;
+    }
+  return yycount;
+}
+
+/* Copy into *YYMSG, which is of size *YYMSG_ALLOC, an error message
+   about the unexpected token YYTOKEN for the state stack whose top is
+   YYSSP.
+
+   Return 0 if *YYMSG was successfully written.  Return -1 if *YYMSG is
+   not large enough to hold the message.  In that case, also set
+   *YYMSG_ALLOC to the required number of bytes.  Return YYENOMEM if the
+   required number of bytes is too large to store.  */
+static int
+yysyntax_error (YYPTRDIFF_T *yymsg_alloc, char **yymsg,
+                const yypcontext_t *yyctx)
+{
+  enum { YYARGS_MAX = 5 };
+  /* Internationalized format string. */
+  const char *yyformat = YY_NULLPTR;
+  /* Arguments of yyformat: reported tokens (one for the "unexpected",
+     one per "expected"). */
+  yysymbol_kind_t yyarg[YYARGS_MAX];
+  /* Cumulated lengths of YYARG.  */
+  YYPTRDIFF_T yysize = 0;
+
+  /* Actual size of YYARG. */
+  int yycount = yy_syntax_error_arguments (yyctx, yyarg, YYARGS_MAX);
+  if (yycount == YYENOMEM)
+    return YYENOMEM;
+
+  switch (yycount)
+    {
+#define YYCASE_(N, S)                       \
+      case N:                               \
+        yyformat = S;                       \
+        break
+    default: /* Avoid compiler warnings. */
+      YYCASE_(0, YY_("syntax error"));
+      YYCASE_(1, YY_("syntax error, unexpected %s"));
+      YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
+      YYCASE_(3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+      YYCASE_(4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+      YYCASE_(5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+#undef YYCASE_
+    }
+
+  /* Compute error message size.  Don't count the "%s"s, but reserve
+     room for the terminator.  */
+  yysize = yystrlen (yyformat) - 2 * yycount + 1;
+  {
+    int yyi;
+    for (yyi = 0; yyi < yycount; ++yyi)
+      {
+        YYPTRDIFF_T yysize1
+          = yysize + yytnamerr (YY_NULLPTR, yytname[yyarg[yyi]]);
+        if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
+          yysize = yysize1;
+        else
+          return YYENOMEM;
+      }
+  }
+
+  if (*yymsg_alloc < yysize)
+    {
+      *yymsg_alloc = 2 * yysize;
+      if (! (yysize <= *yymsg_alloc
+             && *yymsg_alloc <= YYSTACK_ALLOC_MAXIMUM))
+        *yymsg_alloc = YYSTACK_ALLOC_MAXIMUM;
+      return -1;
+    }
+
+  /* Avoid sprintf, as that infringes on the user's name space.
+     Don't have undefined behavior even if the translation
+     produced a string with the wrong number of "%s"s.  */
+  {
+    char *yyp = *yymsg;
+    int yyi = 0;
+    while ((*yyp = *yyformat) != '\0')
+      if (*yyp == '%' && yyformat[1] == 's' && yyi < yycount)
+        {
+          yyp += yytnamerr (yyp, yytname[yyarg[yyi++]]);
+          yyformat += 2;
+        }
+      else
+        {
+          ++yyp;
+          ++yyformat;
+        }
+  }
+  return 0;
+}
 
 
 /*-----------------------------------------------.
@@ -1288,7 +1538,10 @@ yyparse (void)
      action routines.  */
   YYSTYPE yyval;
 
-
+  /* Buffer for error messages, and its allocated size.  */
+  char yymsgbuf[128];
+  char *yymsg = yymsgbuf;
+  YYPTRDIFF_T yymsg_alloc = sizeof yymsgbuf;
 
 #define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N))
 
@@ -1501,389 +1754,389 @@ yyreduce:
   case 2: /* Program: CLASS ID LBRACE recPR RBRACE  */
 #line 106 "jucompiler.y"
                                                                 {printf("Program\n");}
-#line 1505 "y.tab.c"
+#line 1758 "y.tab.c"
     break;
 
   case 3: /* Program: CLASS ID LBRACE RBRACE  */
 #line 107 "jucompiler.y"
                                                                     {printf("Program\n");}
-#line 1511 "y.tab.c"
+#line 1764 "y.tab.c"
     break;
 
   case 10: /* MethodDecl: PUBLIC STATIC MethodHeader MethodBody  */
 #line 118 "jucompiler.y"
                                                                         {printf("MethodDecl\n");}
-#line 1517 "y.tab.c"
+#line 1770 "y.tab.c"
     break;
 
   case 11: /* FieldDecl: PUBLIC STATIC Type ID recCOMMAID SEMICOLON  */
 #line 121 "jucompiler.y"
                                                                                 {printf("FieldDecl\n");}
-#line 1523 "y.tab.c"
+#line 1776 "y.tab.c"
     break;
 
   case 12: /* FieldDecl: PUBLIC STATIC Type ID SEMICOLON  */
 #line 122 "jucompiler.y"
                                                                                 {printf("FieldDecl\n");}
-#line 1529 "y.tab.c"
+#line 1782 "y.tab.c"
     break;
 
   case 15: /* Type: BOOL  */
 #line 129 "jucompiler.y"
                                                                     {printf("Bool\n");}
-#line 1535 "y.tab.c"
+#line 1788 "y.tab.c"
     break;
 
   case 16: /* Type: INT  */
 #line 130 "jucompiler.y"
                                                                     {printf("Int\n");}
-#line 1541 "y.tab.c"
+#line 1794 "y.tab.c"
     break;
 
   case 17: /* Type: DOUBLE  */
 #line 131 "jucompiler.y"
                                                                     {printf("Double\n");}
-#line 1547 "y.tab.c"
+#line 1800 "y.tab.c"
     break;
 
   case 18: /* MethodHeader: Type ID LPAR FormalParams RPAR  */
 #line 134 "jucompiler.y"
                                                                     {printf("Type\n");}
-#line 1553 "y.tab.c"
+#line 1806 "y.tab.c"
     break;
 
   case 19: /* MethodHeader: Type ID LPAR RPAR  */
 #line 135 "jucompiler.y"
                                                                     {printf("Void\n");}
-#line 1559 "y.tab.c"
+#line 1812 "y.tab.c"
     break;
 
   case 20: /* MethodHeader: VOID ID LPAR FormalParams RPAR  */
 #line 136 "jucompiler.y"
                                                                     {printf("MethodHeader\n");}
-#line 1565 "y.tab.c"
+#line 1818 "y.tab.c"
     break;
 
   case 21: /* MethodHeader: VOID ID LPAR RPAR  */
 #line 137 "jucompiler.y"
                                                                     {printf("MethodHeader\n");}
-#line 1571 "y.tab.c"
+#line 1824 "y.tab.c"
     break;
 
   case 22: /* FormalParams: Type ID recFP  */
 #line 140 "jucompiler.y"
                                                                     {printf("FormalParams\n");}
-#line 1577 "y.tab.c"
+#line 1830 "y.tab.c"
     break;
 
   case 23: /* FormalParams: Type ID  */
 #line 141 "jucompiler.y"
                                                                     {printf("FormalParams\n");}
-#line 1583 "y.tab.c"
+#line 1836 "y.tab.c"
     break;
 
   case 24: /* FormalParams: STRING LSQ RSQ ID  */
 #line 142 "jucompiler.y"
                                                                     {printf("FormalParams\n");}
-#line 1589 "y.tab.c"
+#line 1842 "y.tab.c"
     break;
 
   case 27: /* MethodBody: LBRACE recMD RBRACE  */
 #line 149 "jucompiler.y"
                                                                     {printf("MethodBody\n");}
-#line 1595 "y.tab.c"
+#line 1848 "y.tab.c"
     break;
 
   case 28: /* MethodBody: LBRACE RBRACE  */
 #line 150 "jucompiler.y"
                                                                     {printf("MethodBody\n");}
-#line 1601 "y.tab.c"
+#line 1854 "y.tab.c"
     break;
 
   case 33: /* VarDecl: Type ID recCOMMAID SEMICOLON  */
 #line 159 "jucompiler.y"
                                                                     {printf("VarDecl\n");}
-#line 1607 "y.tab.c"
+#line 1860 "y.tab.c"
     break;
 
   case 34: /* VarDecl: Type ID SEMICOLON  */
 #line 160 "jucompiler.y"
                                                                     {printf("VarDecl\n");}
-#line 1613 "y.tab.c"
+#line 1866 "y.tab.c"
     break;
 
   case 35: /* Statement: LBRACE Statement RBRACE  */
 #line 163 "jucompiler.y"
                                                             {printf("Statement\n");}
-#line 1619 "y.tab.c"
+#line 1872 "y.tab.c"
     break;
 
   case 36: /* Statement: LBRACE RBRACE  */
 #line 164 "jucompiler.y"
                                                             {printf("Statement\n");}
-#line 1625 "y.tab.c"
+#line 1878 "y.tab.c"
     break;
 
   case 37: /* Statement: IF LPAR Expr RPAR Statement ELSE Statement  */
 #line 165 "jucompiler.y"
                                                                             {printf("Statement\n");}
-#line 1631 "y.tab.c"
+#line 1884 "y.tab.c"
     break;
 
   case 38: /* Statement: IF LPAR Expr RPAR Statement  */
 #line 166 "jucompiler.y"
                                                             {printf("Statement\n");}
-#line 1637 "y.tab.c"
+#line 1890 "y.tab.c"
     break;
 
   case 39: /* Statement: WHILE LPAR Expr RPAR Statement  */
 #line 167 "jucompiler.y"
                                                                 {printf("Statement\n");}
-#line 1643 "y.tab.c"
+#line 1896 "y.tab.c"
     break;
 
   case 40: /* Statement: RETURN Expr SEMICOLON  */
 #line 168 "jucompiler.y"
                                                         {printf("Statement\n");}
-#line 1649 "y.tab.c"
+#line 1902 "y.tab.c"
     break;
 
   case 41: /* Statement: RETURN SEMICOLON  */
 #line 169 "jucompiler.y"
                                                     {printf("Statement\n");}
-#line 1655 "y.tab.c"
+#line 1908 "y.tab.c"
     break;
 
   case 42: /* Statement: MethodInvocation SEMICOLON  */
 #line 170 "jucompiler.y"
                                                             {printf("Statement\n");}
-#line 1661 "y.tab.c"
+#line 1914 "y.tab.c"
     break;
 
   case 43: /* Statement: Assignment SEMICOLON  */
 #line 171 "jucompiler.y"
                                                         {printf("Statement\n");}
-#line 1667 "y.tab.c"
+#line 1920 "y.tab.c"
     break;
 
   case 44: /* Statement: ParseArgs SEMICOLON  */
 #line 172 "jucompiler.y"
                                                     {printf("Statement\n");}
-#line 1673 "y.tab.c"
+#line 1926 "y.tab.c"
     break;
 
   case 45: /* Statement: SEMICOLON  */
 #line 173 "jucompiler.y"
                                             {printf("Statement\n");}
-#line 1679 "y.tab.c"
+#line 1932 "y.tab.c"
     break;
 
   case 46: /* Statement: PRINT LPAR Expr RPAR SEMICOLON  */
 #line 174 "jucompiler.y"
                                                                 {printf("Statement\n");}
-#line 1685 "y.tab.c"
+#line 1938 "y.tab.c"
     break;
 
   case 47: /* Statement: PRINT LPAR STRLIT RPAR SEMICOLON  */
 #line 175 "jucompiler.y"
                                                                     {printf("Statement\n");}
-#line 1691 "y.tab.c"
+#line 1944 "y.tab.c"
     break;
 
   case 48: /* Statement: PRINT LPAR RPAR SEMICOLON  */
 #line 176 "jucompiler.y"
                                                             {printf("Statement\n");}
-#line 1697 "y.tab.c"
+#line 1950 "y.tab.c"
     break;
 
   case 49: /* MethodInvocation: ID LPAR Expr recCOMMAEXP RPAR  */
 #line 179 "jucompiler.y"
                                                                                          {printf("MethodInvocation\n");}
-#line 1703 "y.tab.c"
+#line 1956 "y.tab.c"
     break;
 
   case 53: /* Assignment: ID ASSIGN Expr  */
 #line 187 "jucompiler.y"
                                                                         {printf("Assign\n");}
-#line 1709 "y.tab.c"
+#line 1962 "y.tab.c"
     break;
 
   case 54: /* ParseArgs: PARSEINT LPAR ID LSQ Expr RSQ RPAR  */
 #line 190 "jucompiler.y"
                                                                         {printf("ParseArgs\n");}
-#line 1715 "y.tab.c"
+#line 1968 "y.tab.c"
     break;
 
   case 55: /* Expr: Expr PLUS Expr  */
 #line 193 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1721 "y.tab.c"
+#line 1974 "y.tab.c"
     break;
 
   case 56: /* Expr: Expr MINUS Expr  */
 #line 194 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1727 "y.tab.c"
+#line 1980 "y.tab.c"
     break;
 
   case 57: /* Expr: Expr STAR Expr  */
 #line 195 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1733 "y.tab.c"
+#line 1986 "y.tab.c"
     break;
 
   case 58: /* Expr: Expr DIV Expr  */
 #line 196 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1739 "y.tab.c"
+#line 1992 "y.tab.c"
     break;
 
   case 59: /* Expr: Expr MOD Expr  */
 #line 197 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1745 "y.tab.c"
+#line 1998 "y.tab.c"
     break;
 
   case 60: /* Expr: Expr AND Expr  */
 #line 198 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1751 "y.tab.c"
+#line 2004 "y.tab.c"
     break;
 
   case 61: /* Expr: Expr OR Expr  */
 #line 199 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1757 "y.tab.c"
+#line 2010 "y.tab.c"
     break;
 
   case 62: /* Expr: Expr XOR Expr  */
 #line 200 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1763 "y.tab.c"
+#line 2016 "y.tab.c"
     break;
 
   case 63: /* Expr: Expr LSHIFT Expr  */
 #line 201 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1769 "y.tab.c"
+#line 2022 "y.tab.c"
     break;
 
   case 64: /* Expr: Expr RSHIFT Expr  */
 #line 202 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1775 "y.tab.c"
+#line 2028 "y.tab.c"
     break;
 
   case 65: /* Expr: Expr EQ Expr  */
 #line 203 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1781 "y.tab.c"
+#line 2034 "y.tab.c"
     break;
 
   case 66: /* Expr: Expr GE Expr  */
 #line 204 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1787 "y.tab.c"
+#line 2040 "y.tab.c"
     break;
 
   case 67: /* Expr: Expr GT Expr  */
 #line 205 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1793 "y.tab.c"
+#line 2046 "y.tab.c"
     break;
 
   case 68: /* Expr: Expr LE Expr  */
 #line 206 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1799 "y.tab.c"
+#line 2052 "y.tab.c"
     break;
 
   case 69: /* Expr: Expr LT Expr  */
 #line 207 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1805 "y.tab.c"
+#line 2058 "y.tab.c"
     break;
 
   case 70: /* Expr: Expr NE Expr  */
 #line 208 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1811 "y.tab.c"
+#line 2064 "y.tab.c"
     break;
 
   case 71: /* Expr: MINUS Expr  */
 #line 209 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1817 "y.tab.c"
+#line 2070 "y.tab.c"
     break;
 
   case 72: /* Expr: NOT Expr  */
 #line 210 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1823 "y.tab.c"
+#line 2076 "y.tab.c"
     break;
 
   case 73: /* Expr: PLUS Expr  */
 #line 211 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1829 "y.tab.c"
+#line 2082 "y.tab.c"
     break;
 
   case 74: /* Expr: LPAR Expr RPAR  */
 #line 212 "jucompiler.y"
                                                         {printf("Expr\n");}
-#line 1835 "y.tab.c"
+#line 2088 "y.tab.c"
     break;
 
   case 75: /* Expr: MethodInvocation  */
 #line 213 "jucompiler.y"
                                                         {printf("MethodInvocation\n");}
-#line 1841 "y.tab.c"
+#line 2094 "y.tab.c"
     break;
 
   case 76: /* Expr: Assignment  */
 #line 214 "jucompiler.y"
                                                         {printf("Assign\n");}
-#line 1847 "y.tab.c"
+#line 2100 "y.tab.c"
     break;
 
   case 77: /* Expr: ParseArgs  */
 #line 215 "jucompiler.y"
                                                         {printf("ParseArgs\n");}
-#line 1853 "y.tab.c"
+#line 2106 "y.tab.c"
     break;
 
   case 78: /* Expr: ID  */
 #line 216 "jucompiler.y"
                                                         {printf("Id()\n");}
-#line 1859 "y.tab.c"
+#line 2112 "y.tab.c"
     break;
 
   case 79: /* Expr: ID DOTLENGTH  */
 #line 217 "jucompiler.y"
                                                         {printf("Length\n");}
-#line 1865 "y.tab.c"
+#line 2118 "y.tab.c"
     break;
 
   case 80: /* Expr: INTLIT  */
 #line 218 "jucompiler.y"
                                                         {printf("IntLit()\n");}
-#line 1871 "y.tab.c"
+#line 2124 "y.tab.c"
     break;
 
   case 81: /* Expr: REALLIT  */
 #line 219 "jucompiler.y"
                                                         {printf("RealLit()\n");}
-#line 1877 "y.tab.c"
+#line 2130 "y.tab.c"
     break;
 
   case 82: /* Expr: BOOLLIT  */
 #line 220 "jucompiler.y"
                                                         {printf("BoolLit()\n");}
-#line 1883 "y.tab.c"
+#line 2136 "y.tab.c"
     break;
 
 
-#line 1887 "y.tab.c"
+#line 2140 "y.tab.c"
 
       default: break;
     }
@@ -1930,7 +2183,37 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (YY_("syntax error"));
+      {
+        yypcontext_t yyctx
+          = {yyssp, yytoken};
+        char const *yymsgp = YY_("syntax error");
+        int yysyntax_error_status;
+        yysyntax_error_status = yysyntax_error (&yymsg_alloc, &yymsg, &yyctx);
+        if (yysyntax_error_status == 0)
+          yymsgp = yymsg;
+        else if (yysyntax_error_status == -1)
+          {
+            if (yymsg != yymsgbuf)
+              YYSTACK_FREE (yymsg);
+            yymsg = YY_CAST (char *,
+                             YYSTACK_ALLOC (YY_CAST (YYSIZE_T, yymsg_alloc)));
+            if (yymsg)
+              {
+                yysyntax_error_status
+                  = yysyntax_error (&yymsg_alloc, &yymsg, &yyctx);
+                yymsgp = yymsg;
+              }
+            else
+              {
+                yymsg = yymsgbuf;
+                yymsg_alloc = sizeof yymsgbuf;
+                yysyntax_error_status = YYENOMEM;
+              }
+          }
+        yyerror (yymsgp);
+        if (yysyntax_error_status == YYENOMEM)
+          YYNOMEM;
+      }
     }
 
   if (yyerrstatus == 3)
@@ -2072,7 +2355,8 @@ yyreturnlab:
   if (yyss != yyssa)
     YYSTACK_FREE (yyss);
 #endif
-
+  if (yymsg != yymsgbuf)
+    YYSTACK_FREE (yymsg);
   return yyresult;
 }
 
