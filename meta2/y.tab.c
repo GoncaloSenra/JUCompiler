@@ -74,31 +74,12 @@
     //Henrique Costa  2020214120
     
     #include <stdio.h>
-    
+    #include "STree.h"
     int yylex(void);
 
     void yyerror (const char *s);
 
-/*
-%define parse.error verbose
-
-
-%type <id> Program
-%type <id> MethodDecl
-%type <id> FieldDecl
-%type <id> Type
-%type <id> MethodHeader
-%type <id> FormalParams
-%type <id> MethodBody
-%type <id> VarDecl
-%type <id> Statement
-%type <id> MethodInvocation
-%type <id> Assignment
-%type <id> ParseArgs
-%type <id> Expr
-*/
-
-#line 102 "y.tab.c"
+#line 83 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -262,8 +243,9 @@ union YYSTYPE
     char* id;
     int intlit;
     float reallit;
+    struct node * no;
 
-#line 267 "y.tab.c"
+#line 249 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -746,15 +728,15 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   111,   111,   112,   115,   116,   117,   118,   119,   120,
-     123,   126,   127,   128,   131,   132,   135,   136,   137,   140,
-     141,   142,   143,   146,   147,   148,   151,   152,   155,   156,
-     159,   160,   161,   162,   165,   166,   169,   170,   171,   172,
-     173,   174,   175,   176,   177,   178,   179,   180,   181,   182,
-     183,   186,   187,   188,   191,   192,   195,   198,   199,   202,
-     203,   204,   205,   206,   207,   208,   209,   210,   211,   212,
-     213,   214,   215,   216,   217,   218,   219,   220,   221,   222,
-     223,   224,   225,   226,   227,   228,   229,   230
+       0,   112,   112,   113,   116,   117,   118,   119,   120,   121,
+     124,   127,   128,   129,   132,   133,   136,   137,   138,   141,
+     142,   143,   144,   147,   148,   149,   152,   153,   156,   157,
+     160,   161,   162,   163,   166,   167,   170,   171,   172,   173,
+     174,   175,   176,   177,   178,   179,   180,   181,   182,   183,
+     184,   187,   188,   189,   192,   193,   196,   199,   200,   203,
+     204,   205,   206,   207,   208,   209,   210,   211,   212,   213,
+     214,   215,   216,   217,   218,   219,   220,   221,   222,   223,
+     224,   225,   226,   227,   228,   229,   230,   231
 };
 #endif
 
@@ -1780,391 +1762,391 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* Program: CLASS ID LBRACE recPR RBRACE  */
-#line 111 "jucompiler.y"
+#line 112 "jucompiler.y"
                                                                 {printf("Program\n");}
-#line 1786 "y.tab.c"
+#line 1768 "y.tab.c"
     break;
 
   case 3: /* Program: CLASS ID LBRACE RBRACE  */
-#line 112 "jucompiler.y"
+#line 113 "jucompiler.y"
                                                                     {printf("Program\n");}
-#line 1792 "y.tab.c"
+#line 1774 "y.tab.c"
     break;
 
   case 10: /* MethodDecl: PUBLIC STATIC MethodHeader MethodBody  */
-#line 123 "jucompiler.y"
+#line 124 "jucompiler.y"
                                                                         {printf("MethodDecl\n");}
-#line 1798 "y.tab.c"
+#line 1780 "y.tab.c"
     break;
 
   case 11: /* FieldDecl: PUBLIC STATIC Type ID recCOMMAID SEMICOLON  */
-#line 126 "jucompiler.y"
+#line 127 "jucompiler.y"
                                                                                 {printf("FieldDecl\n");}
-#line 1804 "y.tab.c"
+#line 1786 "y.tab.c"
     break;
 
   case 12: /* FieldDecl: PUBLIC STATIC Type ID SEMICOLON  */
-#line 127 "jucompiler.y"
+#line 128 "jucompiler.y"
                                                                                 {printf("FieldDecl\n");}
-#line 1810 "y.tab.c"
+#line 1792 "y.tab.c"
     break;
 
   case 16: /* Type: BOOL  */
-#line 135 "jucompiler.y"
+#line 136 "jucompiler.y"
                                                                     {printf("Bool\n");}
-#line 1816 "y.tab.c"
+#line 1798 "y.tab.c"
     break;
 
   case 17: /* Type: INT  */
-#line 136 "jucompiler.y"
+#line 137 "jucompiler.y"
                                                                     {printf("Int\n");}
-#line 1822 "y.tab.c"
+#line 1804 "y.tab.c"
     break;
 
   case 18: /* Type: DOUBLE  */
-#line 137 "jucompiler.y"
+#line 138 "jucompiler.y"
                                                                     {printf("Double\n");}
-#line 1828 "y.tab.c"
+#line 1810 "y.tab.c"
     break;
 
   case 19: /* MethodHeader: Type ID LPAR FormalParams RPAR  */
-#line 140 "jucompiler.y"
+#line 141 "jucompiler.y"
                                                                     {printf("Type\n");}
-#line 1834 "y.tab.c"
+#line 1816 "y.tab.c"
     break;
 
   case 20: /* MethodHeader: Type ID LPAR RPAR  */
-#line 141 "jucompiler.y"
+#line 142 "jucompiler.y"
                                                                     {printf("Void\n");}
-#line 1840 "y.tab.c"
+#line 1822 "y.tab.c"
     break;
 
   case 21: /* MethodHeader: VOID ID LPAR FormalParams RPAR  */
-#line 142 "jucompiler.y"
+#line 143 "jucompiler.y"
                                                                     {printf("MethodHeader\n");}
-#line 1846 "y.tab.c"
+#line 1828 "y.tab.c"
     break;
 
   case 22: /* MethodHeader: VOID ID LPAR RPAR  */
-#line 143 "jucompiler.y"
+#line 144 "jucompiler.y"
                                                                     {printf("MethodHeader\n");}
-#line 1852 "y.tab.c"
+#line 1834 "y.tab.c"
     break;
 
   case 23: /* FormalParams: Type ID recFP  */
-#line 146 "jucompiler.y"
+#line 147 "jucompiler.y"
                                                                     {printf("FormalParams\n");}
-#line 1858 "y.tab.c"
+#line 1840 "y.tab.c"
     break;
 
   case 24: /* FormalParams: Type ID  */
-#line 147 "jucompiler.y"
+#line 148 "jucompiler.y"
                                                                     {printf("FormalParams\n");}
-#line 1864 "y.tab.c"
+#line 1846 "y.tab.c"
     break;
 
   case 25: /* FormalParams: STRING LSQ RSQ ID  */
-#line 148 "jucompiler.y"
+#line 149 "jucompiler.y"
                                                                     {printf("FormalParams\n");}
-#line 1870 "y.tab.c"
+#line 1852 "y.tab.c"
     break;
 
   case 28: /* MethodBody: LBRACE recMD RBRACE  */
-#line 155 "jucompiler.y"
+#line 156 "jucompiler.y"
                                                                     {printf("MethodBody\n");}
-#line 1876 "y.tab.c"
+#line 1858 "y.tab.c"
     break;
 
   case 29: /* MethodBody: LBRACE RBRACE  */
-#line 156 "jucompiler.y"
+#line 157 "jucompiler.y"
                                                                     {printf("MethodBody\n");}
-#line 1882 "y.tab.c"
+#line 1864 "y.tab.c"
     break;
 
   case 34: /* VarDecl: Type ID recCOMMAID SEMICOLON  */
-#line 165 "jucompiler.y"
+#line 166 "jucompiler.y"
                                                                     {printf("VarDecl\n");}
-#line 1888 "y.tab.c"
+#line 1870 "y.tab.c"
     break;
 
   case 35: /* VarDecl: Type ID SEMICOLON  */
-#line 166 "jucompiler.y"
+#line 167 "jucompiler.y"
                                                                     {printf("VarDecl\n");}
-#line 1894 "y.tab.c"
+#line 1876 "y.tab.c"
     break;
 
   case 36: /* Statement: LBRACE Statement RBRACE  */
-#line 169 "jucompiler.y"
+#line 170 "jucompiler.y"
+                                                            {printf("Statement\n");}
+#line 1882 "y.tab.c"
+    break;
+
+  case 37: /* Statement: LBRACE RBRACE  */
+#line 171 "jucompiler.y"
+                                                            {printf("Statement\n");}
+#line 1888 "y.tab.c"
+    break;
+
+  case 38: /* Statement: IF LPAR Expr RPAR Statement ELSE Statement  */
+#line 172 "jucompiler.y"
+                                                                            {printf("Statement\n");}
+#line 1894 "y.tab.c"
+    break;
+
+  case 39: /* Statement: IF LPAR Expr RPAR Statement  */
+#line 173 "jucompiler.y"
                                                             {printf("Statement\n");}
 #line 1900 "y.tab.c"
     break;
 
-  case 37: /* Statement: LBRACE RBRACE  */
-#line 170 "jucompiler.y"
-                                                            {printf("Statement\n");}
+  case 40: /* Statement: WHILE LPAR Expr RPAR Statement  */
+#line 174 "jucompiler.y"
+                                                                {printf("Statement\n");}
 #line 1906 "y.tab.c"
     break;
 
-  case 38: /* Statement: IF LPAR Expr RPAR Statement ELSE Statement  */
-#line 171 "jucompiler.y"
-                                                                            {printf("Statement\n");}
+  case 41: /* Statement: RETURN Expr SEMICOLON  */
+#line 175 "jucompiler.y"
+                                                        {printf("Statement\n");}
 #line 1912 "y.tab.c"
     break;
 
-  case 39: /* Statement: IF LPAR Expr RPAR Statement  */
-#line 172 "jucompiler.y"
-                                                            {printf("Statement\n");}
+  case 42: /* Statement: RETURN SEMICOLON  */
+#line 176 "jucompiler.y"
+                                                    {printf("Statement\n");}
 #line 1918 "y.tab.c"
     break;
 
-  case 40: /* Statement: WHILE LPAR Expr RPAR Statement  */
-#line 173 "jucompiler.y"
-                                                                {printf("Statement\n");}
+  case 43: /* Statement: MethodInvocation SEMICOLON  */
+#line 177 "jucompiler.y"
+                                                            {printf("Statement\n");}
 #line 1924 "y.tab.c"
     break;
 
-  case 41: /* Statement: RETURN Expr SEMICOLON  */
-#line 174 "jucompiler.y"
+  case 44: /* Statement: Assignment SEMICOLON  */
+#line 178 "jucompiler.y"
                                                         {printf("Statement\n");}
 #line 1930 "y.tab.c"
     break;
 
-  case 42: /* Statement: RETURN SEMICOLON  */
-#line 175 "jucompiler.y"
+  case 45: /* Statement: ParseArgs SEMICOLON  */
+#line 179 "jucompiler.y"
                                                     {printf("Statement\n");}
 #line 1936 "y.tab.c"
     break;
 
-  case 43: /* Statement: MethodInvocation SEMICOLON  */
-#line 176 "jucompiler.y"
-                                                            {printf("Statement\n");}
+  case 46: /* Statement: SEMICOLON  */
+#line 180 "jucompiler.y"
+                                            {printf("Statement\n");}
 #line 1942 "y.tab.c"
     break;
 
-  case 44: /* Statement: Assignment SEMICOLON  */
-#line 177 "jucompiler.y"
-                                                        {printf("Statement\n");}
+  case 47: /* Statement: PRINT LPAR Expr RPAR SEMICOLON  */
+#line 181 "jucompiler.y"
+                                                                {printf("Statement\n");}
 #line 1948 "y.tab.c"
     break;
 
-  case 45: /* Statement: ParseArgs SEMICOLON  */
-#line 178 "jucompiler.y"
-                                                    {printf("Statement\n");}
+  case 48: /* Statement: PRINT LPAR STRLIT RPAR SEMICOLON  */
+#line 182 "jucompiler.y"
+                                                                    {printf("Statement\n");}
 #line 1954 "y.tab.c"
     break;
 
-  case 46: /* Statement: SEMICOLON  */
-#line 179 "jucompiler.y"
-                                            {printf("Statement\n");}
+  case 49: /* Statement: PRINT LPAR RPAR SEMICOLON  */
+#line 183 "jucompiler.y"
+                                                            {printf("Statement\n");}
 #line 1960 "y.tab.c"
     break;
 
-  case 47: /* Statement: PRINT LPAR Expr RPAR SEMICOLON  */
-#line 180 "jucompiler.y"
-                                                                {printf("Statement\n");}
+  case 51: /* MethodInvocation: ID LPAR Expr recCOMMAEXP RPAR  */
+#line 187 "jucompiler.y"
+                                                                                         {printf("MethodInvocation\n");}
 #line 1966 "y.tab.c"
     break;
 
-  case 48: /* Statement: PRINT LPAR STRLIT RPAR SEMICOLON  */
-#line 181 "jucompiler.y"
-                                                                    {printf("Statement\n");}
+  case 56: /* Assignment: ID ASSIGN Expr  */
+#line 196 "jucompiler.y"
+                                                                        {printf("Assign\n");}
 #line 1972 "y.tab.c"
     break;
 
-  case 49: /* Statement: PRINT LPAR RPAR SEMICOLON  */
-#line 182 "jucompiler.y"
-                                                            {printf("Statement\n");}
+  case 57: /* ParseArgs: PARSEINT LPAR ID LSQ Expr RSQ RPAR  */
+#line 199 "jucompiler.y"
+                                                                        {printf("ParseArgs\n");}
 #line 1978 "y.tab.c"
     break;
 
-  case 51: /* MethodInvocation: ID LPAR Expr recCOMMAEXP RPAR  */
-#line 186 "jucompiler.y"
-                                                                                         {printf("MethodInvocation\n");}
+  case 59: /* Expr: Expr PLUS Expr  */
+#line 203 "jucompiler.y"
+                                                        {printf("Expr\n");}
 #line 1984 "y.tab.c"
     break;
 
-  case 56: /* Assignment: ID ASSIGN Expr  */
-#line 195 "jucompiler.y"
-                                                                        {printf("Assign\n");}
+  case 60: /* Expr: Expr MINUS Expr  */
+#line 204 "jucompiler.y"
+                                                        {printf("Expr\n");}
 #line 1990 "y.tab.c"
     break;
 
-  case 57: /* ParseArgs: PARSEINT LPAR ID LSQ Expr RSQ RPAR  */
-#line 198 "jucompiler.y"
-                                                                        {printf("ParseArgs\n");}
+  case 61: /* Expr: Expr STAR Expr  */
+#line 205 "jucompiler.y"
+                                                        {printf("Expr\n");}
 #line 1996 "y.tab.c"
     break;
 
-  case 59: /* Expr: Expr PLUS Expr  */
-#line 202 "jucompiler.y"
+  case 62: /* Expr: Expr DIV Expr  */
+#line 206 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2002 "y.tab.c"
     break;
 
-  case 60: /* Expr: Expr MINUS Expr  */
-#line 203 "jucompiler.y"
+  case 63: /* Expr: Expr MOD Expr  */
+#line 207 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2008 "y.tab.c"
     break;
 
-  case 61: /* Expr: Expr STAR Expr  */
-#line 204 "jucompiler.y"
+  case 64: /* Expr: Expr AND Expr  */
+#line 208 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2014 "y.tab.c"
     break;
 
-  case 62: /* Expr: Expr DIV Expr  */
-#line 205 "jucompiler.y"
+  case 65: /* Expr: Expr OR Expr  */
+#line 209 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2020 "y.tab.c"
     break;
 
-  case 63: /* Expr: Expr MOD Expr  */
-#line 206 "jucompiler.y"
+  case 66: /* Expr: Expr XOR Expr  */
+#line 210 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2026 "y.tab.c"
     break;
 
-  case 64: /* Expr: Expr AND Expr  */
-#line 207 "jucompiler.y"
+  case 67: /* Expr: Expr LSHIFT Expr  */
+#line 211 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2032 "y.tab.c"
     break;
 
-  case 65: /* Expr: Expr OR Expr  */
-#line 208 "jucompiler.y"
+  case 68: /* Expr: Expr RSHIFT Expr  */
+#line 212 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2038 "y.tab.c"
     break;
 
-  case 66: /* Expr: Expr XOR Expr  */
-#line 209 "jucompiler.y"
+  case 69: /* Expr: Expr EQ Expr  */
+#line 213 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2044 "y.tab.c"
     break;
 
-  case 67: /* Expr: Expr LSHIFT Expr  */
-#line 210 "jucompiler.y"
+  case 70: /* Expr: Expr GE Expr  */
+#line 214 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2050 "y.tab.c"
     break;
 
-  case 68: /* Expr: Expr RSHIFT Expr  */
-#line 211 "jucompiler.y"
+  case 71: /* Expr: Expr GT Expr  */
+#line 215 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2056 "y.tab.c"
     break;
 
-  case 69: /* Expr: Expr EQ Expr  */
-#line 212 "jucompiler.y"
+  case 72: /* Expr: Expr LE Expr  */
+#line 216 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2062 "y.tab.c"
     break;
 
-  case 70: /* Expr: Expr GE Expr  */
-#line 213 "jucompiler.y"
+  case 73: /* Expr: Expr LT Expr  */
+#line 217 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2068 "y.tab.c"
     break;
 
-  case 71: /* Expr: Expr GT Expr  */
-#line 214 "jucompiler.y"
+  case 74: /* Expr: Expr NE Expr  */
+#line 218 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2074 "y.tab.c"
     break;
 
-  case 72: /* Expr: Expr LE Expr  */
-#line 215 "jucompiler.y"
+  case 75: /* Expr: MINUS Expr  */
+#line 219 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2080 "y.tab.c"
     break;
 
-  case 73: /* Expr: Expr LT Expr  */
-#line 216 "jucompiler.y"
+  case 76: /* Expr: NOT Expr  */
+#line 220 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2086 "y.tab.c"
     break;
 
-  case 74: /* Expr: Expr NE Expr  */
-#line 217 "jucompiler.y"
+  case 77: /* Expr: PLUS Expr  */
+#line 221 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2092 "y.tab.c"
     break;
 
-  case 75: /* Expr: MINUS Expr  */
-#line 218 "jucompiler.y"
+  case 78: /* Expr: LPAR Expr RPAR  */
+#line 222 "jucompiler.y"
                                                         {printf("Expr\n");}
 #line 2098 "y.tab.c"
     break;
 
-  case 76: /* Expr: NOT Expr  */
-#line 219 "jucompiler.y"
-                                                        {printf("Expr\n");}
+  case 79: /* Expr: MethodInvocation  */
+#line 223 "jucompiler.y"
+                                                        {printf("MethodInvocation\n");}
 #line 2104 "y.tab.c"
     break;
 
-  case 77: /* Expr: PLUS Expr  */
-#line 220 "jucompiler.y"
-                                                        {printf("Expr\n");}
+  case 80: /* Expr: Assignment  */
+#line 224 "jucompiler.y"
+                                                        {printf("Assign\n");}
 #line 2110 "y.tab.c"
     break;
 
-  case 78: /* Expr: LPAR Expr RPAR  */
-#line 221 "jucompiler.y"
-                                                        {printf("Expr\n");}
+  case 81: /* Expr: ParseArgs  */
+#line 225 "jucompiler.y"
+                                                        {printf("ParseArgs\n");}
 #line 2116 "y.tab.c"
     break;
 
-  case 79: /* Expr: MethodInvocation  */
-#line 222 "jucompiler.y"
-                                                        {printf("MethodInvocation\n");}
+  case 82: /* Expr: ID  */
+#line 226 "jucompiler.y"
+                                                        {printf("Id()\n");}
 #line 2122 "y.tab.c"
     break;
 
-  case 80: /* Expr: Assignment  */
-#line 223 "jucompiler.y"
-                                                        {printf("Assign\n");}
+  case 83: /* Expr: ID DOTLENGTH  */
+#line 227 "jucompiler.y"
+                                                        {printf("Length\n");}
 #line 2128 "y.tab.c"
     break;
 
-  case 81: /* Expr: ParseArgs  */
-#line 224 "jucompiler.y"
-                                                        {printf("ParseArgs\n");}
+  case 84: /* Expr: INTLIT  */
+#line 228 "jucompiler.y"
+                                                        {printf("IntLit()\n");}
 #line 2134 "y.tab.c"
     break;
 
-  case 82: /* Expr: ID  */
-#line 225 "jucompiler.y"
-                                                        {printf("Id()\n");}
+  case 85: /* Expr: REALLIT  */
+#line 229 "jucompiler.y"
+                                                        {printf("RealLit()\n");}
 #line 2140 "y.tab.c"
     break;
 
-  case 83: /* Expr: ID DOTLENGTH  */
-#line 226 "jucompiler.y"
-                                                        {printf("Length\n");}
+  case 86: /* Expr: BOOLLIT  */
+#line 230 "jucompiler.y"
+                                                        {printf("BoolLit()\n");}
 #line 2146 "y.tab.c"
     break;
 
-  case 84: /* Expr: INTLIT  */
-#line 227 "jucompiler.y"
-                                                        {printf("IntLit()\n");}
-#line 2152 "y.tab.c"
-    break;
 
-  case 85: /* Expr: REALLIT  */
-#line 228 "jucompiler.y"
-                                                        {printf("RealLit()\n");}
-#line 2158 "y.tab.c"
-    break;
-
-  case 86: /* Expr: BOOLLIT  */
-#line 229 "jucompiler.y"
-                                                        {printf("BoolLit()\n");}
-#line 2164 "y.tab.c"
-    break;
-
-
-#line 2168 "y.tab.c"
+#line 2150 "y.tab.c"
 
       default: break;
     }
@@ -2388,7 +2370,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 234 "jucompiler.y"
+#line 235 "jucompiler.y"
 
 
 

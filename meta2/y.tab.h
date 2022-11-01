@@ -174,8 +174,9 @@ union YYSTYPE
     char* id;
     int intlit;
     float reallit;
+    struct node * no;
 
-#line 179 "y.tab.h"
+#line 180 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -5,35 +5,30 @@
     //Henrique Costa  2020214120
     
     #include <stdio.h>
-    
+    #include "STree.h"
     int yylex(void);
 
     void yyerror (const char *s);
-
-/*
-%define parse.error verbose
-
-
-%type <node> Program
-%type <node> recPR
-%type <node> MethodDecl
-%type <node> FieldDecl
-%type <node> recCOMMAID
-%type <node> Type
-%type <node> MethodHeader
-%type <node> FormalParams
-%type <node> recFP
-%type <node> MethodBody
-%type <node> recMD
-%type <node> VarDecl
-%type <node> Statement
-%type <node> MethodInvocation
-%type <node> recCOMMAEXP
-%type <node> Assignment
-%type <node> ParseArgs
-%type <node> Expr
-*/
 %}
+
+%type <no> Program
+%type <no> recPR
+%type <no> MethodDecl
+%type <no> FieldDecl
+%type <no> recCOMMAID
+%type <no> Type
+%type <no> MethodHeader
+%type <no> FormalParams
+%type <no> recFP
+%type <no> MethodBody
+%type <no> recMD
+%type <no> VarDecl
+%type <no> Statement
+%type <no> MethodInvocation
+%type <no> recCOMMAEXP
+%type <no> Assignment
+%type <no> ParseArgs
+%type <no> Expr
 
 %define parse.error verbose
 
@@ -110,6 +105,7 @@
     char* id;
     int intlit;
     float reallit;
+    struct node * no;
 };
 
 %%
