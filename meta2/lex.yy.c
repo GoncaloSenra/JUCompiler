@@ -2431,5 +2431,5 @@ int yywrap()
 
 void yyerror (char *s)
 {
-    printf ("%s\n", s);
+    printf ("Line %d, col %d: syntax error: %s\n",col,line,yytext);
 }

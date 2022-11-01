@@ -14,19 +14,24 @@
 %define parse.error verbose
 
 
-%type <id> Program
-%type <id> MethodDecl
-%type <id> FieldDecl
-%type <id> Type
-%type <id> MethodHeader
-%type <id> FormalParams
-%type <id> MethodBody
-%type <id> VarDecl
-%type <id> Statement
-%type <id> MethodInvocation
-%type <id> Assignment
-%type <id> ParseArgs
-%type <id> Expr
+%type <node> Program
+%type <node> recPR
+%type <node> MethodDecl
+%type <node> FieldDecl
+%type <node> recCOMMAID
+%type <node> Type
+%type <node> MethodHeader
+%type <node> FormalParams
+%type <node> recFP
+%type <node> MethodBody
+%type <node> recMD
+%type <node> VarDecl
+%type <node> Statement
+%type <node> MethodInvocation
+%type <node> recCOMMAEXP
+%type <node> Assignment
+%type <node> ParseArgs
+%type <node> Expr
 */
 %}
 
