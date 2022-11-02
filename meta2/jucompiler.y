@@ -126,21 +126,30 @@ recPR                       :   MethodDecl                      {$$ = $1;}
 MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody   {$$ = createNode("MethodDecl"); $$->child = $3; newBrother($3, $4)}
                             ;
 
-FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux, "Id(%s)", $4); newBrother($3, createNode(aux)); newBrother($3, $5);}
+FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux, "Id(%s)", $4); newBrother($3, createNode(aux)); newBrother($3, $5);
+                                                                                    node * auxnode = $4, auxnode2;
+                                                                                    char * var = $3;
+                                                                                    while{auxnode != NULL}{
+                                                                                        auxnode2 = auxnode->child;
+                                                                                        auxnode->child = createNode(var);
+                                                                                        auxnode->child->brother = auxnode2;
+                                                                                        auxnode = auxnode->brother;
+                                                                                    }
+                                                                                }
                             |   PUBLIC STATIC Type ID SEMICOLON                 {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux, "Id(%s)", $4); newBrother($3, createNode(aux));}
                             |   error SEMICOLON                                 {;}
                             ;
 
-recCOMMAID                  :   COMMA ID {$$ = $2;}
-                            |   recCOMMAID COMMA ID {;}
+recCOMMAID                  :   COMMA ID                    {$$ = createNode("FieldDecl"); sprintf(aux, "Id(%s)", $2); $$->child = createNode(aux);}
+                            |   recCOMMAID COMMA ID         {;}
                             ;
 
-Type                        :   BOOL                                {printf("Bool\n");}
-                            |   INT                                 {printf("Int\n");}
-                            |   DOUBLE                              {printf("Double\n");}
+Type                        :   BOOL                                {$$ = createNode("Bool");}
+                            |   INT                                 {$$ = createNode("Int");}
+                            |   DOUBLE                              {$$ = createNode("Double");}
                             ;
 
-MethodHeader                :   Type ID LPAR FormalParams RPAR      {printf("Type\n");}
+MethodHeader                :   Type ID LPAR FormalParams RPAR      {$$ = createNode("MethodHeader"); $$->child = $1; sprintf(aux, "Id(%s)", $2); addBrother($1, createNode(aux)); addBrother($1, $4);}
                             |   Type ID LPAR RPAR                   {printf("Void\n");}
                             |   VOID ID LPAR FormalParams RPAR      {printf("MethodHeader\n");}
                             |   VOID ID LPAR RPAR                   {printf("MethodHeader\n");}
@@ -222,7 +231,7 @@ Expr                        :   Expr PLUS Expr          {$$ = createNode("Plus")
                             |   NOT Expr                {$$ = createNode("Not"); $$->child=$2;}
                             |   PLUS Expr               {$$ = createNode("Plus"); $$->child=$2;}
                             |   LPAR Expr RPAR          {$$ = $2;}
-                            |   MethodInvocation        {$$ = createNode("MethodInvocation");}
+                            |   MethodInvocation        {$$ = $1;}
                             |   Assignment              {$$ = createNode("Assign");}
                             |   ParseArgs               {$$ = createNode("ParseArgs");}
                             |   ID                      {sprintf(aux, "Id(%s)", $1); $$ = createNode(aux);}
