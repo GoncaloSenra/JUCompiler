@@ -202,35 +202,35 @@ ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR      {printf(
                             |   PARSEINT LPAR error RPAR {;}
                             ;
 
-Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
-                            |   Expr MINUS Expr         {printf("Expr\n");}
-                            |   Expr STAR Expr          {printf("Expr\n");}
-                            |   Expr DIV Expr           {printf("Expr\n");}
-                            |   Expr MOD Expr           {printf("Expr\n");}
-                            |   Expr AND Expr           {printf("Expr\n");}
-                            |   Expr OR Expr            {printf("Expr\n");}
-                            |   Expr XOR Expr           {printf("Expr\n");}
-                            |   Expr LSHIFT Expr        {printf("Expr\n");}
-                            |   Expr RSHIFT Expr        {printf("Expr\n");}
-                            |   Expr EQ Expr            {printf("Expr\n");}
-                            |   Expr GE Expr            {printf("Expr\n");}
-                            |   Expr GT Expr            {printf("Expr\n");}
-                            |   Expr LE Expr            {printf("Expr\n");}
-                            |   Expr LT Expr            {printf("Expr\n");}
-                            |   Expr NE Expr            {printf("Expr\n");}
-                            |   MINUS Expr              {printf("Expr\n");}
-                            |   NOT Expr                {printf("Expr\n");}
-                            |   PLUS Expr               {printf("Expr\n");}
-                            |   LPAR Expr RPAR          {printf("Expr\n");}
-                            |   MethodInvocation        {printf("MethodInvocation\n");}
-                            |   Assignment              {printf("Assign\n");}
-                            |   ParseArgs               {printf("ParseArgs\n");}
-                            |   ID                      {printf("Id()\n");}
-                            |   ID DOTLENGTH            {printf("Length\n");}
-                            |   INTLIT                  {printf("IntLit()\n");}
-                            |   REALLIT                 {printf("RealLit()\n");}
-                            |   BOOLLIT                 {printf("BoolLit()\n");}
-                            |   LPAR error RPAR {;}
+Expr                        :   Expr PLUS Expr          {$$ = createNode("Plus"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr MINUS Expr         {$$ = createNode("Minus"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr STAR Expr          {$$ = createNode("Star"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr DIV Expr           {$$ = createNode("Div"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr MOD Expr           {$$ = createNode("Mod"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr AND Expr           {$$ = createNode("And"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr OR Expr            {$$ = createNode("Or"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr XOR Expr           {$$ = createNode("Xor"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr LSHIFT Expr        {$$ = createNode("Lshift"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr RSHIFT Expr        {$$ = createNode("Rshift"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr EQ Expr            {$$ = createNode("Eq"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr GE Expr            {$$ = createNode("Ge"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr GT Expr            {$$ = createNode("Gt"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr LE Expr            {$$ = createNode("Le"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr LT Expr            {$$ = createNode("Lt"); $$->child=$1; newBrother($1,$3);}
+                            |   Expr NE Expr            {$$ = createNode("Ne"); $$->child=$1; newBrother($1,$3);}
+                            |   MINUS Expr              {$$ = createNode("Minus"); $$->child=$2;}
+                            |   NOT Expr                {$$ = createNode("Not"); $$->child=$2;}
+                            |   PLUS Expr               {$$ = createNode("Plus"); $$->child=$2;}
+                            |   LPAR Expr RPAR          {$$ = $2;}
+                            |   MethodInvocation        {$$ = createNode("MethodInvocation");}
+                            |   Assignment              {$$ = createNode("Assign");}
+                            |   ParseArgs               {$$ = createNode("ParseArgs");}
+                            |   ID                      {sprintf(aux, "Id(%s)", $1); $$ = createNode(aux);}
+                            |   ID DOTLENGTH            {$$ = newNode("Call"); sprintf(aux, "Id(%s)", $1); $$->child = newNode(aux); addBrother($$->child,$2);}
+                            |   INTLIT                  {sprintf(aux, "IntLit(%s)", $1); $$ = createNode(aux);}
+                            |   REALLIT                 {sprintf(aux, "RealLit(%s)", $1); $$ = createNode(aux);}
+                            |   BOOLLIT                 {sprintf(aux, "BoolLit(%s)", $1); $$ = createNode(aux);}
+                            |   LPAR error RPAR         {;}
                             ;
 
 
