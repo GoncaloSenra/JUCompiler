@@ -8,6 +8,8 @@
     #include "STree.h"
     int yylex(void);
 
+    char * aux; 
+
     void yyerror (const char *s);
 %}
 
@@ -109,28 +111,28 @@
 };
 
 %%
-Program                     :   CLASS ID LBRACE recPR RBRACE    {printf("Program\n");}                           
-                            |   CLASS ID LBRACE RBRACE              {printf("Program\n");}
+Program                     :   CLASS ID LBRACE recPR RBRACE    {$$ = createNode("Program"); $$->child = $4;}                           
+                            |   CLASS ID LBRACE RBRACE          {$$ = createNode("Program");}
                             ;
 
-recPR                       :   MethodDecl
-                            |   FieldDecl
-                            |   SEMICOLON
-                            |   recPR MethodDecl
-                            |   recPR FieldDecl
-                            |   recPR SEMICOLON
+recPR                       :   MethodDecl                      {$$ = $1;}
+                            |   FieldDecl                       {$$ = $1;}    
+                            |   SEMICOLON                       {;}
+                            |   recPR MethodDecl                {$$ = $1; newBrother($$, $2);}
+                            |   recPR FieldDecl                 {$$ = $1; newBrother($$, $2);}
+                            |   recPR SEMICOLON                 {$$ = $1;}
                             ;
 
-MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody   {printf("MethodDecl\n");}
+MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody   {$$ = createNode("MethodDecl"); $$->child = $3; newBrother($3, $4)}
                             ;
 
-FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      {printf("FieldDecl\n");}
-                            |   PUBLIC STATIC Type ID SEMICOLON                 {printf("FieldDecl\n");}
-                            |   error SEMICOLON
+FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux, "Id(%s)", $4); newBrother($3, createNode(aux)); newBrother($3, $5);}
+                            |   PUBLIC STATIC Type ID SEMICOLON                 {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux, "Id(%s)", $4); newBrother($3, createNode(aux));}
+                            |   error SEMICOLON                                 {;}
                             ;
 
-recCOMMAID                  :   COMMA ID
-                            |   recCOMMAID COMMA ID
+recCOMMAID                  :   COMMA ID {$$ = $2;}
+                            |   recCOMMAID COMMA ID {;}
                             ;
 
 Type                        :   BOOL                                {printf("Bool\n");}
@@ -149,55 +151,55 @@ FormalParams                :   Type ID recFP                       {printf("For
                             |   STRING LSQ RSQ ID                   {printf("FormalParams\n");}
                             ;
 
-recFP                       :   COMMA Type ID
-                            |   recFP COMMA Type ID
+recFP                       :   COMMA Type ID {;}
+                            |   recFP COMMA Type ID {;}
                             ;
 
 MethodBody                  :   LBRACE recMD RBRACE                 {printf("MethodBody\n");}
                             |   LBRACE RBRACE                       {printf("MethodBody\n");}
                             ;
 
-recMD                       :   Statement
-                            |   VarDecl
-                            |   recMD Statement
-                            |   recMD VarDecl
+recMD                       :   Statement {;}
+                            |   VarDecl {;}
+                            |   recMD Statement {;}
+                            |   recMD VarDecl {;}
                             ;
                         
 VarDecl                     :   Type ID recCOMMAID SEMICOLON        {printf("VarDecl\n");}
                             |   Type ID SEMICOLON                   {printf("VarDecl\n");}
                             ;
 
-Statement                   :   LBRACE Statement RBRACE     {printf("Statement\n");}
-                            |   LBRACE RBRACE               {printf("Statement\n");}
-                            |   IF LPAR Expr RPAR Statement ELSE Statement  {printf("Statement\n");}                            
-                            |   IF LPAR Expr RPAR Statement {printf("Statement\n");}
-                            |   WHILE LPAR Expr RPAR Statement  {printf("Statement\n");}
-                            |   RETURN Expr SEMICOLON   {printf("Statement\n");}                            
-                            |   RETURN SEMICOLON    {printf("Statement\n");}
-                            |   MethodInvocation SEMICOLON  {printf("Statement\n");}
-                            |   Assignment SEMICOLON    {printf("Statement\n");}
-                            |   ParseArgs SEMICOLON {printf("Statement\n");}
-                            |   SEMICOLON   {printf("Statement\n");}                            
-                            |   PRINT LPAR Expr RPAR SEMICOLON  {printf("Statement\n");}
-                            |   PRINT LPAR STRLIT RPAR SEMICOLON    {printf("Statement\n");}
-                            |   PRINT LPAR RPAR SEMICOLON   {printf("Statement\n");}                            
-                            |   error SEMICOLON
+Statement                   :   LBRACE Statement RBRACE                         {printf("Statement\n");}
+                            |   LBRACE RBRACE                                   {printf("Statement\n");}
+                            |   IF LPAR Expr RPAR Statement ELSE Statement      {printf("Statement\n");}                            
+                            |   IF LPAR Expr RPAR Statement                     {printf("Statement\n");}
+                            |   WHILE LPAR Expr RPAR Statement                  {printf("Statement\n");}
+                            |   RETURN Expr SEMICOLON                           {printf("Statement\n");}                            
+                            |   RETURN SEMICOLON                                {printf("Statement\n");}
+                            |   MethodInvocation SEMICOLON                      {printf("Statement\n");}
+                            |   Assignment SEMICOLON                            {printf("Statement\n");}
+                            |   ParseArgs SEMICOLON                             {printf("Statement\n");}
+                            |   SEMICOLON                                       {printf("Statement\n");}                            
+                            |   PRINT LPAR Expr RPAR SEMICOLON                  {printf("Statement\n");}
+                            |   PRINT LPAR STRLIT RPAR SEMICOLON                {printf("Statement\n");}
+                            |   PRINT LPAR RPAR SEMICOLON                       {printf("Statement\n");}                            
+                            |   error SEMICOLON                                 {;}
                             ;
 
 MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                            {printf("MethodInvocation\n");}
-                            |   ID LPAR RPAR
-                            |   ID LPAR error RPAR
+                            |   ID LPAR RPAR {;}
+                            |   ID LPAR error RPAR {;}
                             ;
 
-recCOMMAEXP                 :   COMMA Expr
-                            |   recCOMMAEXP COMMA Expr
+recCOMMAEXP                 :   COMMA Expr {;}
+                            |   recCOMMAEXP COMMA Expr {;}
                             ;
 
 Assignment                  :   ID ASSIGN Expr                          {printf("Assign\n");}
                             ;
 
 ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR      {printf("ParseArgs\n");}
-                            |   PARSEINT LPAR error RPAR
+                            |   PARSEINT LPAR error RPAR {;}
                             ;
 
 Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
@@ -228,7 +230,7 @@ Expr                        :   Expr PLUS Expr          {printf("Expr\n");}
                             |   INTLIT                  {printf("IntLit()\n");}
                             |   REALLIT                 {printf("RealLit()\n");}
                             |   BOOLLIT                 {printf("BoolLit()\n");}
-                            |   LPAR error RPAR
+                            |   LPAR error RPAR {;}
                             ;
 
 
