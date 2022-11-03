@@ -3,13 +3,13 @@
 
 
 node * createNode(char * var) {
-    node * aux = (node *) malloc(sizeof(node));
+    node * aux2 = (node *) malloc(sizeof(node));
 
-    aux->var = var;
-    aux->brother = NULL;
-    aux->child = NULL;
+    aux2->var = var;
+    aux2->brother = NULL;
+    aux2->child = NULL;
 
-    return aux;
+    return aux2;
 
 }
 
@@ -22,4 +22,20 @@ void newBrother(node* old, node* newn) {
 
     return;
 }
+
+void printASTree(struct node *node, int depth){
+    char dots[depth*2];
+    for (int i = 0; i<depth*2; i++){
+        dots[i]='.';
+    }
+    dots[2*depth]='\0';
+
+    printf("%s%s\n",dots,node->var);
+    if (node->child)    printASTree(node->child, depth+1);
+    if (node->brother)  printASTree(node->brother, depth);
+
+    //if printTree and hasError==False limpa a memória depois de printar!!
+    free(node);
+}
+
 

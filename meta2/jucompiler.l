@@ -6,8 +6,11 @@
     #include <stdlib.h>
 
     #include "y.tab.h"
+    #include "STree.h"
 
     int yyparse(void);
+
+    extern struct node * prog;
 
     int line = 1;
     int col = 1;
@@ -166,19 +169,21 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
     
 int main(int argc, char * argv[])
 {
-    
+    /*
     if (argc == 2) {
         if (strcmp(argv[1], "-l") == 0)
             aux = 0;
         else if (strcmp(argv[1], "-e1") == 0)
             aux = 1;
     }
-    
+    */
+    aux = 1; 
     yylex();
     
-    int val = yyparse();
+    yyparse();
 
-    printf("--->%d\n", val);
+    printASTree(prog, 0);
+
     return 0;
 }
 

@@ -12,3 +12,5 @@ typedef struct node{
 node * createNode(char * var);
 
 void newBrother(node* old, node* newn);
+
+void printASTree(struct node *node, int depth);
