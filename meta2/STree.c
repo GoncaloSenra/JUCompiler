@@ -15,18 +15,10 @@ node * createNode(char * var) {
 
 void newBrother(node* old, node* newn) {
 
-    node * aux;
+    while (old->brother != NULL)
+        old = old->brother;
 
-    /*
-    for (aux = old; aux->brother == NULL; aux = aux->brother){
-
-    }
-    */
-
-    while (aux->brother != NULL)
-        aux = aux->brother;
-
-    aux->brother = newn;
+    old->brother = newn;
 
     return;
 }

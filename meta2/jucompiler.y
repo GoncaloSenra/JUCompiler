@@ -40,7 +40,7 @@
 %token  <id> INTLIT
 %token  <id> STRLIT
 %token  <id> REALLIT    
-%token BOOLLIT
+%token  <id> BOOLLIT
 %token AND
 %token ASSIGN
 %token STAR
@@ -129,7 +129,7 @@ MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody   {$$ = cr
 FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux, "Id(%s)", $4); newBrother($3, createNode(aux)); newBrother($3, $5);
                                                                                     node * auxnode = $4, auxnode2;
                                                                                     char * var = $3;
-                                                                                    while{auxnode != NULL}{
+                                                                                    while(auxnode != NULL){
                                                                                         auxnode2 = auxnode->child;
                                                                                         auxnode->child = createNode(var);
                                                                                         auxnode->child->brother = auxnode2;
@@ -141,7 +141,7 @@ FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      
                             ;
 
 recCOMMAID                  :   COMMA ID                    {$$ = createNode("FieldDecl"); sprintf(aux, "Id(%s)", $2); $$->child = createNode(aux);}
-                            |   recCOMMAID COMMA ID         {;}
+                            |   recCOMMAID COMMA ID         {$$ = createNode("FieldDecl"); addBrother($$, $1); sprintf(aux, "Id(%s)", $2); $$->child = createNode(aux);}
                             ;
 
 Type                        :   BOOL                                {$$ = createNode("Bool");}
