@@ -1623,7 +1623,7 @@ yyreduce:
 
   case 23: /* FormalParams: Type ID recFP  */
 #line 159 "jucompiler.y"
-                                                                                {(yyval.no) = createNode("ParamDecl"); (yyval.no)->child = (yyvsp[-2].no); sprintf(aux3, "Id(%s)", (yyvsp[-1].id)); newBrother((yyvsp[-2].no), createNode(strdup(aux3))); newBrother((yyval.no), (yyvsp[0].no));
+                                                                                {(yyval.no) = createNode("MethodParams"); (yyval.no)->child = createNode("ParamDecl"); (yyval.no)->child->child = (yyvsp[-2].no); sprintf(aux3, "Id(%s)", (yyvsp[-1].id)); newBrother((yyvsp[-2].no), createNode(strdup(aux3))); newBrother((yyval.no), (yyvsp[0].no));
                                                                                     struct node * auxnode = (yyvsp[0].no), * auxnode2;
                                                                                     while(auxnode != NULL){
                                                                                         auxnode2 = auxnode->child;
@@ -1638,13 +1638,13 @@ yyreduce:
 
   case 24: /* FormalParams: Type ID  */
 #line 169 "jucompiler.y"
-                                                                                {(yyval.no) = createNode("ParamDecl"); (yyval.no)->child = (yyvsp[-1].no); sprintf(aux3, "Id(%s)", (yyvsp[0].id)); newBrother((yyvsp[-1].no), createNode(strdup(aux3)));printf("FormalParams2\n");}
+                                                                                {(yyval.no) = createNode("MethodParams"); (yyval.no)->child = createNode("ParamDecl"); (yyval.no)->child->child = (yyvsp[-1].no); sprintf(aux3, "Id(%s)", (yyvsp[0].id)); newBrother((yyvsp[-1].no), createNode(strdup(aux3)));printf("FormalParams2\n");}
 #line 1643 "y.tab.c"
     break;
 
   case 25: /* FormalParams: STRING LSQ RSQ ID  */
 #line 170 "jucompiler.y"
-                                                                                {(yyval.no) = createNode("ParamDecl"); (yyval.no)->child = createNode("StringArray"); sprintf(aux3, "Id(%s)", (yyvsp[0].id)); newBrother((yyval.no)->child, createNode(strdup(aux3)));printf("FormalParams3\n");}
+                                                                                {(yyval.no) = createNode("MethodParams"); (yyval.no)->child = createNode("ParamDecl"); (yyval.no)->child->child = createNode("StringArray"); sprintf(aux3, "Id(%s)", (yyvsp[0].id)); newBrother((yyval.no)->child->child, createNode(strdup(aux3)));printf("FormalParams3\n");}
 #line 1649 "y.tab.c"
     break;
 
@@ -1680,7 +1680,7 @@ yyreduce:
 
   case 31: /* recMD: VarDecl  */
 #line 182 "jucompiler.y"
-                                                                                {(yyval.no) = createNode("VarDecl"); (yyval.no)->child = (yyvsp[0].no);printf("recMD2\n");}
+                                                                                {(yyval.no) = (yyvsp[0].no);printf("recMD2\n");}
 #line 1685 "y.tab.c"
     break;
 
@@ -1845,7 +1845,7 @@ yyreduce:
 
   case 57: /* recCOMMAEXP: %empty  */
 #line 227 "jucompiler.y"
-                                                                                {;printf("recCOMMAEXP2\n");}
+                                                                                {(yyval.no) = NULL;printf("recCOMMAEXP2\n");}
 #line 1850 "y.tab.c"
     break;
 
@@ -1863,7 +1863,7 @@ yyreduce:
 
   case 60: /* ParseArgs: PARSEINT LPAR error RPAR  */
 #line 234 "jucompiler.y"
-                                                                                {;printf("ParseArgs2\n");}
+                                                                                {(yyval.no) = NULL;printf("ParseArgs2\n");}
 #line 1868 "y.tab.c"
     break;
 

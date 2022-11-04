@@ -156,7 +156,7 @@ MethodHeader                :   Type ID LPAR FormalParams RPAR                  
                             |   VOID ID LPAR RPAR                               {$$ = createNode("MethodHeader"); $$->child = createNode("Void"); sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3)));printf("MethodHeader4\n");}
                             ;           
 
-FormalParams                :   Type ID recFP                                   {$$ = createNode("ParamDecl"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($$, $3);
+FormalParams                :   Type ID recFP                                   {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($$, $3);
                                                                                     struct node * auxnode = $3, * auxnode2;
                                                                                     while(auxnode != NULL){
                                                                                         auxnode2 = auxnode->child;
@@ -166,8 +166,8 @@ FormalParams                :   Type ID recFP                                   
                                                                                     }
                                                                                     printf("FormalParams\n");
                                                                                 }
-                            |   Type ID                                         {$$ = createNode("ParamDecl"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3)));printf("FormalParams2\n");}
-                            |   STRING LSQ RSQ ID                               {$$ = createNode("ParamDecl"); $$->child = createNode("StringArray"); sprintf(aux3, "Id(%s)", $4); newBrother($$->child, createNode(strdup(aux3)));printf("FormalParams3\n");}
+                            |   Type ID                                         {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3)));printf("FormalParams2\n");}
+                            |   STRING LSQ RSQ ID                               {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = createNode("StringArray"); sprintf(aux3, "Id(%s)", $4); newBrother($$->child->child, createNode(strdup(aux3)));printf("FormalParams3\n");}
                             ;           
 
 recFP                       :   COMMA Type ID                                   {$$ = createNode("ParamDecl"); $$->child = $2; sprintf(aux3, "Id(%s)", $3); newBrother($2, createNode(strdup(aux3)));printf("recFP\n");}
@@ -179,7 +179,7 @@ MethodBody                  :   LBRACE recMD RBRACE                             
                             ;           
 
 recMD                       :   Statement                                       {$$ = $1;printf("recMD\n");}
-                            |   VarDecl                                         {$$ = createNode("VarDecl"); $$->child = $1;printf("recMD2\n");}
+                            |   VarDecl                                         {$$ = $1;printf("recMD2\n");}
                             |   recMD Statement                                 {$$ = $1; newBrother($$, $2);printf("recMD3\n");}
                             |   recMD VarDecl                                   {$$ = $1; newBrother($$, $2);printf("recMD4\n");}
                             ;           
@@ -224,14 +224,14 @@ MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   
                             ;
 
 recCOMMAEXP                 :   recCOMMAEXP COMMA Expr                          {$$ = $1; newBrother($1, $3);printf("recCOMMAEXP\n");}
-                            |                                                   {;printf("recCOMMAEXP2\n");}
+                            |                                                   {$$ = NULL;printf("recCOMMAEXP2\n");}
                             ;
 
 Assignment                  :   ID ASSIGN Expr                                  {$$ = createNode("Assign"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);printf("Assign\n");}
                             ;
 
 ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              {$$ = createNode("ParseArgs"); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3)); newBrother($$->child, $5);printf("ParseArgs\n");}
-                            |   PARSEINT LPAR error RPAR                        {;printf("ParseArgs2\n");}
+                            |   PARSEINT LPAR error RPAR                        {$$ = NULL;printf("ParseArgs2\n");}
                             ;
 
 Expr                        :   Expr PLUS Expr                                  {$$ = createNode("Plus"); $$->child=$1; newBrother($1,$3);printf("PLUS\n");}
