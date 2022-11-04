@@ -203,7 +203,14 @@ int yywrap()
     return 1;
 }
 
-void yyerror (char *s)
-{
-    printf ("Line %d, col %d: syntax error: %s\n",line,col,yytext);
+void yyerror ( const char *s) {
+    switch(strlen(yytext)){
+        case 0:
+            printf("Line %d, col %d: %s: %s\n", line,col,s, yytext);
+            break;
+        default:
+            printf("Line %d, col %d: %s: %s\n", line,(int)(col-yyleng),s, yytext);
+            break;
+    }
+
 }
