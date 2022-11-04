@@ -39,3 +39,10 @@ void printASTree(struct node *node, int depth){
 }
 
 
+void freeASTree(struct node *node){
+    if (node->child)    freeASTree(node->child);
+    if (node->brother)  freeASTree(node->brother);
+
+    //if printTree and hasError==False limpa a memória depois de printar!!
+    free(node);
+}

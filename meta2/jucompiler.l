@@ -16,6 +16,8 @@
     int col = 1;
     int aux = 0;
 
+    int yacc = 0;
+
     int auxline=0;
     int auxcol=0;
 %}
@@ -97,7 +99,7 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
 "\""                                                                    {auxline = line; auxcol= col;BEGIN STRING1;col += yyleng;}
 <STRING1>([^\\\r\n\"]|{VALIDESCAPES})*(\\)([^nftr\\\r\n"])               {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);BEGIN STRING2;}
 <STRING1>([^\\\r\n\"]|{VALIDESCAPES})*(\\)                               {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);BEGIN STRING2;}
-<STRING1>{STRLIT}                                                        {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;return STRLIT;}
+<STRING1>{STRLIT}                                                        {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;if(yacc == 0){yylval.id = strdup(yytext);return STRLIT;}}
 <STRING1>([^\\\r\n\"]|{VALIDESCAPES})*("\n"|"\r"|"\r\n")                 {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
 <STRING1>.                                                               {;}
 <STRING1><<EOF>>                                                         {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
@@ -110,54 +112,54 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
 <STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
 
-{BOOLLIT}          {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;return BOOLLIT;}
-{AND}          {if(aux == 0) printf("AND\n");col += yyleng;return AND;}
-{ASSIGN}          {if(aux == 0) printf("ASSIGN\n");col += yyleng;return ASSIGN;}
-{STAR}          {if(aux == 0) printf("STAR\n");col += yyleng;return STAR;}
-{COMMA}          {if(aux == 0) printf("COMMA\n");col += yyleng;return COMMA;}
-{DIV}          {if(aux == 0) printf("DIV\n");col += yyleng;return DIV;}
-{EQ}          {if(aux == 0) printf("EQ\n");col += yyleng;return EQ;}        
-{GE}          {if(aux == 0) printf("GE\n");col += yyleng;return GE;}
-{GT}          {if(aux == 0) printf("GT\n");col += yyleng;return GT;}
-{LBRACE}          {if(aux == 0) printf("LBRACE\n");col += yyleng;return LBRACE;}
-{LE}          {if(aux == 0) printf("LE\n");col += yyleng;return LE;}
-{LPAR}          {if(aux == 0) printf("LPAR\n");col += yyleng;return LPAR;}
-{LSQ}          {if(aux == 0) printf("LSQ\n");col += yyleng;return LSQ;}
-{LT}          {if(aux == 0) printf("LT\n");col += yyleng;return LT;}
-{MINUS}          {if(aux == 0) printf("MINUS\n");col += yyleng;return MINUS;}
-{MOD}          {if(aux == 0) printf("MOD\n");col += yyleng;return MOD;}
-{NE}          {if(aux == 0) printf("NE\n");col += yyleng;return NE;}
-{NOT}          {if(aux == 0) printf("NOT\n");col += yyleng;return NOT;}
-{OR}          {if(aux == 0) printf("OR\n");col += yyleng;return OR;}
-{PLUS}          {if(aux == 0) printf("PLUS\n");col += yyleng;return PLUS;}
-{RBRACE}          {if(aux == 0) printf("RBRACE\n");col += yyleng;return RBRACE;}
-{RPAR}          {if(aux == 0) printf("RPAR\n");col += yyleng;return RPAR;}
-{RSQ}          {if(aux == 0) printf("RSQ\n");col += yyleng;return RSQ;}
-{SEMICOLON}          {if(aux == 0) printf("SEMICOLON\n");col += yyleng;return SEMICOLON;}
-{ARROW}          {if(aux == 0) printf("ARROW\n");col += yyleng;return ARROW;}
-{LSHIFT}          {if(aux == 0) printf("LSHIFT\n");col += yyleng;return LSHIFT;}
-{RSHIFT}          {if(aux == 0) printf("RSHIFT\n");col += yyleng;return RSHIFT;}
-{XOR}          {if(aux == 0) printf("XOR\n");col += yyleng;return XOR;}
-{BOOL}          {if(aux == 0) printf("BOOL\n");col += yyleng;return BOOL;}
-{CLASS}          {if(aux == 0) printf("CLASS\n");col += yyleng;return CLASS;}
-{DOTLENGTH}          {if(aux == 0) printf("DOTLENGTH\n");col += yyleng;return DOTLENGTH;}
-{DOUBLE}          {if(aux == 0) printf("DOUBLE\n");col += yyleng;return DOUBLE;}
-{ELSE}          {if(aux == 0) printf("ELSE\n");col += yyleng;return ELSE;}
-{IF}          {if(aux == 0) printf("IF\n");col += yyleng;return IF;}
-{INT}          {if(aux == 0) printf("INT\n");col += yyleng;return INT;}
-{PRINT}          {if(aux == 0) printf("PRINT\n");col += yyleng;return PRINT;}
-{PARSEINT}          {if(aux == 0) printf("PARSEINT\n");col += yyleng;return PARSEINT;}
-{PUBLIC}          {if(aux == 0) printf("PUBLIC\n");col += yyleng;return PUBLIC;}
-{RETURN}          {if(aux == 0) printf("RETURN\n");col += yyleng;return RETURN;}
-{STATIC}          {if(aux == 0) printf("STATIC\n");col += yyleng;return STATIC;}
-{STRING}          {if(aux == 0) printf("STRING\n");col += yyleng;return STRING;}
-{VOID}          {if(aux == 0) printf("VOID\n");col += yyleng;return VOID;}
-{WHILE}          {if(aux == 0) printf("WHILE\n");col += yyleng;return WHILE;}
-{INTLIT}                                                           {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;return INTLIT;} 
-{REALLIT}            {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;return REALLIT;}    
+{BOOLLIT}           {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;if(yacc == 0) return BOOLLIT;}
+{AND}               {if(aux == 0) printf("AND\n");col += yyleng;if(yacc == 0) return AND;}
+{ASSIGN}            {if(aux == 0) printf("ASSIGN\n");col += yyleng;if(yacc == 0) return ASSIGN;}
+{STAR}              {if(aux == 0) printf("STAR\n");col += yyleng;if(yacc == 0) return STAR;}
+{COMMA}             {if(aux == 0) printf("COMMA\n");col += yyleng;if(yacc == 0) return COMMA;}
+{DIV}               {if(aux == 0) printf("DIV\n");col += yyleng;if(yacc == 0) return DIV;}
+{EQ}                {if(aux == 0) printf("EQ\n");col += yyleng;if(yacc == 0) return EQ;}        
+{GE}                {if(aux == 0) printf("GE\n");col += yyleng;if(yacc == 0) return GE;}
+{GT}                {if(aux == 0) printf("GT\n");col += yyleng;if(yacc == 0) return GT;}
+{LBRACE}            {if(aux == 0) printf("LBRACE\n");col += yyleng;if(yacc == 0) return LBRACE;}
+{LE}                {if(aux == 0) printf("LE\n");col += yyleng;if(yacc == 0) return LE;}
+{LPAR}              {if(aux == 0) printf("LPAR\n");col += yyleng;if(yacc == 0) return LPAR;}
+{LSQ}               {if(aux == 0) printf("LSQ\n");col += yyleng;if(yacc == 0) return LSQ;}
+{LT}                {if(aux == 0) printf("LT\n");col += yyleng;if(yacc == 0) return LT;}
+{MINUS}             {if(aux == 0) printf("MINUS\n");col += yyleng;if(yacc == 0) return MINUS;}
+{MOD}               {if(aux == 0) printf("MOD\n");col += yyleng;if(yacc == 0) return MOD;}
+{NE}                {if(aux == 0) printf("NE\n");col += yyleng;if(yacc == 0) return NE;}
+{NOT}               {if(aux == 0) printf("NOT\n");col += yyleng;if(yacc == 0) return NOT;}
+{OR}                {if(aux == 0) printf("OR\n");col += yyleng;if(yacc == 0) return OR;}
+{PLUS}              {if(aux == 0) printf("PLUS\n");col += yyleng;if(yacc == 0) return PLUS;}
+{RBRACE}            {if(aux == 0) printf("RBRACE\n");col += yyleng;if(yacc == 0) return RBRACE;}
+{RPAR}              {if(aux == 0) printf("RPAR\n");col += yyleng;if(yacc == 0) return RPAR;}
+{RSQ}               {if(aux == 0) printf("RSQ\n");col += yyleng;if(yacc == 0) return RSQ;}
+{SEMICOLON}         {if(aux == 0) printf("SEMICOLON\n");col += yyleng;if(yacc == 0) return SEMICOLON;}
+{ARROW}             {if(aux == 0) printf("ARROW\n");col += yyleng;if(yacc == 0) return ARROW;}
+{LSHIFT}            {if(aux == 0) printf("LSHIFT\n");col += yyleng;if(yacc == 0) return LSHIFT;}
+{RSHIFT}            {if(aux == 0) printf("RSHIFT\n");col += yyleng;if(yacc == 0) return RSHIFT;}
+{XOR}               {if(aux == 0) printf("XOR\n");col += yyleng;if(yacc == 0) return XOR;}
+{BOOL}              {if(aux == 0) printf("BOOL\n");col += yyleng;if(yacc == 0) return BOOL;}
+{CLASS}             {if(aux == 0) printf("CLASS\n");col += yyleng;if(yacc == 0) return CLASS;}
+{DOTLENGTH}         {if(aux == 0) printf("DOTLENGTH\n");col += yyleng;if(yacc == 0) return DOTLENGTH;}
+{DOUBLE}            {if(aux == 0) printf("DOUBLE\n");col += yyleng;if(yacc == 0) return DOUBLE;}
+{ELSE}              {if(aux == 0) printf("ELSE\n");col += yyleng;if(yacc == 0) return ELSE;}
+{IF}                {if(aux == 0) printf("IF\n");col += yyleng;if(yacc == 0) return IF;}
+{INT}               {if(aux == 0) printf("INT\n");col += yyleng;if(yacc == 0) return INT;}
+{PRINT}             {if(aux == 0) printf("PRINT\n");col += yyleng;if(yacc == 0) return PRINT;}
+{PARSEINT}          {if(aux == 0) printf("PARSEINT\n");col += yyleng;if(yacc == 0) return PARSEINT;}
+{PUBLIC}            {if(aux == 0) printf("PUBLIC\n");col += yyleng;if(yacc == 0) return PUBLIC;}
+{RETURN}            {if(aux == 0) printf("RETURN\n");col += yyleng;if(yacc == 0) return RETURN;}
+{STATIC}            {if(aux == 0) printf("STATIC\n");col += yyleng;if(yacc == 0) return STATIC;}
+{STRING}            {if(aux == 0) printf("STRING\n");col += yyleng;if(yacc == 0) return STRING;}
+{VOID}              {if(aux == 0) printf("VOID\n");col += yyleng;if(yacc == 0) return VOID;}
+{WHILE}             {if(aux == 0) printf("WHILE\n");col += yyleng;if(yacc == 0) return WHILE;}
+{INTLIT}            {if(aux == 0) printf("INTLIT(%s)\n", yytext);col += yyleng;if(yacc == 0){yylval.id = strdup(yytext);return INTLIT;}} 
+{REALLIT}           {if(aux == 0) printf("REALLIT(%s)\n", yytext);col += yyleng;if(yacc == 0){yylval.id = strdup(yytext);return REALLIT;}}    
 
-{RESERVED}                                                    {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;return RESERVED;}
-{ID}                   {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;return ID;}
+{RESERVED}          {if(aux == 0) printf("RESERVED(%s)\n", yytext);col += yyleng;if(yacc == 0){yylval.id = strdup(yytext);return RESERVED;}}
+{ID}                {if(aux == 0) printf("ID(%s)\n", yytext);col += yyleng;if(yacc == 0){yylval.id = strdup(yytext);return ID;} }
 
 (" "|"\t"|"\f")             {;col += yyleng;}
 ("\n"|"\r\n"|"\r")          {line++;col = 1;}
@@ -169,20 +171,29 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
     
 int main(int argc, char * argv[])
 {
-    /*
+    
     if (argc == 2) {
         if (strcmp(argv[1], "-l") == 0)
             aux = 0;
         else if (strcmp(argv[1], "-e1") == 0)
             aux = 1;
     }
-    */
-    aux = 1; 
-    yylex();
+    aux = 1;
+    yacc = 0;
+     
+    //yylex();
+
+    //printf("1\n");
     
     yyparse();
 
-    printASTree(prog, 0);
+    //printf("2\n");
+
+    //printASTree(prog, 0);
+
+    //printf("3\n");
+
+    //freeASTree(prog);
 
     return 0;
 }
@@ -194,5 +205,5 @@ int yywrap()
 
 void yyerror (char *s)
 {
-    printf ("Line %d, col %d: syntax error: %s\n",col,line,yytext);
+    printf ("Line %d, col %d: syntax error: %s\n",line,col,yytext);
 }

@@ -1,4 +1,0 @@
-CLASS
-ID(Factorial)
-Line 16, col 1: syntax error: Factorial
---->1
