@@ -17,9 +17,9 @@ Grammar
     3 recPR: MethodDecl
     4      | FieldDecl
     5      | SEMICOLON
-    6      | recPR MethodDecl
-    7      | recPR FieldDecl
-    8      | recPR SEMICOLON
+    6      | MethodDecl recPR
+    7      | FieldDecl recPR
+    8      | SEMICOLON recPR
 
     9 MethodDecl: PUBLIC STATIC MethodHeader MethodBody
 
@@ -317,8 +317,17 @@ State 7
 State 8
 
     5 recPR: SEMICOLON •
+    8      | SEMICOLON • recPR
 
-    $default  reduce using rule 5 (recPR)
+    error      shift, and go to state 6
+    SEMICOLON  shift, and go to state 8
+    PUBLIC     shift, and go to state 9
+
+    RBRACE  reduce using rule 5 (recPR)
+
+    recPR       go to state 14
+    MethodDecl  go to state 11
+    FieldDecl   go to state 12
 
 
 State 9
@@ -327,37 +336,46 @@ State 9
    10 FieldDecl: PUBLIC • STATIC Type ID recCOMMAID SEMICOLON
    11          | PUBLIC • STATIC Type ID SEMICOLON
 
-    STATIC  shift, and go to state 14
+    STATIC  shift, and go to state 15
 
 
 State 10
 
     1 Program: CLASS ID LBRACE recPR • RBRACE
-    6 recPR: recPR • MethodDecl
-    7      | recPR • FieldDecl
-    8      | recPR • SEMICOLON
 
-    error      shift, and go to state 6
-    RBRACE     shift, and go to state 15
-    SEMICOLON  shift, and go to state 16
-    PUBLIC     shift, and go to state 9
-
-    MethodDecl  go to state 17
-    FieldDecl   go to state 18
+    RBRACE  shift, and go to state 16
 
 
 State 11
 
     3 recPR: MethodDecl •
+    6      | MethodDecl • recPR
 
-    $default  reduce using rule 3 (recPR)
+    error      shift, and go to state 6
+    SEMICOLON  shift, and go to state 8
+    PUBLIC     shift, and go to state 9
+
+    RBRACE  reduce using rule 3 (recPR)
+
+    recPR       go to state 17
+    MethodDecl  go to state 11
+    FieldDecl   go to state 12
 
 
 State 12
 
     4 recPR: FieldDecl •
+    7      | FieldDecl • recPR
 
-    $default  reduce using rule 4 (recPR)
+    error      shift, and go to state 6
+    SEMICOLON  shift, and go to state 8
+    PUBLIC     shift, and go to state 9
+
+    RBRACE  reduce using rule 4 (recPR)
+
+    recPR       go to state 18
+    MethodDecl  go to state 11
+    FieldDecl   go to state 12
 
 
 State 13
@@ -368,6 +386,13 @@ State 13
 
 
 State 14
+
+    8 recPR: SEMICOLON recPR •
+
+    $default  reduce using rule 8 (recPR)
+
+
+State 15
 
     9 MethodDecl: PUBLIC STATIC • MethodHeader MethodBody
    10 FieldDecl: PUBLIC STATIC • Type ID recCOMMAID SEMICOLON
@@ -382,30 +407,23 @@ State 14
     MethodHeader  go to state 24
 
 
-State 15
+State 16
 
     1 Program: CLASS ID LBRACE recPR RBRACE •
 
     $default  reduce using rule 1 (Program)
 
 
-State 16
-
-    8 recPR: recPR SEMICOLON •
-
-    $default  reduce using rule 8 (recPR)
-
-
 State 17
 
-    6 recPR: recPR MethodDecl •
+    6 recPR: MethodDecl recPR •
 
     $default  reduce using rule 6 (recPR)
 
 
 State 18
 
-    7 recPR: recPR FieldDecl •
+    7 recPR: FieldDecl recPR •
 
     $default  reduce using rule 7 (recPR)
 
