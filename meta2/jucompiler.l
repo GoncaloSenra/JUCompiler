@@ -17,6 +17,8 @@
     int aux = 0;
 
     int yacc = 0;
+    int erro_sintaxe = 0;
+
 
     int auxline=0;
     int auxcol=0;
@@ -203,14 +205,21 @@ int yywrap()
     return 1;
 }
 
-void yyerror ( const char *s) {
-    switch(strlen(yytext)){
-        case 0:
-            printf("Line %d, col %d: %s: %s\n", line,col,s, yytext);
-            break;
-        default:
-            printf("Line %d, col %d: %s: %s\n", line,(int)(col-yyleng),s, yytext);
-            break;
-    }
+void yyerror (char *s) { 
+	erro_sintaxe = 1;
 
+	char temp[yyleng+1];
+	strcpy(temp, yytext-1);
+	if(col-yyleng == 0){
+		col++;
+	}
+	if (strcmp(yytext, "\n") == 0) {
+		printf ("Line %d, col %d: %s: %s\n", line, col, s, yytext); 
+	}
+	else {
+		if(yytext[yyleng-1] == '\"' && temp[0] == '\"')
+			printf ("Line %d, col %d: %s: %s\n", line, col-yyleng-1, s, yytext-1);
+		else
+			printf ("Line %d, col %d: %s: %s\n", line, col-yyleng, s, yytext);
+	}
 }

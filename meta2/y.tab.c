@@ -84,7 +84,7 @@
     struct node * prog;
     int hasError;
     int printTree= true;
-    int debug = true;
+    int debug = false;
 
     void yyerror (const char *s);
 
@@ -1632,7 +1632,7 @@ yyreduce:
 
   case 22: /* MethodHeader: VOID ID LPAR RPAR  */
 #line 161 "jucompiler.y"
-                                                                                {(yyval.no) = createNode("MethodHeader"); (yyval.no)->child = createNode("Void"); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); newBrother((yyval.no)->child, createNode(strdup(aux3)));if(debug)printf("MethodHeader4\n");}
+                                                                                {(yyval.no) = createNode("MethodHeader");(yyval.no)->child = createNode("Void"); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); newBrother((yyval.no)->child, createNode(strdup(aux3)));newBrother((yyval.no)->child,createNode("MethodParams"));if(debug)printf("MethodHeader4\n");}
 #line 1637 "y.tab.c"
     break;
 
@@ -1878,7 +1878,7 @@ yyreduce:
 
   case 60: /* ParseArgs: PARSEINT LPAR error RPAR  */
 #line 239 "jucompiler.y"
-                                                                                {printf("ENTREIIIIII");(yyval.no) = NULL;hasError=true;if(debug)printf("ParseArgs2\n");}
+                                                                                {(yyval.no) = NULL;hasError=true;if(debug)printf("ParseArgs2\n");}
 #line 1883 "y.tab.c"
     break;
 

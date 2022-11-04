@@ -15,7 +15,7 @@
     struct node * prog;
     int hasError;
     int printTree= true;
-    int debug = true;
+    int debug = false;
 
     void yyerror (const char *s);
 %}
@@ -158,7 +158,7 @@ Type                        :   BOOL                                            
 MethodHeader                :   Type ID LPAR FormalParams RPAR                  {$$ = createNode("MethodHeader"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($1, $4);if(debug)printf("MethodHeader\n");}
                             |   Type ID LPAR RPAR                               {$$ = createNode("MethodHeader"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3)));if(debug)printf("MethodHeader2\n");}
                             |   VOID ID LPAR FormalParams RPAR                  {$$ = createNode("MethodHeader"); $$->child = createNode("Void"); sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3))); newBrother($$->child, $4);if(debug)printf("MethodHeader3\n");}
-                            |   VOID ID LPAR RPAR                               {$$ = createNode("MethodHeader"); $$->child = createNode("Void"); sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3)));if(debug)printf("MethodHeader4\n");}
+                            |   VOID ID LPAR RPAR                               {$$ = createNode("MethodHeader");$$->child = createNode("Void"); sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3)));newBrother($$->child,createNode("MethodParams"));if(debug)printf("MethodHeader4\n");}
                             ;           
 
 FormalParams                :   Type ID recFP                                   {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($$, $3);
