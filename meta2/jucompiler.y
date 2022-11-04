@@ -15,7 +15,7 @@
     struct node * prog;
     int hasError;
     int printTree= true;
-    int debug = false;
+    int debug = true;
 
     void yyerror (const char *s);
 %}
@@ -47,6 +47,7 @@
 %type <no> ParseArgs
 %type <no> Expr
 %type <no> recVAR
+%type <no> recSTAT
 
 
 %token  <id> ID
@@ -206,7 +207,7 @@ recVAR                      :   COMMA ID                                        
                             |   recVAR COMMA ID                                 {$$ = createNode("VarDecl"); newBrother($$, $1); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR2\n");}
                             ;                            
 
-Statement                   :   LBRACE Statement RBRACE                         {$$ = $2;if(debug)printf("Statement\n");}
+Statement                   :   LBRACE recSTAT RBRACE                           {$$ = $2;if(debug)printf("Statement\n");}
                             |   LBRACE RBRACE                                   {;if(debug)printf("Statement2\n");}
                             |   IF LPAR Expr RPAR Statement ELSE Statement      {$$ = createNode("If"); $$->child = $3; newBrother($3, $5); newBrother($5, createNode("Block")); newBrother($5, $7);if(debug)printf("Statement3\n");}                            
                             |   IF LPAR Expr RPAR Statement                     {$$ = createNode("If"); $$->child = $3; newBrother($3, $5); newBrother($5, createNode("Block"));if(debug)printf("Statement4\n");}
@@ -222,6 +223,9 @@ Statement                   :   LBRACE Statement RBRACE                         
                             |   PRINT LPAR RPAR SEMICOLON                       {$$ = createNode("Print");if(debug)printf("Statement14\n");}                            
                             |   error SEMICOLON                                 {hasError=true;if(debug)printf("Statement15\n");}
                             ;
+
+recSTAT                     :   Statement                                       {$$=$1;}
+                            |   recSTAT Statement                               {if($1!=NULL){$$=$1; newBrother($1,$2);} else{$$=$2;}}
 
 MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3); newBrother($3, $4);if(debug)printf("MethodInvocation\n");}
                             |   ID LPAR RPAR                                    {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("MethodInvocation2\n");}

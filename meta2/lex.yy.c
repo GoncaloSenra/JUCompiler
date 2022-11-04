@@ -2456,12 +2456,12 @@ void yyerror (char *s) {
 		col++;
 	}
 	if (strcmp(yytext, "\n") == 0) {
-		printf ("Line %d, column %d: %s: %s\n", line, col, s, yytext); 
+		printf ("Line %d, col %d: %s: %s\n", line, col, s, yytext); 
 	}
 	else {
 		if(yytext[yyleng-1] == '\"' && temp[0] == '\"')
-			printf ("Line %d, column %d: %s: %s\n", line, col-yyleng-1, s, yytext-1);
+			printf ("Line %d, col %d: %s: %s\n", line, col-yyleng-1, s, yytext-1);
 		else
-			printf ("Line %d, column %d: %s: %s\n", line, col-yyleng, s, yytext);
+			printf ("Line %d, col %d: %s: %s\n", line, col-yyleng, s, yytext);
 	}
 }
