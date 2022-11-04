@@ -15,7 +15,7 @@
     struct node * prog;
     int hasError;
     int printTree= true;
-    int debug = true;
+    int debug = false;
 
     void yyerror (const char *s);
 %}
@@ -148,7 +148,7 @@ FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      
                             ;
 
 recCOMMAID                  :   COMMA ID                                        {$$ = createNode("FieldDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recCommaId\n");}
-                            |   recCOMMAID COMMA ID                             {$$ = createNode("FieldDecl"); newBrother($$, $1); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3));if(debug)printf("recCommaId2\n");}
+                            |   COMMA ID recCOMMAID                             {$$ = createNode("FieldDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$, $3);if(debug)printf("recCommaId2\n");}
                             ;           
 
 Type                        :   BOOL                                            {$$ = createNode("Bool");if(debug)printf("Bool\n");}
@@ -157,7 +157,7 @@ Type                        :   BOOL                                            
                             ;           
 
 MethodHeader                :   Type ID LPAR FormalParams RPAR                  {$$ = createNode("MethodHeader"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($1, $4);if(debug)printf("MethodHeader\n");}
-                            |   Type ID LPAR RPAR                               {$$ = createNode("MethodHeader"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3)));if(debug)printf("MethodHeader2\n");}
+                            |   Type ID LPAR RPAR                               {$$ = createNode("MethodHeader"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($1, createNode("MethodParams"));if(debug)printf("MethodHeader2\n");}
                             |   VOID ID LPAR FormalParams RPAR                  {$$ = createNode("MethodHeader"); $$->child = createNode("Void"); sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3))); newBrother($$->child, $4);if(debug)printf("MethodHeader3\n");}
                             |   VOID ID LPAR RPAR                               {$$ = createNode("MethodHeader");$$->child = createNode("Void"); sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3)));newBrother($$->child,createNode("MethodParams"));if(debug)printf("MethodHeader4\n");}
                             ;           
@@ -226,14 +226,15 @@ Statement                   :   LBRACE recSTAT RBRACE                           
 
 recSTAT                     :   Statement                                       {$$=$1;}
                             |   recSTAT Statement                               {if($1!=NULL){$$=$1; newBrother($1,$2);} else{$$=$2;}}
-
+//        passar(cg,comp(meta2),iia,lpa,si,scc);
 MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3); newBrother($3, $4);if(debug)printf("MethodInvocation\n");}
-                            |   ID LPAR RPAR                                    {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("MethodInvocation2\n");}
-                            |   ID LPAR error RPAR                              {hasError=true;if(debug)printf("MethodInvocation3\n");}
+                            |   ID LPAR Expr RPAR                               {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);if(debug)printf("MethodInvocation2\n");}                                                    
+                            |   ID LPAR RPAR                                    {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("MethodInvocation3\n");}
+                            |   ID LPAR error RPAR                              {hasError=true;if(debug)printf("MethodInvocation4\n");}
                             ;
 
 recCOMMAEXP                 :   recCOMMAEXP COMMA Expr                          {$$ = $1; newBrother($1, $3);if(debug)printf("recCOMMAEXP\n");}
-                            |                                                   {$$ = NULL;if(debug)printf("recCOMMAEXP2\n");}
+                            |   COMMA Expr                                      {$$ = $2;if(debug)printf("recCOMMAEXP2\n");}
                             ;
 
 Assignment                  :   ID ASSIGN Expr                                  {$$ = createNode("Assign"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);if(debug)printf("Assign\n");}
@@ -243,7 +244,7 @@ ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              
                             |   PARSEINT LPAR error RPAR                        {$$ = NULL;hasError=true;if(debug)printf("ParseArgs2\n");}
                             ;
 
-Expr                        :   Expr PLUS Expr                                  {$$ = createNode("Plus"); $$->child=$1; newBrother($1,$3);if(debug)printf("PLUS\n");}
+Expr                        :   Expr PLUS Expr                                  {$$ = createNode("Add"); $$->child=$1; newBrother($1,$3);if(debug)printf("PLUS\n");}
                             |   Expr MINUS Expr                                 {$$ = createNode("Sub"); $$->child=$1; newBrother($1,$3);if(debug)printf("MINUS\n");}
                             |   Expr STAR Expr                                  {$$ = createNode("Mul"); $$->child=$1; newBrother($1,$3);if(debug)printf("STAR\n");}
                             |   Expr DIV Expr                                   {$$ = createNode("Div"); $$->child=$1; newBrother($1,$3);if(debug)printf("DIV\n");}

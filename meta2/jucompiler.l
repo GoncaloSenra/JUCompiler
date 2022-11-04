@@ -114,7 +114,7 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
 <STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
 
 
-{BOOLLIT}           {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;if(yacc == 0) return BOOLLIT;}
+{BOOLLIT}           {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;if(yacc == 0){yylval.id = strdup(yytext); return BOOLLIT;}}
 {AND}               {if(aux == 0) printf("AND\n");col += yyleng;if(yacc == 0) return AND;}
 {ASSIGN}            {if(aux == 0) printf("ASSIGN\n");col += yyleng;if(yacc == 0) return ASSIGN;}
 {STAR}              {if(aux == 0) printf("STAR\n");col += yyleng;if(yacc == 0) return STAR;}

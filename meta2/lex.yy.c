@@ -1149,7 +1149,7 @@ case YY_STATE_EOF(STRING2):
 case 19:
 YY_RULE_SETUP
 #line 118 "jucompiler.l"
-{if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;if(yacc == 0) return BOOLLIT;}
+{if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;if(yacc == 0){yylval.id = strdup(yytext); return BOOLLIT;}}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
