@@ -51,8 +51,8 @@ Gramática
 
    29 recMD: Statement
    30      | VarDecl
-   31      | recMD Statement
-   32      | recMD VarDecl
+   31      | Statement recMD
+   32      | VarDecl recMD
 
    33 VarDecl: Type ID recVAR SEMICOLON
    34        | Type ID SEMICOLON
@@ -105,8 +105,8 @@ Gramática
    74     | Expr LT Expr
    75     | Expr NE Expr
    76     | MINUS Expr
-   77     | NOT Expr
-   78     | PLUS Expr
+   77     | PLUS Expr
+   78     | NOT Expr
    79     | LPAR Expr RPAR
    80     | MethodInvocation
    81     | Assignment
@@ -144,9 +144,9 @@ Terminais, com regras onde aparecem
     MINUS (276) 61 76
     MOD (277) 64
     NE (278) 75
-    NOT (279) 77
+    NOT (279) 78
     OR (280) 66
-    PLUS (281) 60 78
+    PLUS (281) 60 77
     RBRACE (282) 1 2 27 28 37 38
     RPAR (283) 18 19 20 21 39 40 41 48 49 50 52 53 54 58 59 79 88
     RSQ (284) 24 58
@@ -680,13 +680,18 @@ Estado 44
 Estado 45
 
    27 MethodBody: LBRACE recMD • RBRACE
-   31 recMD: recMD • Statement
-   32      | recMD • VarDecl
+
+    RBRACE  troca e vai para estado 83
+
+
+Estado 46
+
+   30 recMD: VarDecl •
+   32      | VarDecl • recMD
 
     error      troca e vai para estado 34
     ID         troca e vai para estado 35
     LBRACE     troca e vai para estado 36
-    RBRACE     troca e vai para estado 83
     SEMICOLON  troca e vai para estado 38
     BOOL       troca e vai para estado 19
     DOUBLE     troca e vai para estado 20
@@ -697,26 +702,44 @@ Estado 45
     RETURN     troca e vai para estado 42
     WHILE      troca e vai para estado 43
 
+    RBRACE  redução com regra 30 (recMD)
+
     Type              vai para estado 44
-    VarDecl           vai para estado 84
-    Statement         vai para estado 85
+    recMD             vai para estado 84
+    VarDecl           vai para estado 46
+    Statement         vai para estado 47
     MethodInvocation  vai para estado 48
     Assignment        vai para estado 49
     ParseArgs         vai para estado 50
 
 
-Estado 46
-
-   30 recMD: VarDecl •
-
-    $default  redução com regra 30 (recMD)
-
-
 Estado 47
 
    29 recMD: Statement •
+   31      | Statement • recMD
 
-    $default  redução com regra 29 (recMD)
+    error      troca e vai para estado 34
+    ID         troca e vai para estado 35
+    LBRACE     troca e vai para estado 36
+    SEMICOLON  troca e vai para estado 38
+    BOOL       troca e vai para estado 19
+    DOUBLE     troca e vai para estado 20
+    IF         troca e vai para estado 39
+    INT        troca e vai para estado 21
+    PRINT      troca e vai para estado 40
+    PARSEINT   troca e vai para estado 41
+    RETURN     troca e vai para estado 42
+    WHILE      troca e vai para estado 43
+
+    RBRACE  redução com regra 29 (recMD)
+
+    Type              vai para estado 44
+    recMD             vai para estado 85
+    VarDecl           vai para estado 46
+    Statement         vai para estado 47
+    MethodInvocation  vai para estado 48
+    Assignment        vai para estado 49
+    ParseArgs         vai para estado 50
 
 
 Estado 48
@@ -1004,7 +1027,7 @@ Estado 73
 
 Estado 74
 
-   77 Expr: NOT • Expr
+   78 Expr: NOT • Expr
 
     ID        troca e vai para estado 68
     INTLIT    troca e vai para estado 69
@@ -1024,7 +1047,7 @@ Estado 74
 
 Estado 75
 
-   78 Expr: PLUS • Expr
+   77 Expr: PLUS • Expr
 
     ID        troca e vai para estado 68
     INTLIT    troca e vai para estado 69
@@ -1149,14 +1172,14 @@ Estado 83
 
 Estado 84
 
-   32 recMD: recMD VarDecl •
+   32 recMD: VarDecl recMD •
 
     $default  redução com regra 32 (recMD)
 
 
 Estado 85
 
-   31 recMD: recMD Statement •
+   31 recMD: Statement recMD •
 
     $default  redução com regra 31 (recMD)
 
@@ -1505,12 +1528,6 @@ Estado 108
    75     | Expr • NE Expr
    76     | MINUS Expr •
 
-    STAR    troca e vai para estado 112
-    DIV     troca e vai para estado 113
-    MOD     troca e vai para estado 120
-    LSHIFT  troca e vai para estado 125
-    RSHIFT  troca e vai para estado 126
-
     $default  redução com regra 76 (Expr)
 
 
@@ -1532,9 +1549,9 @@ Estado 109
    73     | Expr • LE Expr
    74     | Expr • LT Expr
    75     | Expr • NE Expr
-   77     | NOT Expr •
+   78     | NOT Expr •
 
-    $default  redução com regra 77 (Expr)
+    $default  redução com regra 78 (Expr)
 
 
 Estado 110
@@ -1555,15 +1572,9 @@ Estado 110
    73     | Expr • LE Expr
    74     | Expr • LT Expr
    75     | Expr • NE Expr
-   78     | PLUS Expr •
+   77     | PLUS Expr •
 
-    STAR    troca e vai para estado 112
-    DIV     troca e vai para estado 113
-    MOD     troca e vai para estado 120
-    LSHIFT  troca e vai para estado 125
-    RSHIFT  troca e vai para estado 126
-
-    $default  redução com regra 78 (Expr)
+    $default  redução com regra 77 (Expr)
 
 
 Estado 111

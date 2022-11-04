@@ -15,7 +15,7 @@
     struct node * prog;
     int hasError;
     int printTree= true;
-    int debug = false;
+    int debug = true;
 
     void yyerror (const char *s);
 %}
@@ -185,8 +185,8 @@ MethodBody                  :   LBRACE recMD RBRACE                             
 
 recMD                       :   Statement                                       {$$ = $1;if(debug)printf("recMD\n");}
                             |   VarDecl                                         {$$ = $1;if(debug)printf("recMD2\n");}
-                            |   recMD Statement                                 {$$ = $1; newBrother($$, $2);if(debug)printf("recMD3\n");}
-                            |   recMD VarDecl                                   {$$ = $1; newBrother($$, $2);if(debug)printf("recMD4\n");}
+                            |   Statement recMD                                 {if($1) {$$ = $1; newBrother($$, $2);}else{$$=$2;}if(debug)printf("recMD3\n");}
+                            |   VarDecl recMD                                   {$$ = $1; newBrother($$, $2);if(debug)printf("recMD4\n");}
                             ;           
 
 VarDecl                     :   Type ID recVAR SEMICOLON                        {$$ = createNode("VarDecl"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3))); newBrother($$, $3);
@@ -235,7 +235,7 @@ recCOMMAEXP                 :   recCOMMAEXP COMMA Expr                          
 Assignment                  :   ID ASSIGN Expr                                  {$$ = createNode("Assign"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);if(debug)printf("Assign\n");}
                             ;
 
-ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              {$$ = createNode("ParseArgs"); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3)); newBrother($$->child, $5);if(debug)printf("ParseArgs\n");}
+ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              {$$ = createNode("ParseArgs"); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3)); newBrother($$->child, $5);if(debug)printf("ParseArgs + id(%s)\n",aux3);}
                             |   PARSEINT LPAR error RPAR                        {$$ = NULL;hasError=true;if(debug)printf("ParseArgs2\n");}
                             ;
 
@@ -255,14 +255,14 @@ Expr                        :   Expr PLUS Expr                                  
                             |   Expr LE Expr                                    {$$ = createNode("Le"); $$->child=$1; newBrother($1,$3);if(debug)printf("LE\n");}
                             |   Expr LT Expr                                    {$$ = createNode("Lt"); $$->child=$1; newBrother($1,$3);if(debug)printf("LT\n");}
                             |   Expr NE Expr                                    {$$ = createNode("Ne"); $$->child=$1; newBrother($1,$3);if(debug)printf("NE\n");}
-                            |   MINUS Expr                                      {$$ = createNode("Minus"); $$->child=$2;if(debug)printf("MINUS2\n");}
+                            |   MINUS Expr              %prec NOT               {$$ = createNode("Minus"); $$->child=$2;if(debug)printf("MINUS2\n");}
+                            |   PLUS Expr               %prec NOT               {$$ = createNode("Plus"); $$->child=$2;if(debug)printf("PLUS2\n");}
                             |   NOT Expr                                        {$$ = createNode("Not"); $$->child=$2;if(debug)printf("NOT\n");}
-                            |   PLUS Expr                                       {$$ = createNode("Plus"); $$->child=$2;if(debug)printf("PLUS2\n");}
                             |   LPAR Expr RPAR                                  {$$ = $2;if(debug)printf("EXPR\n");}
                             |   MethodInvocation                                {$$ = $1;if(debug)printf("MI\n");}
                             |   Assignment                                      {$$ = $1;if(debug)printf("ASS\n");}
                             |   ParseArgs                                       {$$ = $1;if(debug)printf("PA\n");}
-                            |   ID                                              {sprintf(aux3, "Id(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("ID111\n");}
+                            |   ID                                              {sprintf(aux3, "Id(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("%s_ID111\n", aux3);}
                             |   ID DOTLENGTH                                    {$$ = createNode("Length"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("DOT\n");}
                             |   INTLIT                                          {sprintf(aux3, "DecLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("DEC2\n");}
                             |   REALLIT                                         {sprintf(aux3, "RealLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("REAL2\n");}
