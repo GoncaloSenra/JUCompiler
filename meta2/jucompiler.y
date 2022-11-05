@@ -162,7 +162,7 @@ MethodHeader                :   Type ID LPAR FormalParams RPAR                  
                             |   VOID ID LPAR RPAR                               {$$ = createNode("MethodHeader");$$->child = createNode("Void"); sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3)));newBrother($$->child,createNode("MethodParams"));if(debug)printf("MethodHeader4\n");}
                             ;           
 
-FormalParams                :   Type ID recFP                                   {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($$, $3);
+FormalParams                :   Type ID recFP                                   {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($$->child, $3);
 
                                                                                     if(debug)printf("FormalParams\n");
                                                                                 }
@@ -170,8 +170,8 @@ FormalParams                :   Type ID recFP                                   
                             |   STRING LSQ RSQ ID                               {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = createNode("StringArray"); sprintf(aux3, "Id(%s)", $4); newBrother($$->child->child, createNode(strdup(aux3)));if(debug)printf("FormalParams3\n");}
                             ;           
 
-recFP                       :   COMMA Type ID recFP                             {$$ = createNode("ParamDecl"); newBrother($$, $4); $$->child = $2; sprintf(aux3, "Id(%s)", $3); newBrother($2, createNode(strdup(aux3)));if(debug)printf("recFP2\n");}
-                            |    /*vazio*/                                      {$$ = NULL;} 
+recFP                       :   COMMA Type ID recFP                             {$$ = createNode("ParamDecl"); newBrother($$, $4); $$->child = $2; sprintf(aux3, "Id(%s)", $3); newBrother($2, createNode(strdup(aux3)));if(debug)printf("recFP\n");}
+                            |    /*vazio*/                                      {$$ = NULL;if(debug)printf("recFP2\n");} 
                             ;           
 
 MethodBody                  :   LBRACE recMD RBRACE                             {$$ = createNode("MethodBody"); $$->child = $2;if(debug)printf("MethodBody\n");}
@@ -204,7 +204,7 @@ recVAR                      :   COMMA ID                                        
 Statement                   :   LBRACE recSTAT RBRACE                           {$$ = $2;if(debug)printf("Statement\n");}
                             |   LBRACE RBRACE                                   {;if(debug)printf("Statement2\n");}
                             |   IF LPAR Expr RPAR Statement ELSE Statement      {$$ = createNode("If"); $$->child = $3; newBrother($3, $5); newBrother($5, createNode("Block")); newBrother($5, $7);if(debug)printf("Statement3\n");}                            
-                            |   IF LPAR Expr RPAR Statement                     {$$ = createNode("If"); $$->child = $3; newBrother($3, $5); newBrother($5, createNode("Block"));if(debug)printf("Statement4\n");}
+                            |   IF LPAR Expr RPAR Statement                     {$$ = createNode("If"); $$->child = $3; if(!$5){newBrother($3, createNode("Block"));newBrother($3, createNode("Block"));} else{newBrother($3, $5); newBrother($5, createNode("Block"));};if(debug)printf("Statement4\n");}
                             |   WHILE LPAR Expr RPAR Statement                  {$$ = createNode("While"); $$->child = $3; newBrother($3, $5);if(debug)printf("Statement5\n");}
                             |   RETURN Expr SEMICOLON                           {$$ = createNode("Return"); $$->child = $2;if(debug)printf("Statement6\n");}                            
                             |   RETURN SEMICOLON                                {$$ = createNode("Return");if(debug)printf("Statement7\n");}
@@ -219,8 +219,9 @@ Statement                   :   LBRACE recSTAT RBRACE                           
                             ;
 
 recSTAT                     :   Statement                                       {$$=$1;}
-                            |   recSTAT Statement                               {if($1!=NULL){$$=$1; newBrother($1,$2);} else{$$=$2;}}
-//        passar(cg,comp(meta2),iia,lpa,si,scc);
+                            |   Statement recSTAT                               {if($1!=NULL){$$=$1; newBrother($1,$2);} else{$$=$2;}}
+                            ;
+
 MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3); newBrother($3, $4);if(debug)printf("MethodInvocation\n");}
                             |   ID LPAR Expr RPAR                               {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);if(debug)printf("MethodInvocation2\n");}                                                    
                             |   ID LPAR RPAR                                    {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("MethodInvocation3\n");}
