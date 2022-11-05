@@ -7,14 +7,13 @@
     #include <stdio.h>
     #include "STree.h"
     int yylex(void);
-    #define true 1
-    #define false 0
+    
 
     char aux3[1024]; 
     char aux4[1024]; 
 
     int error;
-    extern int printTree;
+    struct node * prog;
     int debug = false;
 
     void yyerror (const char *s);
@@ -117,7 +116,7 @@
 
 
 %%
-Program                     :   CLASS ID LBRACE recPR RBRACE                    {$$ = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$->child, $4); if (printTree==true && error==false){printSTree($$,0);} else{freeSTree($$);}  if(debug)printf("Program\n");}                           
+Program                     :   CLASS ID LBRACE recPR RBRACE                    {$$ = prog = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$->child, $4); if(debug)printf("Program\n");}                           
                             |   CLASS ID LBRACE RBRACE                          {$$ = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("Program2\n");}
                             ;
 

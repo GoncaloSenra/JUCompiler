@@ -16,7 +16,11 @@
     int col = 1;
     int aux = 0;
 
+    extern struct node * prog;
+    extern int error;
+
     int yacc;
+    int lexicalError = 0;
 
     int auxline=0;
     int auxcol=0;
@@ -184,12 +188,16 @@ int main(int argc, char * argv[])
         }else if (strcmp(argv[1], "-t") == 0){
             aux = 1;
             yacc = 0;
-            printTree = 1;
             yyparse();
+            if (lexicalError != 1)
+                if (error==false){
+                    printSTree(prog,0);
+                } else{
+                    freeSTree(prog);
+                }
         }else if (strcmp(argv[1], "-e2") == 0){
             aux = 1;
             yacc = 0;
-            printTree = 0;
             yyparse();
         }
     }
@@ -204,6 +212,7 @@ int yywrap()
 }
 
 void yyerror (char *s) { 
+    lexicalError = 1;
 
 	char straux[yyleng+1];
 	strcpy(straux, yytext-1);
