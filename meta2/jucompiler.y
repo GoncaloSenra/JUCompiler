@@ -201,10 +201,15 @@ recVAR                      :   COMMA ID                                        
                             |   COMMA ID recVAR                                 {$$ = createNode("VarDecl"); newBrother($$, $3); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR2\n");}
                             ;                        
 
-Statement                   :   LBRACE recSTAT RBRACE                           {if($2 != NULL){if($2->brother != NULL){$$ = createNode("Block");$$->child = $2;}else{$$ = $2;}}else $$ = $2;if(debug)printf("Statement\n");}
+Statement                   :   LBRACE recSTAT RBRACE                           {$$ = $2;
+                                                                                if(debug)printf("Statement\n");}
                             |   LBRACE RBRACE                                   {$$ = NULL;if(debug)printf("Statement2\n");}
-                            |   IF LPAR Expr RPAR Statement ELSE Statement      {$$ = createNode("If"); $$->child = $3; if(!$5){newBrother($3, createNode("Block"));newBrother($3, createNode("Block"));} else{newBrother($3, $5); newBrother($3, createNode("Block"));}; newBrother($3, $7);if(debug)printf("Statement3\n");}                            
-                            |   IF LPAR Expr RPAR Statement                     {$$ = createNode("If"); $$->child = $3; if(!$5){newBrother($3, createNode("Block"));newBrother($3, createNode("Block"));} else{newBrother($3, $5); newBrother($3, createNode("Block"));};if(debug)printf("Statement4\n");}
+                            |   IF LPAR Expr RPAR Statement ELSE Statement      {$$ = createNode("If"); $$->child = $3; 
+                                                                                    if(!$5){newBrother($3, createNode("Block"));} 
+                                                                                    else{if($5->brother != NULL){$3->child = createNode("Block"); newBrother($3->child, $5);}else{newBrother($3, $5); newBrother($3, createNode("Block"));}}; newBrother($3, $7);if(debug)printf("Statement3\n");}                            
+                            |   IF LPAR Expr RPAR Statement                     {$$ = createNode("If"); $$->child = $3; 
+                                                                                    if(!$5){newBrother($3, createNode("Block"));newBrother($3, createNode("Block"));} 
+                                                                                    else{if($5->brother != NULL){$3->child = $5; newBrother($3->child, createNode("Block"));}else{newBrother($3, $5); newBrother($3, createNode("Block"));}};if(debug)printf("Statement4\n");}
                             |   WHILE LPAR Expr RPAR Statement                  {$$ = createNode("While"); $$->child = $3; newBrother($3, $5);if(debug)printf("Statement5\n");}
                             |   RETURN Expr SEMICOLON                           {$$ = createNode("Return"); $$->child = $2;if(debug)printf("Statement6\n");}                            
                             |   RETURN SEMICOLON                                {$$ = createNode("Return");if(debug)printf("Statement7\n");}
