@@ -1604,7 +1604,7 @@ yyreduce:
 
   case 13: /* FieldDecl: error SEMICOLON  */
 #line 147 "jucompiler.y"
-                                                                                {hasError=true;if(debug)printf("FieldDecl3\n");}
+                                                                                {(yyval.no)=createNode(NULL);hasError=true;if(debug)printf("FieldDecl3\n");}
 #line 1609 "y.tab.c"
     break;
 
@@ -1849,7 +1849,7 @@ yyreduce:
 
   case 51: /* Statement: error SEMICOLON  */
 #line 223 "jucompiler.y"
-                                                                                {hasError=true;if(debug)printf("Statement15\n");}
+                                                                                {(yyval.no)=createNode(NULL);hasError=true;if(debug)printf("Statement15\n");}
 #line 1854 "y.tab.c"
     break;
 
@@ -1885,7 +1885,7 @@ yyreduce:
 
   case 57: /* MethodInvocation: ID LPAR error RPAR  */
 #line 233 "jucompiler.y"
-                                                                                {hasError=true;if(debug)printf("MethodInvocation4\n");}
+                                                                                {(yyval.no)=createNode(NULL);hasError=true;if(debug)printf("MethodInvocation4\n");}
 #line 1890 "y.tab.c"
     break;
 
@@ -1915,7 +1915,7 @@ yyreduce:
 
   case 62: /* ParseArgs: PARSEINT LPAR error RPAR  */
 #line 244 "jucompiler.y"
-                                                                                {(yyval.no) = NULL;hasError=true;if(debug)printf("ParseArgs2\n");}
+                                                                                {(yyval.no) = NULL;(yyval.no)=createNode(NULL);hasError=true;if(debug)printf("ParseArgs2\n");}
 #line 1920 "y.tab.c"
     break;
 
@@ -2089,7 +2089,7 @@ yyreduce:
 
   case 91: /* Expr: LPAR error RPAR  */
 #line 275 "jucompiler.y"
-                                                                                {hasError=true;if(debug)printf("666\n");}
+                                                                                {(yyval.no)=createNode(NULL);hasError=true;if(debug)printf("666\n");}
 #line 2094 "y.tab.c"
     break;
 
