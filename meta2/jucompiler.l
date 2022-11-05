@@ -17,8 +17,6 @@
     int aux = 0;
 
     int yacc;
-    int erro_sintaxe = 0;
-
 
     int auxline=0;
     int auxcol=0;
@@ -206,20 +204,19 @@ int yywrap()
 }
 
 void yyerror (char *s) { 
-	erro_sintaxe = 1;
 
-	char temp[yyleng+1];
-	strcpy(temp, yytext-1);
+	char straux[yyleng+1];
+	strcpy(straux, yytext-1);
 	if(col-yyleng == 0){
 		col++;
 	}
-	if (strcmp(yytext, "\n") == 0) {
-		printf ("Line %d, col %d: %s: %s\n", line, col, s, yytext); 
-	}
-	else {
-		if(yytext[yyleng-1] == '\"' && temp[0] == '\"')
+	if (strcmp(yytext, "\n") != 0) {
+		if(yytext[yyleng-1] == '\"' && straux[0] == '\"')
 			printf ("Line %d, col %d: %s: %s\n", line, col-yyleng-1, s, yytext-1);
 		else
 			printf ("Line %d, col %d: %s: %s\n", line, col-yyleng, s, yytext);
+	}
+	else {
+        printf ("Line %d, col %d: %s: %s\n", line, col, s, yytext); 
 	}
 }

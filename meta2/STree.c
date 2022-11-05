@@ -23,26 +23,25 @@ void newBrother(node* old, node* newn) {
     return;
 }
 
-void printASTree(struct node *node, int depth){
-    char dots[depth*2];
-    for (int i = 0; i<depth*2; i++){
-        dots[i]='.';
+void printSTree(struct node *node, int prof){
+    char pontos [prof * 2];
+
+    for (int i = 0; i < prof * 2; i++){
+        pontos[i]='.';
     }
-    dots[2*depth]='\0';
+    pontos [2 * prof] = '\0';
 
-    printf("%s%s\n",dots,node->var);
-    if (node->child)    printASTree(node->child, depth+1);
-    if (node->brother)  printASTree(node->brother, depth);
+    printf("%s%s\n", pontos, node->var);
+    if (node->child)    printSTree(node->child, prof + 1);
+    if (node->brother)  printSTree(node->brother, prof);
 
-    //if printTree and hasError==False limpa a memória depois de printar!!
     free(node);
 }
 
 
-void freeASTree(struct node *node){
-    if (node->child)    freeASTree(node->child);
-    if (node->brother)  freeASTree(node->brother);
+void freeSTree(struct node *node){
+    if (node->child)    freeSTree(node->child);
+    if (node->brother)  freeSTree(node->brother);
 
-    //if printTree and hasError==False limpa a memória depois de printar!!
     free(node);
 }

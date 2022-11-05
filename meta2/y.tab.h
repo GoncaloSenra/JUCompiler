@@ -102,9 +102,7 @@ extern int yydebug;
     VOID = 303,                    /* VOID  */
     WHILE = 304,                   /* WHILE  */
     RESERVED = 305,                /* RESERVED  */
-    MUL = 306,                     /* MUL  */
-    LOWER = 307,                   /* LOWER  */
-    HIGHER = 308                   /* HIGHER  */
+    MUL = 306                      /* MUL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -162,8 +160,6 @@ extern int yydebug;
 #define WHILE 304
 #define RESERVED 305
 #define MUL 306
-#define LOWER 307
-#define HIGHER 308
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -176,7 +172,7 @@ union YYSTYPE
     float reallit;
     struct node * no;
 
-#line 180 "y.tab.h"
+#line 176 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

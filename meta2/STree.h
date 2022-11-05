@@ -13,6 +13,6 @@ node * createNode(char * var);
 
 void newBrother(node* old, node* newn);
 
-void printASTree(struct node *node, int depth);
+void printSTree(struct node *node, int prof);
 
-void freeASTree(struct node *node);
+void freeSTree(struct node *node);

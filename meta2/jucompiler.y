@@ -13,7 +13,7 @@
     char aux3[1024]; 
     char aux4[1024]; 
 
-    int hasError;
+    int error;
     extern int printTree;
     int debug = false;
 
@@ -113,12 +113,11 @@
 %left   LPAR
 %left   RPAR
 
-%nonassoc LOWER
 %nonassoc ELSE
-%nonassoc HIGHER
+
 
 %%
-Program                     :   CLASS ID LBRACE recPR RBRACE                    {$$ = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$->child, $4); if (printTree==true && hasError==false){printASTree($$,0);} else{freeASTree($$);}  if(debug)printf("Program\n");}                           
+Program                     :   CLASS ID LBRACE recPR RBRACE                    {$$ = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$->child, $4); if (printTree==true && error==false){printSTree($$,0);} else{freeSTree($$);}  if(debug)printf("Program\n");}                           
                             |   CLASS ID LBRACE RBRACE                          {$$ = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("Program2\n");}
                             ;
 
@@ -144,7 +143,7 @@ FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      
                                                                                     if(debug)printf("FieldDecl\n");
                                                                                 }
                             |   PUBLIC STATIC Type ID SEMICOLON                 {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux3, "Id(%s)", $4); newBrother($3, createNode(strdup(aux3)));if(debug)printf("FieldDecl2\n");}
-                            |   error SEMICOLON                                 {$$=createNode(NULL);hasError=true;if(debug)printf("FieldDecl3\n");}
+                            |   error SEMICOLON                                 {$$=createNode(NULL);error=true;if(debug)printf("FieldDecl3\n");}
                             ;
 
 recCOMMAID                  :   COMMA ID                                        {$$ = createNode("FieldDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recCommaId(%s)\n", aux3);}
@@ -220,7 +219,7 @@ Statement                   :   LBRACE recSTAT RBRACE                           
                             |   PRINT LPAR Expr RPAR SEMICOLON                  {$$ = createNode("Print"); $$->child = $3;if(debug)printf("Statement12\n");}
                             |   PRINT LPAR STRLIT RPAR SEMICOLON                {$$ = createNode("Print"); sprintf(aux3, "StrLit(\"%s\")", $3); $$->child = createNode(strdup(aux3));if(debug)printf("Statement13\n");}
                             |   PRINT LPAR RPAR SEMICOLON                       {$$ = createNode("Print");if(debug)printf("Statement14\n");}                            
-                            |   error SEMICOLON                                 {$$=createNode(NULL);hasError=true;if(debug)printf("Statement15\n");}
+                            |   error SEMICOLON                                 {$$=createNode(NULL);error=true;if(debug)printf("Statement15\n");}
                             ;
 
 recSTAT                     :   Statement                                       {$$=$1;}
@@ -230,7 +229,7 @@ recSTAT                     :   Statement                                       
 MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3); newBrother($3, $4);if(debug)printf("MethodInvocation\n");}
                             |   ID LPAR Expr RPAR                               {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);if(debug)printf("MethodInvocation2\n");}                                                    
                             |   ID LPAR RPAR                                    {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("MethodInvocation3\n");}
-                            |   ID LPAR error RPAR                              {$$=createNode(NULL);hasError=true;if(debug)printf("MethodInvocation4\n");}
+                            |   ID LPAR error RPAR                              {$$=createNode(NULL);error=true;if(debug)printf("MethodInvocation4\n");}
                             ;
 
 recCOMMAEXP                 :   recCOMMAEXP COMMA Expr                          {$$ = $1; newBrother($1, $3);if(debug)printf("recCOMMAEXP\n");}
@@ -241,7 +240,7 @@ Assignment                  :   ID ASSIGN Expr                                  
                             ;
 
 ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              {$$ = createNode("ParseArgs"); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3)); newBrother($$->child, $5);if(debug)printf("ParseArgs + id(%s)\n",aux3);}
-                            |   PARSEINT LPAR error RPAR                        {$$ = NULL;$$=createNode(NULL);hasError=true;if(debug)printf("ParseArgs2\n");}
+                            |   PARSEINT LPAR error RPAR                        {$$ = NULL;$$=createNode(NULL);error=true;if(debug)printf("ParseArgs2\n");}
                             ;
 
 Expr                        :   Expr PLUS Expr                                  {$$ = createNode("Add"); $$->child=$1; newBrother($1,$3);if(debug)printf("PLUS\n");}
@@ -272,7 +271,7 @@ Expr                        :   Expr PLUS Expr                                  
                             |   INTLIT                                          {sprintf(aux3, "DecLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("DEC2\n");}
                             |   REALLIT                                         {sprintf(aux3, "RealLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("REAL2\n");}
                             |   BOOLLIT                                         {sprintf(aux3, "BoolLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("BOOL2\n");}
-                            |   LPAR error RPAR                                 {$$=createNode(NULL);hasError=true;if(debug)printf("666\n");}
+                            |   LPAR error RPAR                                 {$$=createNode(NULL);error=true;if(debug)printf("666\n");}
                             ;
 
 
