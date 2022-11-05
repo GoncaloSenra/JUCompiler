@@ -163,21 +163,15 @@ MethodHeader                :   Type ID LPAR FormalParams RPAR                  
                             ;           
 
 FormalParams                :   Type ID recFP                                   {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3))); newBrother($$, $3);
-                                                                                    struct node * auxnode = $3, * auxnode2;
-                                                                                    while(auxnode != NULL){
-                                                                                        auxnode2 = auxnode->child;
-                                                                                        auxnode->child = createNode($1->var);
-                                                                                        auxnode->child->brother = auxnode2;
-                                                                                        auxnode = auxnode->brother;
-                                                                                    }
-                                                                                    if(debug)printf("FormalParams(%s)\n", aux3);
+
+                                                                                    if(debug)printf("FormalParams\n");
                                                                                 }
-                            |   Type ID                                         {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3)));if(debug)printf("FormalParams2\n");}
+                            
                             |   STRING LSQ RSQ ID                               {$$ = createNode("MethodParams"); $$->child = createNode("ParamDecl"); $$->child->child = createNode("StringArray"); sprintf(aux3, "Id(%s)", $4); newBrother($$->child->child, createNode(strdup(aux3)));if(debug)printf("FormalParams3\n");}
                             ;           
 
-recFP                       :   COMMA Type ID                                   {$$ = createNode("ParamDecl"); $$->child = $2; sprintf(aux3, "Id(%s)", $3); newBrother($2, createNode(strdup(aux3)));if(debug)printf("recFP(%s)\n", aux3);}
-                            |   recFP COMMA Type ID                             {$$ = createNode("ParamDecl"); newBrother($$, $1); $$->child = $3; sprintf(aux3, "Id(%s)", $4); newBrother($3, createNode(strdup(aux3)));if(debug)printf("recFP2(%s)\n", aux3);}
+recFP                       :   COMMA Type ID recFP                             {$$ = createNode("ParamDecl"); newBrother($$, $4); $$->child = $2; sprintf(aux3, "Id(%s)", $3); newBrother($2, createNode(strdup(aux3)));if(debug)printf("recFP2\n");}
+                            |    /*vazio*/                                      {$$ = NULL;} 
                             ;           
 
 MethodBody                  :   LBRACE recMD RBRACE                             {$$ = createNode("MethodBody"); $$->child = $2;if(debug)printf("MethodBody\n");}
@@ -204,8 +198,8 @@ VarDecl                     :   Type ID recVAR SEMICOLON                        
                             ;           
 
 recVAR                      :   COMMA ID                                        {$$ = createNode("VarDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR\n");}
-                            |   recVAR COMMA ID                                 {$$ = createNode("VarDecl"); newBrother($$, $1); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR2\n");}
-                            ;                            
+                            |   COMMA ID recVAR                                 {$$ = createNode("VarDecl"); newBrother($$, $3); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR2\n");}
+                            ;                        
 
 Statement                   :   LBRACE recSTAT RBRACE                           {$$ = $2;if(debug)printf("Statement\n");}
                             |   LBRACE RBRACE                                   {;if(debug)printf("Statement2\n");}
