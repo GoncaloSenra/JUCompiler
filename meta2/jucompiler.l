@@ -10,13 +10,13 @@
 
     int yyparse(void);
 
-    extern struct node * prog;
+    int printTree;
 
     int line = 1;
     int col = 1;
     int aux = 0;
 
-    int yacc = 0;
+    int yacc;
     int erro_sintaxe = 0;
 
 
@@ -175,27 +175,27 @@ int main(int argc, char * argv[])
 {
     
     if (argc == 2) {
-        if (strcmp(argv[1], "-l") == 0)
+        if (strcmp(argv[1], "-l") == 0){
             aux = 0;
-        else if (strcmp(argv[1], "-e1") == 0)
+            yacc = 1;
+            yylex();
+        }else if (strcmp(argv[1], "-e1") == 0){
             aux = 1;
+            yacc = 0;
+            yylex();
+        }else if (strcmp(argv[1], "-t") == 0){
+            aux = 1;
+            yacc = 0;
+            printTree = 1;
+            yyparse();
+        }else if (strcmp(argv[1], "-e2") == 0){
+            aux = 1;
+            yacc = 0;
+            printTree = 0;
+            yyparse();
+        }
     }
-    aux = 1;
-    yacc = 0;
-     
-    //yylex();
-
-    //printf("1\n");
     
-    yyparse();
-
-    //printf("2\n");
-
-    //printASTree(prog, 0);
-
-    //printf("3\n");
-
-    //freeASTree(prog);
 
     return 0;
 }

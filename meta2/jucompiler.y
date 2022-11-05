@@ -12,9 +12,9 @@
 
     char aux3[1024]; 
     char aux4[1024]; 
-    struct node * prog;
+
     int hasError;
-    int printTree= true;
+    extern int printTree;
     int debug = false;
 
     void yyerror (const char *s);
