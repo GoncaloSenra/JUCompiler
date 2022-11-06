@@ -106,14 +106,14 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
 <STRING1>{STRLIT}                                                        {if(aux == 0) printf("STRLIT(\"%s)\n", yytext);col+=yyleng;BEGIN 0;if(yacc == 0){yylval.id = strdup(yytext);return STRLIT;}}
 <STRING1>([^\\\r\n\"]|{VALIDESCAPES})*("\n"|"\r"|"\r\n")                 {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
 <STRING1>.                                                               {;}
-<STRING1><<EOF>>                                                         {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
+<STRING1><<EOF>>                                                         {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);yyterminate();}
 
 <STRING2>("\n"|"\r"|"\r\n")                  {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);col = 1;line++;BEGIN 0;}
 <STRING2>(\\)([^nftr\\\r\n"])                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-2, &yytext[yyleng-2]);}
 <STRING2>(\\)                                {col += yyleng;printf("Line %d, col %d: invalid escape sequence (%s)\n", line, col-1, &yytext[yyleng-1]);}
 <STRING2>"\""                                {col += yyleng; BEGIN 0;}
 <STRING2>([^\\\r\n\"]|{VALIDESCAPES})*       {col += yyleng;}
-<STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
+<STRING2><<EOF>>                             {col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);yyterminate();}
 
 
 {BOOLLIT}           {if(aux == 0) printf("BOOLLIT(%s)\n", yytext);col += yyleng;if(yacc == 0){yylval.id = strdup(yytext); return BOOLLIT;}}

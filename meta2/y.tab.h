@@ -101,8 +101,7 @@ extern int yydebug;
     STRING = 302,                  /* STRING  */
     VOID = 303,                    /* VOID  */
     WHILE = 304,                   /* WHILE  */
-    RESERVED = 305,                /* RESERVED  */
-    MUL = 306                      /* MUL  */
+    RESERVED = 305                 /* RESERVED  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -159,7 +158,6 @@ extern int yydebug;
 #define VOID 303
 #define WHILE 304
 #define RESERVED 305
-#define MUL 306
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -168,11 +166,9 @@ union YYSTYPE
 #line 22 "jucompiler.y"
 
     char* id;
-    int intlit;
-    float reallit;
     struct node * no;
 
-#line 176 "y.tab.h"
+#line 172 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

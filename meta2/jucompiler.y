@@ -21,32 +21,8 @@
 
 %union{
     char* id;
-    int intlit;
-    float reallit;
     struct node * no;
 };
-
-%type <no> Program
-%type <no> recPR
-%type <no> MethodDecl
-%type <no> FieldDecl
-%type <no> recCOMMAID
-%type <no> Type
-%type <no> MethodHeader
-%type <no> FormalParams
-%type <no> recFP
-%type <no> MethodBody
-%type <no> recMD
-%type <no> VarDecl
-%type <no> Statement
-%type <no> MethodInvocation
-%type <no> recCOMMAEXP
-%type <no> Assignment
-%type <no> ParseArgs
-%type <no> Expr
-%type <no> Expr2
-%type <no> recVAR
-%type <no> recSTAT
 
 
 %token  <id> ID
@@ -98,34 +74,55 @@
 %token WHILE
 %token RESERVED
 
-%left   COMMA
+
 %right  ASSIGN
 %left   OR
 %left   AND
 %left   XOR
 %left   EQ NE
 %left   LE LT GE GT
+%left   LSHIFT RSHIFT
 %left   PLUS MINUS
-%left   MUL DIV MOD
-%left   STAR LSHIFT RSHIFT
+%left   STAR DIV MOD
 %right  NOT
-%left   LPAR
-%left   RPAR
+%left   LPAR RPAR LSQ RSQ
+
 
 %nonassoc ELSE
 
 
+%type <no> Program
+%type <no> recPR
+%type <no> MethodDecl
+%type <no> FieldDecl
+%type <no> recCOMMAID
+%type <no> Type
+%type <no> MethodHeader
+%type <no> FormalParams
+%type <no> recFP
+%type <no> MethodBody
+%type <no> recMD
+%type <no> VarDecl
+%type <no> Statement
+%type <no> MethodInvocation
+%type <no> recCOMMAEXP
+%type <no> Assignment
+%type <no> ParseArgs
+%type <no> Expr
+%type <no> Expr2
+%type <no> recVAR
+%type <no> recSTAT
+
+
+
 %%
 Program                     :   CLASS ID LBRACE recPR RBRACE                    {$$ = prog = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$->child, $4); if(debug)printf("Program\n");}                           
-                            |   CLASS ID LBRACE RBRACE                          {$$ = createNode("Program"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("Program2\n");}
                             ;
 
-recPR                       :   MethodDecl                                      {$$ = $1;if(debug)printf("recPR\n");}
-                            |   FieldDecl                                       {$$ = $1;if(debug)printf("recPR2\n");}    
-                            |   SEMICOLON                                       {;if(debug)printf("recPR3\n");}
-                            |   MethodDecl recPR                               {$$ = $1; newBrother($$, $2);if(debug)printf("recPR4\n");}
+recPR                       :   MethodDecl recPR                               {$$ = $1; newBrother($$, $2);if(debug)printf("recPR4\n");}
                             |   FieldDecl recPR                                {$$ = $1; newBrother($$, $2);if(debug)printf("recPR5\n");}
                             |   SEMICOLON recPR                                {$$ = $2;if(debug)printf("recPR6\n");}
+                            |                                                  {$$ = NULL;}
                             ;
 
 MethodDecl                  :   PUBLIC STATIC MethodHeader MethodBody           {$$ = createNode("MethodDecl"); $$->child = $3; newBrother($3, $4);if(debug)printf("MethodDecl\n");}
@@ -141,12 +138,11 @@ FieldDecl                   :   PUBLIC STATIC Type ID recCOMMAID SEMICOLON      
                                                                                     }
                                                                                     if(debug)printf("FieldDecl\n");
                                                                                 }
-                            |   PUBLIC STATIC Type ID SEMICOLON                 {$$ = createNode("FieldDecl"); $$->child = $3; sprintf(aux3, "Id(%s)", $4); newBrother($3, createNode(strdup(aux3)));if(debug)printf("FieldDecl2\n");}
                             |   error SEMICOLON                                 {$$=createNode(NULL);error=true;if(debug)printf("FieldDecl3\n");}
                             ;
 
-recCOMMAID                  :   COMMA ID                                        {$$ = createNode("FieldDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recCommaId(%s)\n", aux3);}
-                            |   COMMA ID recCOMMAID                             {$$ = createNode("FieldDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$, $3);if(debug)printf("recCommaId2(%s)\n", aux3);}
+recCOMMAID                  :   COMMA ID recCOMMAID                             {$$ = createNode("FieldDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3)); newBrother($$, $3);if(debug)printf("recCommaId2(%s)\n", aux3);}
+                            |                                                   {$$ = NULL;}
                             ;           
 
 Type                        :   BOOL                                            {$$ = createNode("Bool");if(debug)printf("Bool\n");}
@@ -169,17 +165,15 @@ FormalParams                :   Type ID recFP                                   
                             ;           
 
 recFP                       :   COMMA Type ID recFP                             {$$ = createNode("ParamDecl"); newBrother($$, $4); $$->child = $2; sprintf(aux3, "Id(%s)", $3); newBrother($2, createNode(strdup(aux3)));if(debug)printf("recFP\n");}
-                            |    /*vazio*/                                      {$$ = NULL;if(debug)printf("recFP2\n");} 
+                            |                                                   {$$ = NULL;if(debug)printf("recFP2\n");} 
                             ;           
 
 MethodBody                  :   LBRACE recMD RBRACE                             {$$ = createNode("MethodBody"); $$->child = $2;if(debug)printf("MethodBody\n");}
-                            |   LBRACE RBRACE                                   {$$ = createNode("MethodBody");if(debug)printf("MethodBody2\n");}
                             ;           
 
-recMD                       :   Statement                                       {$$ = $1;if(debug)printf("recMD\n");}
-                            |   VarDecl                                         {$$ = $1;if(debug)printf("recMD2\n");}
-                            |   Statement recMD                                 {if($1) {$$ = $1; newBrother($$, $2);}else{$$=$2;}if(debug)printf("recMD3\n");}
+recMD                       :   Statement recMD                                 {if($1) {$$ = $1; newBrother($$, $2);}else{$$=$2;}if(debug)printf("recMD3\n");}
                             |   VarDecl recMD                                   {$$ = $1; newBrother($$, $2);if(debug)printf("recMD4\n");}
+                            |                                                   {$$ = NULL;}
                             ;           
 
 VarDecl                     :   Type ID recVAR SEMICOLON                        {$$ = createNode("VarDecl"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($$->child, createNode(strdup(aux3))); newBrother($$, $3);
@@ -192,11 +186,10 @@ VarDecl                     :   Type ID recVAR SEMICOLON                        
                                                                                     }
                                                                                     if(debug)printf("VarDecl\n");
                                                                                 }
-                            |   Type ID SEMICOLON                               {$$ = createNode("VarDecl"); $$->child = $1; sprintf(aux3, "Id(%s)", $2); newBrother($1, createNode(strdup(aux3)));if(debug)printf("VarDecl2\n");}
                             ;           
 
-recVAR                      :   COMMA ID                                        {$$ = createNode("VarDecl"); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR\n");}
-                            |   COMMA ID recVAR                                 {$$ = createNode("VarDecl"); newBrother($$, $3); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR2\n");}
+recVAR                      :   COMMA ID recVAR                                 {$$ = createNode("VarDecl"); newBrother($$, $3); sprintf(aux3, "Id(%s)", $2); $$->child = createNode(strdup(aux3));if(debug)printf("recVAR2\n");}
+                            |                                                   {$$ = NULL;}
                             ;                        
 
 Statement                   :   LBRACE recSTAT RBRACE                           {if ($2!=NULL){if ($2->brother != NULL){$$ = createNode("Block"); $$->child = $2;} else {$$ = $2;}} else {$$ = $2;}; if(debug)printf("Statement\n");}
@@ -258,13 +251,12 @@ recSTAT                     :   Statement recSTAT                               
                             ;
 
 MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3); newBrother($3, $4);if(debug)printf("MethodInvocation\n");}
-                            |   ID LPAR Expr RPAR                               {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);if(debug)printf("MethodInvocation2\n");}                                                    
                             |   ID LPAR RPAR                                    {$$ = createNode("Call"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("MethodInvocation3\n");}
                             |   ID LPAR error RPAR                              {$$=createNode(NULL);error=true;if(debug)printf("MethodInvocation4\n");}
                             ;
 
-recCOMMAEXP                 :   recCOMMAEXP COMMA Expr                          {$$ = $1; newBrother($1, $3);if(debug)printf("recCOMMAEXP\n");}
-                            |   COMMA Expr                                      {$$ = $2;if(debug)printf("recCOMMAEXP2\n");}
+recCOMMAEXP                 :   COMMA Expr recCOMMAEXP                          {$$ = $2; newBrother($2, $3);if(debug)printf("recCOMMAEXP\n");}
+                            |                                                   {$$ = NULL;}
                             ;
 
 Assignment                  :   ID ASSIGN Expr                                  {$$ = createNode("Assign"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3)); newBrother($$->child, $3);if(debug)printf("Assign\n");}

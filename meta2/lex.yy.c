@@ -1116,7 +1116,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(STRING1):
 #line 110 "jucompiler.l"
-{col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
+{col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);yyterminate();}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
@@ -1146,7 +1146,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(STRING2):
 #line 117 "jucompiler.l"
-{col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);BEGIN 0;}
+{col += yyleng;printf("Line %d, col %d: unterminated string literal\n", auxline, auxcol);yyterminate();}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
