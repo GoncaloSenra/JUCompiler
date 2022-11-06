@@ -242,7 +242,6 @@ Statement                   :   LBRACE recSTAT RBRACE                           
                             |   SEMICOLON                                       {$$ = NULL;if(debug)printf("Statement11\n");}                            
                             |   PRINT LPAR Expr RPAR SEMICOLON                  {$$ = createNode("Print"); $$->child = $3;if(debug)printf("Statement12\n");}
                             |   PRINT LPAR STRLIT RPAR SEMICOLON                {$$ = createNode("Print"); sprintf(aux3, "StrLit(\"%s)", $3); $$->child = createNode(strdup(aux3));if(debug)printf("Statement13\n");}
-                            |   PRINT LPAR RPAR SEMICOLON                       {$$ = createNode("Print");if(debug)printf("Statement14\n");}                            
                             |   error SEMICOLON                                 {$$=createNode(NULL);error=true;if(debug)printf("Statement15\n");}
                             ;
 
@@ -264,10 +263,6 @@ Assignment                  :   ID ASSIGN Expr                                  
 
 ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              {$$ = createNode("ParseArgs"); sprintf(aux3, "Id(%s)", $3); $$->child = createNode(strdup(aux3)); newBrother($$->child, $5);if(debug)printf("ParseArgs + id(%s)\n",aux3);}
                             |   PARSEINT LPAR error RPAR                        {$$ = NULL;$$=createNode(NULL);error=true;if(debug)printf("ParseArgs2\n");}
-                            ;
-
-Expr                        :   Assignment                                      {$$ = $1;}
-                            |   Expr2                                            {$$ = $1;}
                             ;
 
 Expr2                       :   Expr2 PLUS Expr2                                  {$$ = createNode("Add"); $$->child=$1; newBrother($1,$3);if(debug)printf("PLUS\n");}
@@ -298,6 +293,10 @@ Expr2                       :   Expr2 PLUS Expr2                                
                             |   REALLIT                                         {sprintf(aux3, "RealLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("REAL2\n");}
                             |   BOOLLIT                                         {sprintf(aux3, "BoolLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("BOOL2\n");}
                             |   LPAR error RPAR                                 {$$=createNode(NULL);error=true;if(debug)printf("666\n");}
+                            ;
+
+Expr                        :   Assignment                                      {$$ = $1;}
+                            |   Expr2                                            {$$ = $1;}
                             ;
 
 %%
