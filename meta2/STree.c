@@ -45,3 +45,14 @@ void freeSTree(struct node *node){
 
     free(node);
 }
+
+int numBrothers(struct node * no) {
+		int count = 0;
+		struct node * aux;
+		aux = no;
+		while (aux != NULL) {
+			aux = aux->brother;
+			count++;
+		}
+		return count;
+}
