@@ -44,6 +44,7 @@
 %type <no> Assignment
 %type <no> ParseArgs
 %type <no> Expr
+%type <no> Expr2
 %type <no> recVAR
 %type <no> recSTAT
 
@@ -273,28 +274,31 @@ ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              
                             |   PARSEINT LPAR error RPAR                        {$$ = NULL;$$=createNode(NULL);error=true;if(debug)printf("ParseArgs2\n");}
                             ;
 
-Expr                        :   Expr PLUS Expr                                  {$$ = createNode("Add"); $$->child=$1; newBrother($1,$3);if(debug)printf("PLUS\n");}
-                            |   Expr MINUS Expr                                 {$$ = createNode("Sub"); $$->child=$1; newBrother($1,$3);if(debug)printf("MINUS\n");}
-                            |   Expr STAR Expr                                  {$$ = createNode("Mul"); $$->child=$1; newBrother($1,$3);if(debug)printf("STAR\n");}
-                            |   Expr DIV Expr                                   {$$ = createNode("Div"); $$->child=$1; newBrother($1,$3);if(debug)printf("DIV\n");}
-                            |   Expr MOD Expr                                   {$$ = createNode("Mod"); $$->child=$1; newBrother($1,$3);if(debug)printf("MOD\n");}
-                            |   Expr AND Expr                                   {$$ = createNode("And"); $$->child=$1; newBrother($1,$3);if(debug)printf("AND\n");}
-                            |   Expr OR Expr                                    {$$ = createNode("Or"); $$->child=$1; newBrother($1,$3);if(debug)printf("OR\n");}
-                            |   Expr XOR Expr                                   {$$ = createNode("Xor"); $$->child=$1; newBrother($1,$3);if(debug)printf("XOR\n");}
-                            |   Expr LSHIFT Expr                                {$$ = createNode("Lshift"); $$->child=$1; newBrother($1,$3);if(debug)printf("LSHIFT\n");}
-                            |   Expr RSHIFT Expr                                {$$ = createNode("Rshift"); $$->child=$1; newBrother($1,$3);if(debug)printf("RSHIFT\n");}
-                            |   Expr EQ Expr                                    {$$ = createNode("Eq"); $$->child=$1; newBrother($1,$3);if(debug)printf("EQ\n");}
-                            |   Expr GE Expr                                    {$$ = createNode("Ge"); $$->child=$1; newBrother($1,$3);if(debug)printf("GE\n");}
-                            |   Expr GT Expr                                    {$$ = createNode("Gt"); $$->child=$1; newBrother($1,$3);if(debug)printf("GT\n");}
-                            |   Expr LE Expr                                    {$$ = createNode("Le"); $$->child=$1; newBrother($1,$3);if(debug)printf("LE\n");}
-                            |   Expr LT Expr                                    {$$ = createNode("Lt"); $$->child=$1; newBrother($1,$3);if(debug)printf("LT\n");}
-                            |   Expr NE Expr                                    {$$ = createNode("Ne"); $$->child=$1; newBrother($1,$3);if(debug)printf("NE\n");}
-                            |   MINUS Expr              %prec NOT               {$$ = createNode("Minus"); $$->child=$2;if(debug)printf("MINUS2\n");}
-                            |   PLUS Expr               %prec NOT               {$$ = createNode("Plus"); $$->child=$2;if(debug)printf("PLUS2\n");}
-                            |   NOT Expr                                        {$$ = createNode("Not"); $$->child=$2;if(debug)printf("NOT\n");}
+Expr                        :   Assignment                                      {$$ = $1;}
+                            |   Expr2                                            {$$ = $1;}
+                            ;
+
+Expr2                       :   Expr2 PLUS Expr2                                  {$$ = createNode("Add"); $$->child=$1; newBrother($1,$3);if(debug)printf("PLUS\n");}
+                            |   Expr2 MINUS Expr2                                 {$$ = createNode("Sub"); $$->child=$1; newBrother($1,$3);if(debug)printf("MINUS\n");}
+                            |   Expr2 STAR Expr2                                  {$$ = createNode("Mul"); $$->child=$1; newBrother($1,$3);if(debug)printf("STAR\n");}
+                            |   Expr2 DIV Expr2                                   {$$ = createNode("Div"); $$->child=$1; newBrother($1,$3);if(debug)printf("DIV\n");}
+                            |   Expr2 MOD Expr2                                   {$$ = createNode("Mod"); $$->child=$1; newBrother($1,$3);if(debug)printf("MOD\n");}
+                            |   Expr2 AND Expr2                                   {$$ = createNode("And"); $$->child=$1; newBrother($1,$3);if(debug)printf("AND\n");}
+                            |   Expr2 OR Expr2                                    {$$ = createNode("Or"); $$->child=$1; newBrother($1,$3);if(debug)printf("OR\n");}
+                            |   Expr2 XOR Expr2                                   {$$ = createNode("Xor"); $$->child=$1; newBrother($1,$3);if(debug)printf("XOR\n");}
+                            |   Expr2 LSHIFT Expr2                                {$$ = createNode("Lshift"); $$->child=$1; newBrother($1,$3);if(debug)printf("LSHIFT\n");}
+                            |   Expr2 RSHIFT Expr2                                {$$ = createNode("Rshift"); $$->child=$1; newBrother($1,$3);if(debug)printf("RSHIFT\n");}
+                            |   Expr2 EQ Expr2                                    {$$ = createNode("Eq"); $$->child=$1; newBrother($1,$3);if(debug)printf("EQ\n");}
+                            |   Expr2 GE Expr2                                    {$$ = createNode("Ge"); $$->child=$1; newBrother($1,$3);if(debug)printf("GE\n");}
+                            |   Expr2 GT Expr2                                    {$$ = createNode("Gt"); $$->child=$1; newBrother($1,$3);if(debug)printf("GT\n");}
+                            |   Expr2 LE Expr2                                    {$$ = createNode("Le"); $$->child=$1; newBrother($1,$3);if(debug)printf("LE\n");}
+                            |   Expr2 LT Expr2                                    {$$ = createNode("Lt"); $$->child=$1; newBrother($1,$3);if(debug)printf("LT\n");}
+                            |   Expr2 NE Expr2                                    {$$ = createNode("Ne"); $$->child=$1; newBrother($1,$3);if(debug)printf("NE\n");}
+                            |   MINUS Expr2              %prec NOT               {$$ = createNode("Minus"); $$->child=$2;if(debug)printf("MINUS2\n");}
+                            |   PLUS Expr2               %prec NOT               {$$ = createNode("Plus"); $$->child=$2;if(debug)printf("PLUS2\n");}
+                            |   NOT Expr2                                        {$$ = createNode("Not"); $$->child=$2;if(debug)printf("NOT\n");}
                             |   LPAR Expr RPAR                                  {$$ = $2;if(debug)printf("EXPR\n");}
                             |   MethodInvocation                                {$$ = $1;if(debug)printf("MI\n");}
-                            |   Assignment                                      {$$ = $1;if(debug)printf("ASS\n");}
                             |   ParseArgs                                       {$$ = $1;if(debug)printf("PA\n");}
                             |   ID                                              {sprintf(aux3, "Id(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("%s_ID111\n", aux3);}
                             |   ID DOTLENGTH                                    {$$ = createNode("Length"); sprintf(aux3, "Id(%s)", $1); $$->child = createNode(strdup(aux3));if(debug)printf("DOT\n");}
@@ -303,6 +307,5 @@ Expr                        :   Expr PLUS Expr                                  
                             |   BOOLLIT                                         {sprintf(aux3, "BoolLit(%s)", $1); $$ = createNode(strdup(aux3));if(debug)printf("BOOL2\n");}
                             |   LPAR error RPAR                                 {$$=createNode(NULL);error=true;if(debug)printf("666\n");}
                             ;
-
 
 %%
