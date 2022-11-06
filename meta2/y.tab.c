@@ -1759,15 +1759,15 @@ yyreduce:
                                                                                             (yyvsp[-2].no)->brother->child = (yyvsp[0].no);
                                                                                         }
                                                                                     } else {
-                                                                                        struct node * buffer = createNode("Block");
-                                                                                        newBrother((yyvsp[-4].no), buffer);
-                                                                                        buffer->child = (yyvsp[-2].no);
+                                                                                        struct node * temp = createNode("Block");
+                                                                                        newBrother((yyvsp[-4].no), temp);
+                                                                                        temp->child = (yyvsp[-2].no);
                                                                                         if((yyvsp[0].no) != NULL && numBrothers((yyvsp[0].no)) == 1){
-                                                                                            newBrother(buffer, (yyvsp[0].no)); 
+                                                                                            newBrother(temp, (yyvsp[0].no)); 
                                                                                         }
                                                                                         else{
-                                                                                            newBrother(buffer, createNode("Block"));
-                                                                                            buffer->brother->child = (yyvsp[0].no);
+                                                                                            newBrother(temp, createNode("Block"));
+                                                                                            temp->brother->child = (yyvsp[0].no);
                                                                                         }
                                                                                     }
                                                                                 if(debug)printf("Statement3\n");}
@@ -1847,7 +1847,7 @@ yyreduce:
 
   case 48: /* Statement: PRINT LPAR STRLIT RPAR SEMICOLON  */
 #line 250 "jucompiler.y"
-                                                                                {(yyval.no) = createNode("Print"); sprintf(aux3, "StrLit(\"%s\")", (yyvsp[-2].id)); (yyval.no)->child = createNode(strdup(aux3));if(debug)printf("Statement13\n");}
+                                                                                {(yyval.no) = createNode("Print"); sprintf(aux3, "StrLit(\"%s)", (yyvsp[-2].id)); (yyval.no)->child = createNode(strdup(aux3));if(debug)printf("Statement13\n");}
 #line 1852 "y.tab.c"
     break;
 

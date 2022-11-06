@@ -209,15 +209,15 @@ Statement                   :   LBRACE recSTAT RBRACE                           
                                                                                             $5->brother->child = $7;
                                                                                         }
                                                                                     } else {
-                                                                                        struct node * buffer = createNode("Block");
-                                                                                        newBrother($3, buffer);
-                                                                                        buffer->child = $5;
+                                                                                        struct node * temp = createNode("Block");
+                                                                                        newBrother($3, temp);
+                                                                                        temp->child = $5;
                                                                                         if($7 != NULL && numBrothers($7) == 1){
-                                                                                            newBrother(buffer, $7); 
+                                                                                            newBrother(temp, $7); 
                                                                                         }
                                                                                         else{
-                                                                                            newBrother(buffer, createNode("Block"));
-                                                                                            buffer->brother->child = $7;
+                                                                                            newBrother(temp, createNode("Block"));
+                                                                                            temp->brother->child = $7;
                                                                                         }
                                                                                     }
                                                                                 if(debug)printf("Statement3\n");}                            
@@ -247,7 +247,7 @@ Statement                   :   LBRACE recSTAT RBRACE                           
                             |   ParseArgs SEMICOLON                             {$$ = $1;if(debug)printf("Statement10\n");}
                             |   SEMICOLON                                       {$$ = NULL;if(debug)printf("Statement11\n");}                            
                             |   PRINT LPAR Expr RPAR SEMICOLON                  {$$ = createNode("Print"); $$->child = $3;if(debug)printf("Statement12\n");}
-                            |   PRINT LPAR STRLIT RPAR SEMICOLON                {$$ = createNode("Print"); sprintf(aux3, "StrLit(\"%s\")", $3); $$->child = createNode(strdup(aux3));if(debug)printf("Statement13\n");}
+                            |   PRINT LPAR STRLIT RPAR SEMICOLON                {$$ = createNode("Print"); sprintf(aux3, "StrLit(\"%s)", $3); $$->child = createNode(strdup(aux3));if(debug)printf("Statement13\n");}
                             |   PRINT LPAR RPAR SEMICOLON                       {$$ = createNode("Print");if(debug)printf("Statement14\n");}                            
                             |   error SEMICOLON                                 {$$=createNode(NULL);error=true;if(debug)printf("Statement15\n");}
                             ;

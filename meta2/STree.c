@@ -56,3 +56,6 @@ int numBrothers(struct node * no) {
 		}
 		return count;
 }
+
+
+
