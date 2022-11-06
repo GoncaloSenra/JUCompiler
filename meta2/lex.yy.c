@@ -1060,7 +1060,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(COMMENT):
 #line 97 "jucompiler.l"
-{col += yyleng;printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);BEGIN 0;}
+{col += yyleng;printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);yyterminate();}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
@@ -1399,15 +1399,17 @@ YY_RULE_SETUP
 #line 171 "jucompiler.l"
 {printf("Line %d, col %d: illegal character (%s)\n", line, col, &yytext[yyleng-1]);col += yyleng;}
 	YY_BREAK
-case 69:
-YY_RULE_SETUP
-#line 173 "jucompiler.l"
-ECHO;
-	YY_BREAK
-#line 1408 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT2):
-	yyterminate();
+#line 173 "jucompiler.l"
+{col += yyleng; yyterminate();}
+	YY_BREAK
+case 69:
+YY_RULE_SETUP
+#line 175 "jucompiler.l"
+ECHO;
+	YY_BREAK
+#line 1413 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2410,7 +2412,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 173 "jucompiler.l"
+#line 175 "jucompiler.l"
 
 
 

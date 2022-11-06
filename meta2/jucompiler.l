@@ -93,7 +93,7 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
 "/*"                        {auxline = line; auxcol= col;BEGIN COMMENT;col += yyleng;}
 <COMMENT>"\n"|"\r"|"\r\n"   {line++;col =1;}
 <COMMENT>.                  {col += yyleng;}
-<COMMENT><<EOF>>            {col += yyleng;printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);BEGIN 0;}
+<COMMENT><<EOF>>            {col += yyleng;printf("Line %d, col %d: unterminated comment\n", auxline, auxcol);yyterminate();}
 <COMMENT>"*/"               {BEGIN 0;col += yyleng;}
 
 "//"                                          {BEGIN COMMENT2;col += yyleng;}
@@ -168,6 +168,8 @@ STRLIT                  ([^\\\r\n\"]|{VALIDESCAPES})*"\""
 (" "|"\t"|"\f")             {;col += yyleng;}
 ("\n"|"\r\n"|"\r")          {line++;col = 1;}
 .                           {printf("Line %d, col %d: illegal character (%s)\n", line, col, &yytext[yyleng-1]);col += yyleng;}
+
+<<EOF>>                     {col += yyleng; yyterminate();}
 
 %%
 
