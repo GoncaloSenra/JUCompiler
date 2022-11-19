@@ -8,11 +8,12 @@
 
 typedef struct node{
     char * var;
+    char * value;
     struct node * brother;
     struct node * child;
 }node;
 
-node * createNode(char * var);
+node * createNode(char * value, char * var);
 
 void newBrother(node* old, node* newn);
 
