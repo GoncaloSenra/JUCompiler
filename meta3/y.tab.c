@@ -74,7 +74,9 @@
     //Henrique Costa  2020214120
     
     #include <stdio.h>
-    #include "STree.h"
+    
+    #include "SymTable.h"
+
     int yylex(void);
     
 
@@ -87,7 +89,7 @@
 
     void yyerror (const char *s);
 
-#line 91 "y.tab.c"
+#line 93 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -240,12 +242,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 22 "jucompiler.y"
+#line 24 "jucompiler.y"
 
     char* id;
     struct node * no;
 
-#line 249 "y.tab.c"
+#line 251 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -728,15 +730,15 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   119,   119,   122,   123,   124,   125,   128,   131,   141,
-     144,   145,   148,   149,   150,   153,   154,   155,   156,   159,
-     164,   167,   168,   171,   174,   175,   176,   179,   191,   192,
-     195,   196,   218,   229,   237,   238,   239,   240,   241,   242,
-     243,   244,   245,   248,   249,   252,   253,   254,   257,   258,
-     261,   264,   265,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,   298,   299
+       0,   121,   121,   124,   125,   126,   127,   130,   133,   143,
+     146,   147,   150,   151,   152,   155,   156,   157,   158,   161,
+     166,   169,   170,   173,   176,   177,   178,   181,   193,   194,
+     197,   198,   220,   231,   239,   240,   241,   242,   243,   244,
+     245,   246,   247,   250,   251,   254,   255,   256,   259,   260,
+     263,   266,   267,   270,   271,   272,   273,   274,   275,   276,
+     277,   278,   279,   280,   281,   282,   283,   284,   285,   286,
+     287,   288,   289,   290,   291,   292,   293,   294,   295,   296,
+     297,   300,   301
 };
 #endif
 
@@ -1457,43 +1459,43 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* Program: CLASS ID LBRACE recPR RBRACE  */
-#line 119 "jucompiler.y"
+#line 121 "jucompiler.y"
                                                                                 {(yyval.no) = prog = createNode(NULL,"Program"); sprintf(aux3, "Id(%s)", (yyvsp[-3].id)); (yyval.no)->child = createNode((yyvsp[-3].id), strdup(aux3)); newBrother((yyval.no)->child, (yyvsp[-1].no)); if(debug)printf("Program\n");}
-#line 1463 "y.tab.c"
+#line 1465 "y.tab.c"
     break;
 
   case 3: /* recPR: MethodDecl recPR  */
-#line 122 "jucompiler.y"
+#line 124 "jucompiler.y"
                                                                                {(yyval.no) = (yyvsp[-1].no); newBrother((yyval.no), (yyvsp[0].no));if(debug)printf("recPR4\n");}
-#line 1469 "y.tab.c"
+#line 1471 "y.tab.c"
     break;
 
   case 4: /* recPR: FieldDecl recPR  */
-#line 123 "jucompiler.y"
+#line 125 "jucompiler.y"
                                                                                {(yyval.no) = (yyvsp[-1].no); newBrother((yyval.no), (yyvsp[0].no));if(debug)printf("recPR5\n");}
-#line 1475 "y.tab.c"
+#line 1477 "y.tab.c"
     break;
 
   case 5: /* recPR: SEMICOLON recPR  */
-#line 124 "jucompiler.y"
+#line 126 "jucompiler.y"
                                                                                {(yyval.no) = (yyvsp[0].no);if(debug)printf("recPR6\n");}
-#line 1481 "y.tab.c"
+#line 1483 "y.tab.c"
     break;
 
   case 6: /* recPR: %empty  */
-#line 125 "jucompiler.y"
+#line 127 "jucompiler.y"
                                                                                {(yyval.no) = NULL;}
-#line 1487 "y.tab.c"
+#line 1489 "y.tab.c"
     break;
 
   case 7: /* MethodDecl: PUBLIC STATIC MethodHeader MethodBody  */
-#line 128 "jucompiler.y"
+#line 130 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodDecl"); (yyval.no)->child = (yyvsp[-1].no); newBrother((yyvsp[-1].no), (yyvsp[0].no));if(debug)printf("MethodDecl\n");}
-#line 1493 "y.tab.c"
+#line 1495 "y.tab.c"
     break;
 
   case 8: /* FieldDecl: PUBLIC STATIC Type ID recCOMMAID SEMICOLON  */
-#line 131 "jucompiler.y"
+#line 133 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"FieldDecl"); (yyval.no)->child = (yyvsp[-3].no); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); newBrother((yyvsp[-3].no), createNode((yyvsp[-2].id), strdup(aux3))); newBrother((yyval.no), (yyvsp[-1].no));
                                                                                     struct node * auxnode = (yyvsp[-1].no), * auxnode2;
                                                                                     while(auxnode != NULL){
@@ -1504,122 +1506,122 @@ yyreduce:
                                                                                     }
                                                                                     if(debug)printf("FieldDecl\n");
                                                                                 }
-#line 1508 "y.tab.c"
+#line 1510 "y.tab.c"
     break;
 
   case 9: /* FieldDecl: error SEMICOLON  */
-#line 141 "jucompiler.y"
+#line 143 "jucompiler.y"
                                                                                 {(yyval.no)=createNode(NULL,NULL);error=true;if(debug)printf("FieldDecl3\n");}
-#line 1514 "y.tab.c"
+#line 1516 "y.tab.c"
     break;
 
   case 10: /* recCOMMAID: COMMA ID recCOMMAID  */
-#line 144 "jucompiler.y"
+#line 146 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"FieldDecl"); sprintf(aux3, "Id(%s)", (yyvsp[-1].id)); (yyval.no)->child = createNode((yyvsp[-1].id), strdup(aux3)); newBrother((yyval.no), (yyvsp[0].no));if(debug)printf("recCommaId2(%s)\n", aux3);}
-#line 1520 "y.tab.c"
+#line 1522 "y.tab.c"
     break;
 
   case 11: /* recCOMMAID: %empty  */
-#line 145 "jucompiler.y"
+#line 147 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;}
-#line 1526 "y.tab.c"
+#line 1528 "y.tab.c"
     break;
 
   case 12: /* Type: BOOL  */
-#line 148 "jucompiler.y"
+#line 150 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Bool");if(debug)printf("Bool\n");}
-#line 1532 "y.tab.c"
+#line 1534 "y.tab.c"
     break;
 
   case 13: /* Type: INT  */
-#line 149 "jucompiler.y"
+#line 151 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Int");if(debug)printf("Int\n");}
-#line 1538 "y.tab.c"
+#line 1540 "y.tab.c"
     break;
 
   case 14: /* Type: DOUBLE  */
-#line 150 "jucompiler.y"
+#line 152 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Double");if(debug)printf("Double\n");}
-#line 1544 "y.tab.c"
+#line 1546 "y.tab.c"
     break;
 
   case 15: /* MethodHeader: Type ID LPAR FormalParams RPAR  */
-#line 153 "jucompiler.y"
+#line 155 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodHeader"); (yyval.no)->child = (yyvsp[-4].no); sprintf(aux3, "Id(%s)", (yyvsp[-3].id)); newBrother((yyvsp[-4].no), createNode((yyvsp[-3].id), strdup(aux3))); newBrother((yyvsp[-4].no), (yyvsp[-1].no));if(debug)printf("MethodHeader\n");}
-#line 1550 "y.tab.c"
+#line 1552 "y.tab.c"
     break;
 
   case 16: /* MethodHeader: Type ID LPAR RPAR  */
-#line 154 "jucompiler.y"
+#line 156 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodHeader"); (yyval.no)->child = (yyvsp[-3].no); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); newBrother((yyvsp[-3].no), createNode((yyvsp[-2].id), strdup(aux3))); newBrother((yyvsp[-3].no), createNode(NULL,"MethodParams"));if(debug)printf("MethodHeader2\n");}
-#line 1556 "y.tab.c"
+#line 1558 "y.tab.c"
     break;
 
   case 17: /* MethodHeader: VOID ID LPAR FormalParams RPAR  */
-#line 155 "jucompiler.y"
+#line 157 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodHeader"); (yyval.no)->child = createNode(NULL,"Void"); sprintf(aux3, "Id(%s)", (yyvsp[-3].id)); newBrother((yyval.no)->child, createNode((yyvsp[-3].id), strdup(aux3))); newBrother((yyval.no)->child, (yyvsp[-1].no));if(debug)printf("MethodHeader3\n");}
-#line 1562 "y.tab.c"
+#line 1564 "y.tab.c"
     break;
 
   case 18: /* MethodHeader: VOID ID LPAR RPAR  */
-#line 156 "jucompiler.y"
+#line 158 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodHeader");(yyval.no)->child = createNode(NULL,"Void"); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); newBrother((yyval.no)->child, createNode((yyvsp[-2].id), strdup(aux3)));newBrother((yyval.no)->child,createNode(NULL,"MethodParams"));if(debug)printf("MethodHeader4\n");}
-#line 1568 "y.tab.c"
+#line 1570 "y.tab.c"
     break;
 
   case 19: /* FormalParams: Type ID recFP  */
-#line 159 "jucompiler.y"
+#line 161 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodParams"); (yyval.no)->child = createNode(NULL,"ParamDecl"); (yyval.no)->child->child = (yyvsp[-2].no); sprintf(aux3, "Id(%s)", (yyvsp[-1].id)); newBrother((yyvsp[-2].no), createNode((yyvsp[-1].id), strdup(aux3))); newBrother((yyval.no)->child, (yyvsp[0].no));
 
                                                                                     if(debug)printf("FormalParams\n");
                                                                                 }
-#line 1577 "y.tab.c"
+#line 1579 "y.tab.c"
     break;
 
   case 20: /* FormalParams: STRING LSQ RSQ ID  */
-#line 164 "jucompiler.y"
+#line 166 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodParams"); (yyval.no)->child = createNode(NULL,"ParamDecl"); (yyval.no)->child->child = createNode(NULL,"StringArray"); sprintf(aux3, "Id(%s)", (yyvsp[0].id)); newBrother((yyval.no)->child->child, createNode((yyvsp[0].id), strdup(aux3)));if(debug)printf("FormalParams3\n");}
-#line 1583 "y.tab.c"
+#line 1585 "y.tab.c"
     break;
 
   case 21: /* recFP: COMMA Type ID recFP  */
-#line 167 "jucompiler.y"
+#line 169 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"ParamDecl"); newBrother((yyval.no), (yyvsp[0].no)); (yyval.no)->child = (yyvsp[-2].no); sprintf(aux3, "Id(%s)", (yyvsp[-1].id)); newBrother((yyvsp[-2].no), createNode((yyvsp[-1].id), strdup(aux3)));if(debug)printf("recFP\n");}
-#line 1589 "y.tab.c"
+#line 1591 "y.tab.c"
     break;
 
   case 22: /* recFP: %empty  */
-#line 168 "jucompiler.y"
+#line 170 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;if(debug)printf("recFP2\n");}
-#line 1595 "y.tab.c"
+#line 1597 "y.tab.c"
     break;
 
   case 23: /* MethodBody: LBRACE recMD RBRACE  */
-#line 171 "jucompiler.y"
+#line 173 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"MethodBody"); (yyval.no)->child = (yyvsp[-1].no);if(debug)printf("MethodBody\n");}
-#line 1601 "y.tab.c"
+#line 1603 "y.tab.c"
     break;
 
   case 24: /* recMD: Statement recMD  */
-#line 174 "jucompiler.y"
+#line 176 "jucompiler.y"
                                                                                 {if((yyvsp[-1].no)) {(yyval.no) = (yyvsp[-1].no); newBrother((yyval.no), (yyvsp[0].no));}else{(yyval.no)=(yyvsp[0].no);}if(debug)printf("recMD3\n");}
-#line 1607 "y.tab.c"
+#line 1609 "y.tab.c"
     break;
 
   case 25: /* recMD: VarDecl recMD  */
-#line 175 "jucompiler.y"
+#line 177 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[-1].no); newBrother((yyval.no), (yyvsp[0].no));if(debug)printf("recMD4\n");}
-#line 1613 "y.tab.c"
+#line 1615 "y.tab.c"
     break;
 
   case 26: /* recMD: %empty  */
-#line 176 "jucompiler.y"
+#line 178 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;}
-#line 1619 "y.tab.c"
+#line 1621 "y.tab.c"
     break;
 
   case 27: /* VarDecl: Type ID recVAR SEMICOLON  */
-#line 179 "jucompiler.y"
+#line 181 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"VarDecl"); (yyval.no)->child = (yyvsp[-3].no); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); newBrother((yyval.no)->child, createNode((yyvsp[-2].id), strdup(aux3))); newBrother((yyval.no), (yyvsp[-1].no));
                                                                                     struct node * auxnode = (yyvsp[-1].no), * auxnode2;
                                                                                     while(auxnode != NULL){
@@ -1630,29 +1632,29 @@ yyreduce:
                                                                                     }
                                                                                     if(debug)printf("VarDecl\n");
                                                                                 }
-#line 1634 "y.tab.c"
+#line 1636 "y.tab.c"
     break;
 
   case 28: /* recVAR: COMMA ID recVAR  */
-#line 191 "jucompiler.y"
+#line 193 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"VarDecl"); newBrother((yyval.no), (yyvsp[0].no)); sprintf(aux3, "Id(%s)", (yyvsp[-1].id)); (yyval.no)->child = createNode((yyvsp[-1].id), strdup(aux3));if(debug)printf("recVAR2\n");}
-#line 1640 "y.tab.c"
+#line 1642 "y.tab.c"
     break;
 
   case 29: /* recVAR: %empty  */
-#line 192 "jucompiler.y"
+#line 194 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;}
-#line 1646 "y.tab.c"
+#line 1648 "y.tab.c"
     break;
 
   case 30: /* Statement: LBRACE recSTAT RBRACE  */
-#line 195 "jucompiler.y"
+#line 197 "jucompiler.y"
                                                                                 {if ((yyvsp[-1].no)!=NULL){if ((yyvsp[-1].no)->brother != NULL){(yyval.no) = createNode(NULL,"Block"); (yyval.no)->child = (yyvsp[-1].no);} else {(yyval.no) = (yyvsp[-1].no);}} else {(yyval.no) = (yyvsp[-1].no);}; if(debug)printf("Statement\n");}
-#line 1652 "y.tab.c"
+#line 1654 "y.tab.c"
     break;
 
   case 31: /* Statement: IF LPAR Expr RPAR Statement ELSE Statement  */
-#line 196 "jucompiler.y"
+#line 198 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"If"); (yyval.no)->child = (yyvsp[-4].no);
                                                                                     if ((yyvsp[-2].no) != NULL && numBrothers((yyvsp[-2].no)) == 1) {
                                                                                         newBrother((yyvsp[-4].no), (yyvsp[-2].no));
@@ -1675,11 +1677,11 @@ yyreduce:
                                                                                         }
                                                                                     }
                                                                                 if(debug)printf("Statement3\n");}
-#line 1679 "y.tab.c"
+#line 1681 "y.tab.c"
     break;
 
   case 32: /* Statement: IF LPAR Expr RPAR Statement  */
-#line 218 "jucompiler.y"
+#line 220 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"If"); (yyval.no)->child = (yyvsp[-2].no);
                                                                                     if ((yyvsp[0].no)!=NULL && numBrothers((yyvsp[0].no)) == 1) {
                                                                                         newBrother((yyvsp[-2].no), (yyvsp[0].no));
@@ -1691,11 +1693,11 @@ yyreduce:
                                                                                         newBrother(temp, createNode(NULL,"Block"));
                                                                                     }
                                                                                 if(debug)printf("Statement4\n");}
-#line 1695 "y.tab.c"
+#line 1697 "y.tab.c"
     break;
 
   case 33: /* Statement: WHILE LPAR Expr RPAR Statement  */
-#line 229 "jucompiler.y"
+#line 231 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"While"); (yyval.no)->child = (yyvsp[-2].no); 
                                                                                     if((yyvsp[0].no) != NULL && numBrothers((yyvsp[0].no)) < 2){
                                                                                         newBrother((yyvsp[-2].no), (yyvsp[0].no));
@@ -1704,305 +1706,305 @@ yyreduce:
                                                                                         (yyvsp[-2].no)->brother->child = (yyvsp[0].no);
                                                                                     }
                                                                                 if(debug)printf("Statement5\n");}
-#line 1708 "y.tab.c"
+#line 1710 "y.tab.c"
     break;
 
   case 34: /* Statement: RETURN Expr SEMICOLON  */
-#line 237 "jucompiler.y"
+#line 239 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Return"); (yyval.no)->child = (yyvsp[-1].no);if(debug)printf("Statement6\n");}
-#line 1714 "y.tab.c"
+#line 1716 "y.tab.c"
     break;
 
   case 35: /* Statement: RETURN SEMICOLON  */
-#line 238 "jucompiler.y"
+#line 240 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Return");if(debug)printf("Statement7\n");}
-#line 1720 "y.tab.c"
+#line 1722 "y.tab.c"
     break;
 
   case 36: /* Statement: MethodInvocation SEMICOLON  */
-#line 239 "jucompiler.y"
+#line 241 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[-1].no);if(debug)printf("Statement8\n");}
-#line 1726 "y.tab.c"
+#line 1728 "y.tab.c"
     break;
 
   case 37: /* Statement: Assignment SEMICOLON  */
-#line 240 "jucompiler.y"
+#line 242 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[-1].no);if(debug)printf("Statement9\n");}
-#line 1732 "y.tab.c"
+#line 1734 "y.tab.c"
     break;
 
   case 38: /* Statement: ParseArgs SEMICOLON  */
-#line 241 "jucompiler.y"
+#line 243 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[-1].no);if(debug)printf("Statement10\n");}
-#line 1738 "y.tab.c"
+#line 1740 "y.tab.c"
     break;
 
   case 39: /* Statement: SEMICOLON  */
-#line 242 "jucompiler.y"
+#line 244 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;if(debug)printf("Statement11\n");}
-#line 1744 "y.tab.c"
+#line 1746 "y.tab.c"
     break;
 
   case 40: /* Statement: PRINT LPAR Expr RPAR SEMICOLON  */
-#line 243 "jucompiler.y"
+#line 245 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Print"); (yyval.no)->child = (yyvsp[-2].no);if(debug)printf("Statement12\n");}
-#line 1750 "y.tab.c"
+#line 1752 "y.tab.c"
     break;
 
   case 41: /* Statement: PRINT LPAR STRLIT RPAR SEMICOLON  */
-#line 244 "jucompiler.y"
+#line 246 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Print"); sprintf(aux3, "StrLit(\"%s)", (yyvsp[-2].id)); (yyval.no)->child = createNode((yyvsp[-2].id), strdup(aux3));if(debug)printf("Statement13\n");}
-#line 1756 "y.tab.c"
+#line 1758 "y.tab.c"
     break;
 
   case 42: /* Statement: error SEMICOLON  */
-#line 245 "jucompiler.y"
+#line 247 "jucompiler.y"
                                                                                 {(yyval.no)=createNode(NULL,NULL);error=true;if(debug)printf("Statement15\n");}
-#line 1762 "y.tab.c"
+#line 1764 "y.tab.c"
     break;
 
   case 43: /* recSTAT: Statement recSTAT  */
-#line 248 "jucompiler.y"
+#line 250 "jucompiler.y"
                                                                                 {if((yyval.no)!=NULL){(yyval.no)=(yyvsp[-1].no); newBrother((yyval.no),(yyvsp[0].no));} else{(yyval.no)=(yyvsp[0].no);}}
-#line 1768 "y.tab.c"
+#line 1770 "y.tab.c"
     break;
 
   case 44: /* recSTAT: %empty  */
-#line 249 "jucompiler.y"
+#line 251 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;}
-#line 1774 "y.tab.c"
+#line 1776 "y.tab.c"
     break;
 
   case 45: /* MethodInvocation: ID LPAR Expr recCOMMAEXP RPAR  */
-#line 252 "jucompiler.y"
+#line 254 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Call"); sprintf(aux3, "Id(%s)", (yyvsp[-4].id)); (yyval.no)->child = createNode((yyvsp[-4].id), strdup(aux3)); newBrother((yyval.no)->child, (yyvsp[-2].no)); newBrother((yyvsp[-2].no), (yyvsp[-1].no));if(debug)printf("MethodInvocation\n");}
-#line 1780 "y.tab.c"
+#line 1782 "y.tab.c"
     break;
 
   case 46: /* MethodInvocation: ID LPAR RPAR  */
-#line 253 "jucompiler.y"
+#line 255 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Call"); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); (yyval.no)->child = createNode((yyvsp[-2].id), strdup(aux3));if(debug)printf("MethodInvocation3\n");}
-#line 1786 "y.tab.c"
+#line 1788 "y.tab.c"
     break;
 
   case 47: /* MethodInvocation: ID LPAR error RPAR  */
-#line 254 "jucompiler.y"
+#line 256 "jucompiler.y"
                                                                                 {(yyval.no)=createNode(NULL, NULL);error=true;if(debug)printf("MethodInvocation4\n");}
-#line 1792 "y.tab.c"
+#line 1794 "y.tab.c"
     break;
 
   case 48: /* recCOMMAEXP: COMMA Expr recCOMMAEXP  */
-#line 257 "jucompiler.y"
+#line 259 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[-1].no); newBrother((yyvsp[-1].no), (yyvsp[0].no));if(debug)printf("recCOMMAEXP\n");}
-#line 1798 "y.tab.c"
+#line 1800 "y.tab.c"
     break;
 
   case 49: /* recCOMMAEXP: %empty  */
-#line 258 "jucompiler.y"
+#line 260 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;}
-#line 1804 "y.tab.c"
+#line 1806 "y.tab.c"
     break;
 
   case 50: /* Assignment: ID ASSIGN Expr  */
-#line 261 "jucompiler.y"
+#line 263 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"Assign"); sprintf(aux3, "Id(%s)", (yyvsp[-2].id)); (yyval.no)->child = createNode((yyvsp[-2].id), strdup(aux3)); newBrother((yyval.no)->child, (yyvsp[0].no));if(debug)printf("Assign\n");}
-#line 1810 "y.tab.c"
+#line 1812 "y.tab.c"
     break;
 
   case 51: /* ParseArgs: PARSEINT LPAR ID LSQ Expr RSQ RPAR  */
-#line 264 "jucompiler.y"
+#line 266 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL,"ParseArgs"); sprintf(aux3, "Id(%s)", (yyvsp[-4].id)); (yyval.no)->child = createNode((yyvsp[-4].id), strdup(aux3)); newBrother((yyval.no)->child, (yyvsp[-2].no));if(debug)printf("ParseArgs + id(%s)\n",aux3);}
-#line 1816 "y.tab.c"
+#line 1818 "y.tab.c"
     break;
 
   case 52: /* ParseArgs: PARSEINT LPAR error RPAR  */
-#line 265 "jucompiler.y"
+#line 267 "jucompiler.y"
                                                                                 {(yyval.no) = NULL;(yyval.no)=createNode(NULL,NULL);error=true;if(debug)printf("ParseArgs2\n");}
-#line 1822 "y.tab.c"
+#line 1824 "y.tab.c"
     break;
 
   case 53: /* Expr2: Expr2 PLUS Expr2  */
-#line 268 "jucompiler.y"
+#line 270 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Add"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("PLUS\n");}
-#line 1828 "y.tab.c"
+#line 1830 "y.tab.c"
     break;
 
   case 54: /* Expr2: Expr2 MINUS Expr2  */
-#line 269 "jucompiler.y"
+#line 271 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Sub"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("MINUS\n");}
-#line 1834 "y.tab.c"
+#line 1836 "y.tab.c"
     break;
 
   case 55: /* Expr2: Expr2 STAR Expr2  */
-#line 270 "jucompiler.y"
+#line 272 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Mul"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("STAR\n");}
-#line 1840 "y.tab.c"
+#line 1842 "y.tab.c"
     break;
 
   case 56: /* Expr2: Expr2 DIV Expr2  */
-#line 271 "jucompiler.y"
+#line 273 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Div"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("DIV\n");}
-#line 1846 "y.tab.c"
+#line 1848 "y.tab.c"
     break;
 
   case 57: /* Expr2: Expr2 MOD Expr2  */
-#line 272 "jucompiler.y"
+#line 274 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Mod"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("MOD\n");}
-#line 1852 "y.tab.c"
+#line 1854 "y.tab.c"
     break;
 
   case 58: /* Expr2: Expr2 AND Expr2  */
-#line 273 "jucompiler.y"
+#line 275 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"And"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("AND\n");}
-#line 1858 "y.tab.c"
+#line 1860 "y.tab.c"
     break;
 
   case 59: /* Expr2: Expr2 OR Expr2  */
-#line 274 "jucompiler.y"
+#line 276 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Or"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("OR\n");}
-#line 1864 "y.tab.c"
+#line 1866 "y.tab.c"
     break;
 
   case 60: /* Expr2: Expr2 XOR Expr2  */
-#line 275 "jucompiler.y"
+#line 277 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Xor"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("XOR\n");}
-#line 1870 "y.tab.c"
+#line 1872 "y.tab.c"
     break;
 
   case 61: /* Expr2: Expr2 LSHIFT Expr2  */
-#line 276 "jucompiler.y"
+#line 278 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Lshift"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("LSHIFT\n");}
-#line 1876 "y.tab.c"
+#line 1878 "y.tab.c"
     break;
 
   case 62: /* Expr2: Expr2 RSHIFT Expr2  */
-#line 277 "jucompiler.y"
+#line 279 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Rshift"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("RSHIFT\n");}
-#line 1882 "y.tab.c"
+#line 1884 "y.tab.c"
     break;
 
   case 63: /* Expr2: Expr2 EQ Expr2  */
-#line 278 "jucompiler.y"
+#line 280 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Eq"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("EQ\n");}
-#line 1888 "y.tab.c"
+#line 1890 "y.tab.c"
     break;
 
   case 64: /* Expr2: Expr2 GE Expr2  */
-#line 279 "jucompiler.y"
+#line 281 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Ge"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("GE\n");}
-#line 1894 "y.tab.c"
+#line 1896 "y.tab.c"
     break;
 
   case 65: /* Expr2: Expr2 GT Expr2  */
-#line 280 "jucompiler.y"
+#line 282 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Gt"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("GT\n");}
-#line 1900 "y.tab.c"
+#line 1902 "y.tab.c"
     break;
 
   case 66: /* Expr2: Expr2 LE Expr2  */
-#line 281 "jucompiler.y"
+#line 283 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Le"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("LE\n");}
-#line 1906 "y.tab.c"
+#line 1908 "y.tab.c"
     break;
 
   case 67: /* Expr2: Expr2 LT Expr2  */
-#line 282 "jucompiler.y"
+#line 284 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Lt"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("LT\n");}
-#line 1912 "y.tab.c"
+#line 1914 "y.tab.c"
     break;
 
   case 68: /* Expr2: Expr2 NE Expr2  */
-#line 283 "jucompiler.y"
+#line 285 "jucompiler.y"
                                                                                   {(yyval.no) = createNode(NULL,"Ne"); (yyval.no)->child=(yyvsp[-2].no); newBrother((yyvsp[-2].no),(yyvsp[0].no));if(debug)printf("NE\n");}
-#line 1918 "y.tab.c"
+#line 1920 "y.tab.c"
     break;
 
   case 69: /* Expr2: MINUS Expr2  */
-#line 284 "jucompiler.y"
+#line 286 "jucompiler.y"
                                                                                  {(yyval.no) = createNode(NULL,"Minus"); (yyval.no)->child=(yyvsp[0].no);if(debug)printf("MINUS2\n");}
-#line 1924 "y.tab.c"
+#line 1926 "y.tab.c"
     break;
 
   case 70: /* Expr2: PLUS Expr2  */
-#line 285 "jucompiler.y"
+#line 287 "jucompiler.y"
                                                                                  {(yyval.no) = createNode(NULL,"Plus"); (yyval.no)->child=(yyvsp[0].no);if(debug)printf("PLUS2\n");}
-#line 1930 "y.tab.c"
+#line 1932 "y.tab.c"
     break;
 
   case 71: /* Expr2: NOT Expr2  */
-#line 286 "jucompiler.y"
+#line 288 "jucompiler.y"
                                                                                  {(yyval.no) = createNode(NULL,"Not"); (yyval.no)->child=(yyvsp[0].no);if(debug)printf("NOT\n");}
-#line 1936 "y.tab.c"
+#line 1938 "y.tab.c"
     break;
 
   case 72: /* Expr2: LPAR Expr RPAR  */
-#line 287 "jucompiler.y"
+#line 289 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[-1].no);if(debug)printf("EXPR\n");}
-#line 1942 "y.tab.c"
+#line 1944 "y.tab.c"
     break;
 
   case 73: /* Expr2: MethodInvocation  */
-#line 288 "jucompiler.y"
+#line 290 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[0].no);if(debug)printf("MI\n");}
-#line 1948 "y.tab.c"
+#line 1950 "y.tab.c"
     break;
 
   case 74: /* Expr2: ParseArgs  */
-#line 289 "jucompiler.y"
+#line 291 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[0].no);if(debug)printf("PA\n");}
-#line 1954 "y.tab.c"
+#line 1956 "y.tab.c"
     break;
 
   case 75: /* Expr2: ID  */
-#line 290 "jucompiler.y"
+#line 292 "jucompiler.y"
                                                                                 {sprintf(aux3, "Id(%s)", (yyvsp[0].id)); (yyval.no) = createNode((yyvsp[0].id), strdup(aux3));if(debug)printf("%s_ID111\n", aux3);}
-#line 1960 "y.tab.c"
+#line 1962 "y.tab.c"
     break;
 
   case 76: /* Expr2: ID DOTLENGTH  */
-#line 291 "jucompiler.y"
+#line 293 "jucompiler.y"
                                                                                 {(yyval.no) = createNode(NULL, "Length"); sprintf(aux3, "Id(%s)", (yyvsp[-1].id)); (yyval.no)->child = createNode((yyvsp[-1].id), strdup(aux3));if(debug)printf("DOT\n");}
-#line 1966 "y.tab.c"
+#line 1968 "y.tab.c"
     break;
 
   case 77: /* Expr2: INTLIT  */
-#line 292 "jucompiler.y"
+#line 294 "jucompiler.y"
                                                                                 {sprintf(aux3, "DecLit(%s)", (yyvsp[0].id)); (yyval.no) = createNode((yyvsp[0].id), strdup(aux3));if(debug)printf("DEC2\n");}
-#line 1972 "y.tab.c"
+#line 1974 "y.tab.c"
     break;
 
   case 78: /* Expr2: REALLIT  */
-#line 293 "jucompiler.y"
+#line 295 "jucompiler.y"
                                                                                 {sprintf(aux3, "RealLit(%s)", (yyvsp[0].id)); (yyval.no) = createNode((yyvsp[0].id), strdup(aux3));if(debug)printf("REAL2\n");}
-#line 1978 "y.tab.c"
+#line 1980 "y.tab.c"
     break;
 
   case 79: /* Expr2: BOOLLIT  */
-#line 294 "jucompiler.y"
+#line 296 "jucompiler.y"
                                                                                 {sprintf(aux3, "BoolLit(%s)", (yyvsp[0].id)); (yyval.no) = createNode((yyvsp[0].id), strdup(aux3));if(debug)printf("BOOL2\n");}
-#line 1984 "y.tab.c"
+#line 1986 "y.tab.c"
     break;
 
   case 80: /* Expr2: LPAR error RPAR  */
-#line 295 "jucompiler.y"
+#line 297 "jucompiler.y"
                                                                                 {(yyval.no)=createNode(NULL,NULL);error=true;if(debug)printf("666\n");}
-#line 1990 "y.tab.c"
+#line 1992 "y.tab.c"
     break;
 
   case 81: /* Expr: Assignment  */
-#line 298 "jucompiler.y"
+#line 300 "jucompiler.y"
                                                                                 {(yyval.no) = (yyvsp[0].no);}
-#line 1996 "y.tab.c"
+#line 1998 "y.tab.c"
     break;
 
   case 82: /* Expr: Expr2  */
-#line 299 "jucompiler.y"
+#line 301 "jucompiler.y"
                                                                                  {(yyval.no) = (yyvsp[0].no);}
-#line 2002 "y.tab.c"
+#line 2004 "y.tab.c"
     break;
 
 
-#line 2006 "y.tab.c"
+#line 2008 "y.tab.c"
 
       default: break;
     }
@@ -2195,4 +2197,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 302 "jucompiler.y"
+#line 304 "jucompiler.y"

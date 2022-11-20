@@ -2,7 +2,7 @@
 #include "STree.h"
 
 
-node * createNode(char * value, char * var) {
+struct node * createNode(char * value, char * var) {
     node * aux2 = (node *) malloc(sizeof(node));
 
     aux2->var = var;
@@ -14,7 +14,7 @@ node * createNode(char * value, char * var) {
 
 }
 
-void newBrother(node* old, node* newn) {
+void newBrother(struct node* old, struct node* newn) {
 
     while (old->brother != NULL)
         old = old->brother;

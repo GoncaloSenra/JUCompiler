@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #define true 1
 #define false 0
@@ -13,12 +14,12 @@ typedef struct node{
     struct node * child;
 }node;
 
-node * createNode(char * value, char * var);
+struct node * createNode(char * value, char * var);
 
-void newBrother(node* old, node* newn);
+void newBrother(struct node * old, struct node * newn);
 
-void printSTree(struct node *node, int prof);
+void printSTree(struct node * node, int prof);
 
-void freeSTree(struct node *node);
+void freeSTree(struct node * node);
 
 int numBrothers(struct node * no);

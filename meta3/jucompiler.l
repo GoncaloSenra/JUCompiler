@@ -6,7 +6,8 @@
     #include <stdlib.h>
 
     #include "y.tab.h"
-    #include "STree.h"
+    
+    #include "SymTable.h"
 
     int yyparse(void);
 
@@ -205,6 +206,21 @@ int main(int argc, char * argv[])
             aux = 1;
             yacc = 0;
             yyparse();
+        }else if (strcmp(argv[1], "-s") == 0){
+            printf("aqui\n");
+            aux = 1;
+            yacc = 0;
+            yyparse();
+            if (lexicalError != 1) {
+                Sym * table = createSym(prog->child->value, "", "", 0, 0, 0);
+                createTable(table, prog);
+                printTable(table);
+                if (error==false){
+                    //printSTree(prog,0);
+                } else{
+                    freeSTree(prog);
+                }
+            }
         }
     }
     

@@ -4,7 +4,9 @@
     //Henrique Costa  2020214120
     
     #include <stdio.h>
-    #include "STree.h"
+    
+    #include "SymTable.h"
+
     int yylex(void);
     
 
