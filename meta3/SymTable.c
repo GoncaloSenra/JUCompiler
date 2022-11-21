@@ -43,7 +43,7 @@ void createTable (Sym * last, struct node * root) {
         //printf("Field\n");
         FieldDecl(root, last, table, 0);
     } else if (strcmp(root->var, "MethodDecl") == 0) {
-        //MethodDecl(last, table, root);
+        MethodDecl(last, table, root);
     }
 
     while (last->next != NULL) {
@@ -132,16 +132,16 @@ void Header(struct node * root, Sym * first){
     first->in = createSym("return", first->type, "", 0, 0, 0); //FIXME: verificar se correto
     Sym * aux_first = first->in;
 
-    node * aux_root = root;
+    node * aux_root = root->child->brother->brother->child;
     char * param = "";
-    printf("Header\n");
+    printf("Header -------------- %s\n", root->child->brother->var);
+    
     while(aux_root != NULL && aux_root->child != NULL){
 
         if(CheckIfAlreadyDefined(first->in, aux_root->child->brother->value,1)!= NULL){
             
             printf("ERROR ALREADY DEFINED\n"); //FIXME: mensagem de erro de simbolo já definido
             break;
-            
         }else{
             
             //if
@@ -154,24 +154,26 @@ void Header(struct node * root, Sym * first){
                 }
 
                 Sym * aux;
-
+                printf("1\n");
                 aux = createSym(aux_root->child->brother->value, aux_root->child->var,"", 0, 0, 0); //FIXME: Verificar se correto
-
-                aux_first->in = aux;
+                printf("2\n");
                 aux_first = aux;
+                printf("3\n");
             //else
                 //FIXME: é alfa numerico (detetar este erro)
         }
 
-        if(param[0]=='\0'){
+        printf(":::::::%s\n", param);
+        if(strlen(param) == 0){
             param = myStrCat(param, aux_root->child->var);
         }else{
             param = myStrCat(param, ",");
             param = myStrCat(param, aux_root->child->var);
         }
-
+        printf("4\n");
         aux_root = aux_root->brother;
     }
+    printf("%s-----> %s\n", first->name, param);
     first->param = param;
 }
 
