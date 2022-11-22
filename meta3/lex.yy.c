@@ -2449,7 +2449,6 @@ int main(int argc, char * argv[])
             yacc = 0;
             yyparse();
         }else if (strcmp(argv[1], "-s") == 0){
-            printf("aqui\n");
             aux = 1;
             yacc = 0;
             yyparse();

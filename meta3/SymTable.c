@@ -31,7 +31,6 @@ Sym * insertSym(Sym * last, Sym * new) {
 }
 
 void createTable (Sym * last, struct node * root) {
-    printf("%s\n", root->var);
     if (strcmp(root->var, "Program") == 0) {
         if (root->child) {
             /*last->name = root->child->value;
@@ -40,7 +39,6 @@ void createTable (Sym * last, struct node * root) {
             createTable(last, root->child);
         }
     } else if (strcmp(root->var, "FieldDecl") == 0) {
-        //printf("Field\n");
         FieldDecl(root, last, table, 0);
     } else if (strcmp(root->var, "MethodDecl") == 0) {
         MethodDecl(last, table, root);
@@ -63,7 +61,6 @@ void FieldDecl (struct node * root, Sym * last, Sym * first, int aux) {
         if (strcmp(root->var, "FieldDecl") == 0) {
             if (CheckIfAlreadyDefined(first, root->child->brother->value, 0) == NULL) {
                 //FIXME: if is alphanumeric
-                printf("cheked\n");
                 if(strcmp(root->child->var,"Bool")==0){
                     root->child->var = "boolean";
                 }
@@ -73,7 +70,7 @@ void FieldDecl (struct node * root, Sym * last, Sym * first, int aux) {
                 aux2 = createSym(root->child->brother->value, root->child->var, "", 0, 0, 1);
                 insertSym(last, aux2);
             } else {
-                printf("ERROR ALREADY DEFINED\n");
+                printf("FD ERROR ALREADY DEFINED %s\n", root->child->brother->value);
             }
         }    
     }
@@ -91,16 +88,17 @@ void Vardecl (struct node * root, Sym * func) {
         if (strcmp(root->var, "VarDecl") == 0) {
             if (CheckIfAlreadyDefined(func, root->child->brother->value, 1) == NULL) {
                 //FIXME: if is alphanumeric
-                printf("cheked\n");
                 if(strcmp(root->child->var,"Bool")==0){
                     root->child->var = "boolean";
                 }
                 if(strcmp(root->child->var,"StringArray")==0){
                     root->child->var = "String[]";
                 }
-                aux_func = createSym(root->child->brother->value, root->brother->var, "", 0, 0, 1);
+                aux_func = createSym(root->child->brother->value, root->child->var, "", 0, 0, 1);
                 aux->in = aux_func;
                 aux = aux_func;
+            } else {
+                printf("VD ERROR ALREADY DEFINED %s\n", root->child->brother->value);
             }
         }
         
@@ -134,13 +132,12 @@ void Header(struct node * root, Sym * first){
 
     node * aux_root = root->child->brother->brother->child;
     char * param = "";
-    printf("Header -------------- %s\n", root->child->brother->var);
     
     while(aux_root != NULL && aux_root->child != NULL){
 
         if(CheckIfAlreadyDefined(first->in, aux_root->child->brother->value,1)!= NULL){
             
-            printf("ERROR ALREADY DEFINED\n"); //FIXME: mensagem de erro de simbolo já definido
+            printf("HD ERROR ALREADY DEFINED %s\n", aux_root->child->brother->value); //FIXME: mensagem de erro de simbolo já definido
             break;
         }else{
             
@@ -163,17 +160,14 @@ void Header(struct node * root, Sym * first){
                 //FIXME: é alfa numerico (detetar este erro)
         }
 
-        printf(":::::::%s\n", param);
         if(strlen(param) == 0){
             param = myStrCat(param, aux_root->child->var);
         }else{
             param = myStrCat(param, ",");
             param = myStrCat(param, aux_root->child->var);
         }
-        printf("4\n");
         aux_root = aux_root->brother;
     }
-    printf("%s-----> %s\n", first->name, param);
     first->param = param;
 }
 
@@ -185,9 +179,8 @@ void MethodDecl(Sym * last, Sym * first, struct node * root) {
     char * func_name = root->child->child->brother->value;
 
     if (CheckIfAlreadyDefined(first, func_name, 0) != NULL) {
-        printf("ERROR ALREADY DEFINED\n");
+        printf("MD ERROR ALREADY DEFINED %s\n", func_name);
     } else {
-        printf("MethodDecl\n");
         Sym * newMethod = createSym(func_name, root->child->child->var, "", 0, 0, 0);
 
         last->next = newMethod;
@@ -195,6 +188,9 @@ void MethodDecl(Sym * last, Sym * first, struct node * root) {
         //(MethodHeader, ...)
         Header(root->child, newMethod);
 
+
+
+        Vardecl(root->child->brother->child, last->next);
 
     }
 
@@ -207,10 +203,12 @@ void printTable(Sym * elem) {
     printf("===== Class %s Symbol Table =====\n", elem->name);
     elem = elem->next;
     while (elem != NULL) {
-        if (elem->variable== 1)
+        if (elem->variable== 1){
             printf("%s\t%s\n", elem->name, elem->type);
-        else if (elem->variable == 0)
+        } else if (elem->variable == 0){
+            tolower_word(elem->param);
             printf("%s\t(%s)\t%s\n", elem->name, elem->param, elem->type);
+        }
         elem = elem->next;
     }
     
@@ -227,6 +225,7 @@ void printTable(Sym * elem) {
             Sym * func = copy->in;
 
             while (func != NULL) {
+                
                 if (aux == 0) {
                     printf("%s\t\t%s\n", func->name, func->type);
                     aux = 1;
@@ -239,18 +238,6 @@ void printTable(Sym * elem) {
                 }
                 func = func->in;
             }
-
-            /*while (func != NULL) {
-                if (func->variable == 1 || func->variable == 2) {
-                    if (strcmp(func->param, "") == 0)
-                        printf("%s\t\t%s\n", func->name, func->type);
-                    else
-                        printf("%s\t\t%s\t%s\n", func->name, func->type, func->param);
-                }
-                else if (func->variable == 0)
-                    printf("%s\t(%s)\t%s\t%s\n", func->name, func->param, func->type, func->param);
-                func = func->in;
-            }*/
         }
         copy = copy->next;
     }
@@ -258,10 +245,8 @@ void printTable(Sym * elem) {
 }
 
 Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux) {
-    printf("-----%s-----\n", name);
     while(simTab) {
         if (strcmp(simTab->name, name) == 0) {
-            printf("igual\n");     
             return simTab;
         } else {
             if (aux == 0) {
@@ -271,6 +256,14 @@ Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux) {
             }
         }
     }
-    //printf("endcheck\n");
     return NULL;
+}
+
+void tolower_word(char * param){
+
+    for(int i= 0; i< strlen(param); i++){
+        if(param[i] >= 65 && param[i]<=90){
+            param[i] = param[i] + 32;
+        }
+    }
 }
