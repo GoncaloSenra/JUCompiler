@@ -154,11 +154,11 @@ void Header(struct node * root, Sym * first){
                 }
 
                 Sym * aux;
-                printf("1\n");
+
                 aux = createSym(aux_root->child->brother->value, aux_root->child->var,"", 0, 0, 0); //FIXME: Verificar se correto
-                printf("2\n");
+                aux_first->in = aux;
                 aux_first = aux;
-                printf("3\n");
+                
             //else
                 //FIXME: é alfa numerico (detetar este erro)
         }
@@ -198,9 +198,6 @@ void MethodDecl(Sym * last, Sym * first, struct node * root) {
 
     }
 
-    //last
-    
-    //Header(root->child->child->brother->brother, );
 }
 
 void printTable(Sym * elem) {
@@ -216,8 +213,9 @@ void printTable(Sym * elem) {
             printf("%s\t(%s)\t%s\n", elem->name, elem->param, elem->type);
         elem = elem->next;
     }
-    /*
+    
     // Tabelas de funcoes
+    
     while (copy != NULL) {
         if (copy->in != NULL) {
             if (strcmp(copy->param, "") == 0)
@@ -225,8 +223,24 @@ void printTable(Sym * elem) {
             else
                 printf("\n===== Function %s(%s) Symbol Table =====\n", copy->name, copy->param);
             
+            int aux = 0;
             Sym * func = copy->in;
+
             while (func != NULL) {
+                if (aux == 0) {
+                    printf("%s\t\t%s\n", func->name, func->type);
+                    aux = 1;
+                } else {
+                    if (func->variable == 0) {
+                        printf("%s\t\t%s param\n", func->name, func->type);
+                    } else {
+                        printf("%s\t\t%s\n", func->name, func->type);
+                    }
+                }
+                func = func->in;
+            }
+
+            /*while (func != NULL) {
                 if (func->variable == 1 || func->variable == 2) {
                     if (strcmp(func->param, "") == 0)
                         printf("%s\t\t%s\n", func->name, func->type);
@@ -236,10 +250,10 @@ void printTable(Sym * elem) {
                 else if (func->variable == 0)
                     printf("%s\t(%s)\t%s\t%s\n", func->name, func->param, func->type, func->param);
                 func = func->in;
-            }
+            }*/
         }
         copy = copy->next;
-    }*/
+    }
     printf("\n");
 }
 
