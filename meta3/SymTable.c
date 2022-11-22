@@ -203,11 +203,11 @@ void printTable(Sym * elem) {
     printf("===== Class %s Symbol Table =====\n", elem->name);
     elem = elem->next;
     while (elem != NULL) {
+        char * temp_type = tolower_word(elem->type);
         if (elem->variable== 1){
-            printf("%s\t%s\n", elem->name, elem->type);
+            printf("%s\t%s\n", elem->name, temp_type);
         } else if (elem->variable == 0){
-            tolower_word(elem->param);
-            printf("%s\t(%s)\t%s\n", elem->name, elem->param, elem->type);
+            printf("%s\t(%s)\t%s\n", elem->name, tolower_word(elem->param), temp_type);
         }
         elem = elem->next;
     }
@@ -219,21 +219,21 @@ void printTable(Sym * elem) {
             if (strcmp(copy->param, "") == 0)
                 printf("\n===== Function %s() Symbol Table =====\n", copy->name);
             else
-                printf("\n===== Function %s(%s) Symbol Table =====\n", copy->name, copy->param);
+                printf("\n===== Function %s(%s) Symbol Table =====\n", copy->name, tolower_word(copy->param));
             
             int aux = 0;
             Sym * func = copy->in;
 
             while (func != NULL) {
-                
+                char * temp_type = tolower_word(func->type);
                 if (aux == 0) {
-                    printf("%s\t\t%s\n", func->name, func->type);
+                    printf("%s\t\t%s\n", func->name, temp_type);
                     aux = 1;
                 } else {
                     if (func->variable == 0) {
-                        printf("%s\t\t%s param\n", func->name, func->type);
+                        printf("%s\t\t%s param\n", func->name, temp_type);
                     } else {
-                        printf("%s\t\t%s\n", func->name, func->type);
+                        printf("%s\t\t%s\n", func->name, temp_type);
                     }
                 }
                 func = func->in;
@@ -259,11 +259,19 @@ Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux) {
     return NULL;
 }
 
-void tolower_word(char * param){
-
+char * tolower_word(char * param){
+    char * temp = (char *) malloc(sizeof(char) * strlen(param));
     for(int i= 0; i< strlen(param); i++){
         if(param[i] >= 65 && param[i]<=90){
-            param[i] = param[i] + 32;
+            temp[i] = param[i] + 32;
+        }
+        else {
+            temp[i] = param[i];
         }
     }
+    return temp;
+}
+
+void checkTypes(struct node * root, Sym * first) {
+    
 }

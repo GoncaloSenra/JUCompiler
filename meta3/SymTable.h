@@ -24,4 +24,6 @@ void Vardecl (struct node * root, Sym * func);
 void FieldDecl (struct node * root, Sym * last, Sym * first, int aux);
 Sym * insertSym(Sym * last, Sym * new);
 void createTable (Sym * last, struct node * root);
-void tolower_word(char * param);
+char * tolower_word(char * param);
+
+
