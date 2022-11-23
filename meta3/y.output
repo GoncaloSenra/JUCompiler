@@ -115,54 +115,54 @@ Terminals, with rules where they appear
 
     $end (0) 0
     error (256) 8 41 46 51 79
-    ID <id> (258) 1 7 9 14 15 16 17 18 19 20 26 27 44 45 46 49 50 74 75
-    INTLIT <id> (259) 76
-    STRLIT <id> (260) 40
-    REALLIT <id> (261) 77
-    BOOLLIT <id> (262) 78
-    AND (263) 57
-    ASSIGN (264) 49
-    STAR (265) 54
-    COMMA (266) 9 20 27 47
-    DIV (267) 55
-    EQ (268) 62
-    GE (269) 63
-    GT (270) 64
-    LBRACE (271) 1 22 29
-    LE (272) 65
-    LPAR (273) 14 15 16 17 30 31 32 39 40 44 45 46 50 51 71 79
-    LSQ (274) 19 50
-    LT (275) 66
-    MINUS (276) 53 68
-    MOD (277) 56
-    NE (278) 67
-    NOT (279) 70
-    OR (280) 58
-    PLUS (281) 52 69
-    RBRACE (282) 1 22 29
-    RPAR (283) 14 15 16 17 30 31 32 39 40 44 45 46 50 51 71 79
-    RSQ (284) 19 50
-    SEMICOLON (285) 4 7 8 26 33 34 35 36 37 38 39 40 41
-    ARROW (286)
-    LSHIFT (287) 60
-    RSHIFT (288) 61
-    XOR (289) 59
-    BOOL (290) 11
-    CLASS (291) 1
-    DOTLENGTH (292) 75
-    DOUBLE (293) 13
-    ELSE (294) 30
-    IF (295) 30 31
-    INT (296) 12
-    PRINT (297) 39 40
-    PARSEINT (298) 50 51
-    PUBLIC (299) 6 7
-    RETURN (300) 33 34
-    STATIC (301) 6 7
-    STRING (302) 19
-    VOID (303) 16 17
-    WHILE (304) 32
-    RESERVED (305)
+    ID <tok> (258) 1 7 9 14 15 16 17 18 19 20 26 27 44 45 46 49 50 74 75
+    INTLIT <tok> (259) 76
+    STRLIT <tok> (260) 40
+    REALLIT <tok> (261) 77
+    BOOLLIT <tok> (262) 78
+    AND <tok> (263) 57
+    ASSIGN <tok> (264) 49
+    STAR <tok> (265) 54
+    COMMA <tok> (266) 9 20 27 47
+    DIV <tok> (267) 55
+    EQ <tok> (268) 62
+    GE <tok> (269) 63
+    GT <tok> (270) 64
+    LBRACE <tok> (271) 1 22 29
+    LE <tok> (272) 65
+    LPAR <tok> (273) 14 15 16 17 30 31 32 39 40 44 45 46 50 51 71 79
+    LSQ <tok> (274) 19 50
+    LT <tok> (275) 66
+    MINUS <tok> (276) 53 68
+    MOD <tok> (277) 56
+    NE <tok> (278) 67
+    NOT <tok> (279) 70
+    OR <tok> (280) 58
+    PLUS <tok> (281) 52 69
+    RBRACE <tok> (282) 1 22 29
+    RPAR <tok> (283) 14 15 16 17 30 31 32 39 40 44 45 46 50 51 71 79
+    RSQ <tok> (284) 19 50
+    SEMICOLON <tok> (285) 4 7 8 26 33 34 35 36 37 38 39 40 41
+    ARROW <tok> (286)
+    LSHIFT <tok> (287) 60
+    RSHIFT <tok> (288) 61
+    XOR <tok> (289) 59
+    BOOL <tok> (290) 11
+    CLASS <tok> (291) 1
+    DOTLENGTH <tok> (292) 75
+    DOUBLE <tok> (293) 13
+    ELSE <tok> (294) 30
+    IF <tok> (295) 30 31
+    INT <tok> (296) 12
+    PRINT <tok> (297) 39 40
+    PARSEINT <tok> (298) 50 51
+    PUBLIC <tok> (299) 6 7
+    RETURN <tok> (300) 33 34
+    STATIC <tok> (301) 6 7
+    STRING <tok> (302) 19
+    VOID <tok> (303) 16 17
+    WHILE <tok> (304) 32
+    RESERVED <tok> (305)
 
 
 Nonterminals, with rules where they appear

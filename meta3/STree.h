@@ -7,14 +7,17 @@
 #define true 1
 #define false 0
 
+
 typedef struct node{
     char * var;
     char * value;
     struct node * brother;
     struct node * child;
+    int line;
+    int col;
 }node;
 
-struct node * createNode(char * value, char * var);
+struct node * createNode(char * value, char * var, int line, int col);
 
 void newBrother(struct node * old, struct node * newn);
 

@@ -2,13 +2,15 @@
 #include "STree.h"
 
 
-struct node * createNode(char * value, char * var) {
+struct node * createNode(char * value, char * var, int line, int col) {
     node * aux2 = (node *) malloc(sizeof(node));
 
     aux2->var = var;
     aux2->value = value;
     aux2->brother = NULL;
     aux2->child = NULL;
+    aux2->line = line;
+    aux2->col = col;
 
     return aux2;
 
@@ -57,6 +59,7 @@ int numBrothers(struct node * no) {
 		}
 		return count;
 }
+
 
 
 

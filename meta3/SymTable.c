@@ -98,7 +98,7 @@ void Vardecl (struct node * root, Sym * func) {
                 aux->in = aux_func;
                 aux = aux_func;
             } else {
-                printf("VD ERROR ALREADY DEFINED %s\n", root->child->brother->value);
+                printf("VD ERROR ALREADY DEFINED %s : %d %d\n", root->child->brother->value, root->child->brother->line, root->child->brother->col);
             }
         }
         
@@ -137,7 +137,7 @@ void Header(struct node * root, Sym * first){
 
         if(CheckIfAlreadyDefined(first->in, aux_root->child->brother->value,1)!= NULL){
             
-            printf("HD ERROR ALREADY DEFINED %s\n", aux_root->child->brother->value); //FIXME: mensagem de erro de simbolo já definido
+            printf("HD ERROR ALREADY DEFINED %s : %d %d\n", aux_root->child->brother->value, aux_root->child->brother->line, aux_root->child->brother->col); //FIXME: mensagem de erro de simbolo já definido
             break;
         }else{
             
