@@ -388,8 +388,8 @@ void checkOneMemberOperationNL(struct node * root, Sym * first, char * name){
         //printf("INT: %s\n", type);
         type = searchType(root, first, name, type);
         printf("type: %s\n", type);
-        root->child->anotation = type;
-        sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type));      
+        root->child->anotation = tolower_word(type);
+        //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type));      
     } else {
         type = "NULL2";
         printf("type: %s\n", type);
@@ -428,30 +428,30 @@ char * searchType(struct node * root, Sym * first, char * name, char * type) {
 }
 
 int isVAR(struct node * root) {
-    printf("isVAR: %s\n", root->var);
     char * type;
     //if (strcmp(root->var, "BoolLit") == 0) printf("LEN: %d\n", strlen(root->var));
-    if (root->var[0] == 'D' && root->var[1] == 'e') {
-        type = "int";
-        printf("type: %s\n", type);
-        root->anotation = type;
-        sprintf(root->var, "%s - %s", root->var, type);
-        return true;
-    } /*else if (root->var[0] == 'B' && root->var[1] == 'o' && root->var[2] == 'o' && root->var[3] == 'l') {
-        if (strcmp(root->var, "Bool") != 0){
-        type = "boolean";
-        printf("type: %s\n", type);
-        root->anotation = type;
-        sprintf(root->var, "%s - %s", root->var, type);
-        return true;
+    if (root->value != NULL) {
+            printf("isVAR: %s\n", root->var);
+        if (root->var[0] == 'D' && root->var[1] == 'e') {
+            type = "int";
+            printf("type: %s\n", type);
+            root->anotation = type;
+            //sprintf(root->var, "%s - %s", root->var, type);
+            return true;
+        } else if (root->var[0] == 'B' && root->var[1] == 'o' ) {   //FIXME: BoolLit e Bool, uma historia de amor...
+            type = "boolean";
+            printf("type: %s\n", type);
+            root->anotation = type;
+            //sprintf(root->var, "%s - %s", root->var, type);
+            return true;
+        } else if (root->var[0] == 'R' && root->var[1] == 'e' && root->var[2] == 'a') {
+            type = "double";
+            printf("type: %s\n", type);
+            root->anotation = type;
+            //sprintf(root->var, "%s - %s", root->var, type);
+            return true;
         }
-    } */else if (root->var[0] == 'R' && root->var[1] == 'e' && root->var[2] == 'a') {
-        type = "double";
-        printf("type: %s\n", type);
-        root->anotation = type;
-        sprintf(root->var, "%s - %s", root->var, type);
-        return true;
-    }
+    }    
     return false;
 }
 
