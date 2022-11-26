@@ -359,12 +359,9 @@ void checkTypes(struct node * root, Sym * first, char * name) {
          
     if(isTwoMemberOperation(root->var)){
         printf("1%s\n", root->var); 
-    }
-    else if(isLogicalOperator(root->var)){
+    } else if(isLogicalOperator(root->var)){
         printf("2%s\n", root->var);         // Eq Lt Gt etc
-    }
-
-    //else if(isNewValue(root));                                            // se estiver só Intlit Reallit
+    } else if(isVAR(root));                                            // se estiver só Intlit Reallit
         
     else if(isOneMemberOperationNonLogical(root->var)){
         printf("3%s:%s\n", root->child->var, root->child->value);
@@ -393,6 +390,12 @@ void checkOneMemberOperationNL(struct node * root, Sym * first, char * name){
         printf("type: %s\n", type);
         root->child->anotation = type;
         sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type));      
+    } else {
+        type = "NULL2";
+        printf("type: %s\n", type);
+        //root->child->anotation = type;
+        //sprintf(root->child->var, "%s - %s", root->child->var, type);
+        //printf("NAME2 %s\n", root->child->var);
     }
 
 }
@@ -405,7 +408,7 @@ char * searchType(struct node * root, Sym * first, char * name, char * type) {
         if (strcmp(name, first->name) == 0){
             Sym * aux = first->in;
             while (aux != NULL) {
-                printf("first->name: %s\n", aux->name);
+                //printf("first->name: %s\n", aux->name);
                 //printf("aux->name: %s---%s\n", aux->name, root->child->value);
                 if (strcmp(root->child->value, aux->name) == 0) {
                     //printf("11111type: %s\n", aux->type);
@@ -422,6 +425,34 @@ char * searchType(struct node * root, Sym * first, char * name, char * type) {
         if (first != NULL)
             first = first->next;                                
     }
+}
+
+int isVAR(struct node * root) {
+    printf("isVAR: %s\n", root->var);
+    char * type;
+    //if (strcmp(root->var, "BoolLit") == 0) printf("LEN: %d\n", strlen(root->var));
+    if (root->var[0] == 'D' && root->var[1] == 'e') {
+        type = "int";
+        printf("type: %s\n", type);
+        root->anotation = type;
+        sprintf(root->var, "%s - %s", root->var, type);
+        return true;
+    } /*else if (root->var[0] == 'B' && root->var[1] == 'o' && root->var[2] == 'o' && root->var[3] == 'l') {
+        if (strcmp(root->var, "Bool") != 0){
+        type = "boolean";
+        printf("type: %s\n", type);
+        root->anotation = type;
+        sprintf(root->var, "%s - %s", root->var, type);
+        return true;
+        }
+    } */else if (root->var[0] == 'R' && root->var[1] == 'e' && root->var[2] == 'a') {
+        type = "double";
+        printf("type: %s\n", type);
+        root->anotation = type;
+        sprintf(root->var, "%s - %s", root->var, type);
+        return true;
+    }
+    return false;
 }
 
 
