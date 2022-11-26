@@ -186,10 +186,12 @@ void MethodDecl(Sym * last, Sym * first, struct node * root) {
         last->next = newMethod;
 
         //(MethodHeader, ...)
+
+        //printf("Header\n");
         Header(root->child, newMethod);
 
 
-
+        //printf("VarDecl\n");
         Vardecl(root->child->brother->child, last->next);
 
     }
@@ -272,6 +274,154 @@ char * tolower_word(char * param){
     return temp;
 }
 
-void checkTypes(struct node * root, Sym * first) {
+int isTwoMemberOperation(char* type){
+    if(strcmp(type, "Add") == 0)
+        return true;
+    else if(strcmp(type, "Sub") == 0)
+        return true;
+    else if(strcmp(type, "Mul") == 0)
+        return true;
+    else if(strcmp(type, "Div") == 0)
+        return true;
+    else if(strcmp(type, "Mod") == 0)
+        return true;
+    else if(strcmp(type, "Assign")==0)
+        return true;
+    else if(strcmp(type, "ParseArgs")==0)
+        return true;
+    else 
+        return false;
+}
+
+int isOneMemberOperationLogical(char* type){
+    if(strcmp(type, "Not") == 0)
+        return true;
+    if(strcmp(type, "If") == 0)
+        return true;
+    else if(strcmp(type, "While") == 0)
+        return true;
+    else
+        return false;
+}
+
+int isOneMemberOperationNonLogical(char* type){
+    if(strcmp(type, "Minus") == 0)
+        return true;
+    else if(strcmp(type, "Plus") == 0)
+        return true;
+    else if(strcmp(type, "Print") == 0)
+        return true;
+    else if(strcmp(type, "Return") == 0)
+        return true;
+    else 
+        return false;
+}
+
+int isLogicalOperator(char* type){
+    if(strcmp(type, "Or") == 0)
+        return true;
+    else if(strcmp(type, "Eq") == 0)
+        return true;
+    else if(strcmp(type, "Ne") == 0)
+        return true;
+    else if(strcmp(type, "Lt") == 0)
+        return true;
+    else if(strcmp(type, "Gt") == 0)
+        return true;
+    else if(strcmp(type, "Le") == 0)
+        return true;
+    else if(strcmp(type, "Ge") == 0)
+        return true;
+    else if(strcmp(type, "And") == 0)
+        return true;
+    else 
+        return false;
+}
+
+int isStatement(char* type){
+    if(strcmp(type, "If") == 0)
+        return true;
+    else
+        return false;
+}
+
+
+void checkTypes(struct node * root, Sym * first, char * name) {
+    
+    if (strcmp("MethodHeader", root->var) == 0){ 
+        //printf("MethodHeader: %s\n", root->child->brother->value);
+        name = root->child->brother->value;
+    }
+    if (root->child != NULL)
+        checkTypes(root->child, first, name);
+    if (root->brother != NULL)
+        checkTypes(root->brother, first, name);
+         
+    if(isTwoMemberOperation(root->var)){
+        printf("1%s\n", root->var); 
+    }
+    else if(isLogicalOperator(root->var)){
+        printf("2%s\n", root->var);         // Eq Lt Gt etc
+    }
+
+    //else if(isNewValue(root));                                            // se estiver só Intlit Reallit
+        
+    else if(isOneMemberOperationNonLogical(root->var)){
+        printf("3%s:%s\n", root->child->var, root->child->value);
+        //printf("NAME2: %s\n", methodName);
+        //printf("NAME3: %s\n", name);
+        checkOneMemberOperationNL(root, first, name);
+    }
+
+    else if(isOneMemberOperationLogical(root->var)){
+        printf("4%s\n", root->var);
+    }
+    else if(strcmp(root->var, "Call") == 0){
+        printf("5%s\n", root->var);
+    }
     
 }
+
+void checkOneMemberOperationNL(struct node * root, Sym * first, char * name){
+    char * type;
+    printf("NAME %s\n", root->child->value);
+    if(root->child == NULL){
+        type = "NULL";
+    } else if ((root->child->var[0] == 'I')){
+        //printf("INT: %s\n", type);
+        type = searchType(root, first, name, type);
+        printf("type: %s\n", type);
+        root->child->anotation = type;
+        sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type));      
+    }
+
+}
+
+char * searchType(struct node * root, Sym * first, char * name, char * type) {
+    //printf("searchType----%s\n", name);
+
+    while (first != NULL) {
+        //printf("first->name: %s---%s\n", first->name, name);
+        if (strcmp(name, first->name) == 0){
+            Sym * aux = first->in;
+            while (aux != NULL) {
+                printf("first->name: %s\n", aux->name);
+                //printf("aux->name: %s---%s\n", aux->name, root->child->value);
+                if (strcmp(root->child->value, aux->name) == 0) {
+                    //printf("11111type: %s\n", aux->type);
+                    type = aux->type;
+                    return type;
+                }
+                aux = aux->in;
+                //printf("22222type: %s\n", type);
+            }
+        }
+
+
+
+        if (first != NULL)
+            first = first->next;                                
+    }
+}
+
+

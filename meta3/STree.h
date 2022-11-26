@@ -11,6 +11,7 @@
 typedef struct node{
     char * var;
     char * value;
+    char * anotation;
     struct node * brother;
     struct node * child;
     int line;

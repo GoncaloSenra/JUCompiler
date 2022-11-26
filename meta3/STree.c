@@ -7,6 +7,7 @@ struct node * createNode(char * value, char * var, int line, int col) {
 
     aux2->var = var;
     aux2->value = value;
+    aux2->anotation = NULL;
     aux2->brother = NULL;
     aux2->child = NULL;
     aux2->line = line;
