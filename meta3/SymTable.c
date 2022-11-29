@@ -138,28 +138,24 @@ void Header(struct node * root, Sym * first){
         if(CheckIfAlreadyDefined(first->in, aux_root->child->brother->value,1)!= NULL){
             
             printf("HD ERROR ALREADY DEFINED %s : %d %d\n", aux_root->child->brother->value, aux_root->child->brother->line, aux_root->child->brother->col); //FIXME: mensagem de erro de simbolo já definido
-            break;
-        }else{
+        }
             
-            //if
-                if(strcmp(aux_root->child->var,"Bool")==0){
-                    aux_root->child->var = "boolean";
-                }
-
-                if(strcmp(aux_root->child->var,"StringArray")==0){
-                    aux_root->child->var = "String[]";
-                }
-
-                Sym * aux;
-
-                aux = createSym(aux_root->child->brother->value, aux_root->child->var,"", 0, 0, 0); //FIXME: Verificar se correto
-                aux_first->in = aux;
-                aux_first = aux;
-                
-            //else
-                //FIXME: é alfa numerico (detetar este erro)
+        
+        if(strcmp(aux_root->child->var,"Bool")==0){
+            aux_root->child->var = "boolean";
         }
 
+        if(strcmp(aux_root->child->var,"StringArray")==0){
+            aux_root->child->var = "String[]";
+        }
+
+        Sym * aux;
+
+        aux = createSym(aux_root->child->brother->value, aux_root->child->var,"", 0, 0, 0); //FIXME: Verificar se correto
+        aux_first->in = aux;
+        aux_first = aux;
+            
+        
         if(strlen(param) == 0){
             param = myStrCat(param, aux_root->child->var);
         }else{
@@ -169,6 +165,7 @@ void Header(struct node * root, Sym * first){
         aux_root = aux_root->brother;
     }
     first->param = param;
+    printf("PARAM: %s\n", param);
 }
 
 void MethodDecl(Sym * last, Sym * first, struct node * root) {
