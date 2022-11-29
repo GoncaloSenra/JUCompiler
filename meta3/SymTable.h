@@ -31,6 +31,6 @@ void checkTypes(struct node * root, Sym * first, char * name);
 
 void checkOneMemberOperationNL(struct node * root, Sym * first, char * name);
 
-char * searchType(struct node * root, Sym * first, char * name, char * type);
+char * searchType(struct node * root, Sym * first, char * name, char * type, int val);
 
 int isVAR(struct node * root);

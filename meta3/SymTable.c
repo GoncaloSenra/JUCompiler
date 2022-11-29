@@ -347,7 +347,7 @@ int isStatement(char* type){
 
 
 void checkTypes(struct node * root, Sym * first, char * name) {
-    
+    //printf("CHECK TYPES %s\n", root->var);
     if (strcmp("MethodHeader", root->var) == 0){ 
         //printf("MethodHeader: %s\n", root->child->brother->value);
         name = root->child->brother->value;
@@ -412,19 +412,21 @@ void checkCallOperation(struct node * root, Sym * first, char * name){
     }
     
     struct node * aux = root->child->brother;
+    printf("AUX: %s\n", aux->var);
     char * tvar;
     while(aux != NULL){
         printf("hi %s\n", aux->var);
         
         printf("RIP\n");
         if((aux->var[0] == 'I') && (aux->var[1] == 'd')){
-            tvar = searchType(aux, first_aux, name, tvar);
+            printf("ID: %s\n", aux->var);
+            tvar = searchType(aux, first_aux, name, tvar, 1);
             printf("RIP\n");
             
             aux->anotation = tvar;
             printf("-->%s...%s\n", aux->anotation, tvar);
         }
-        
+        /*
         if(strcmp(aux->var,"Call")== 0 && aux->anotation == NULL){
             if(strlen(param) == 0)
                 param = myStrCat(param, "none");
@@ -437,7 +439,7 @@ void checkCallOperation(struct node * root, Sym * first, char * name){
                 param = myStrCat(param, tolower_word(aux->anotation));
             //FIXME: else if  
         }
-        
+        */
         aux = aux->brother;
     }
     
@@ -454,16 +456,17 @@ void checkCallOperation(struct node * root, Sym * first, char * name){
 
 }
 
+void checkTwoMemberOperation();
 
 void checkOneMemberOperationNL(struct node * root, Sym * first, char * name){
     char * type;
-    //printf("NAME %s\n", root->child->value);
+    printf("NAME %s\n", root->child->value);
     
     if(root->child == NULL){
         type = "NULL";
     } else if ((root->child->var[0] == 'I')){
         //printf("INT: %s\n", type);
-        type = searchType(root, first, name, type);
+        type = searchType(root, first, name, type, 0);
         //printf("type: %s\n", type);
         root->child->anotation = tolower_word(type);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type));      
@@ -491,8 +494,8 @@ void checkOneMemberOperationNL(struct node * root, Sym * first, char * name){
 
 }
 
-char * searchType(struct node * root, Sym * first, char * name, char * type) {
-    //printf("searchType----%s\n", name);
+char * searchType(struct node * root, Sym * first, char * name, char * type, int val) {
+    printf("searchType----%s:::::%s\n", name, root->var);
     while (first != NULL) {
         //printf("first->name: %s---%s\n", first->name, name);
         /*if(strcmp(first->name, root->value)== 0){
@@ -505,12 +508,16 @@ char * searchType(struct node * root, Sym * first, char * name, char * type) {
             while (aux != NULL) {
                 printf("first->name: %s\n", aux->name);
                 printf("cvbnm,.cvbnm,.\n");
-                printf("aux->name: %s---%s\n", aux->name, root->value);
-                if (strcmp(root->value, aux->name) == 0) {
+                //printf("aux->name: %s---%s\n", aux->name, root->value);
+                if (val == 0 && strcmp(root->child->value, aux->name) == 0) {
                     //printf("11111type: %s\n", aux->type);
                     type = aux->type;
                     return type;
 
+                } else if (val == 1 && strcmp(root->value, aux->name) == 0) {
+                    //printf("11111type: %s\n", aux->type);
+                    type = aux->type;
+                    return type;
                 }
 
 
