@@ -384,12 +384,13 @@ void checkTypes(struct node * root, Sym * first, char * name) {
 
 void checkCallOperation(struct node * root, Sym * first, char * name){
     char *type = "undef";
-    char * param = "\0";
+    char * param_aux = "\0";
     Sym * first_aux = first;
     int at_least_one = 0;
+    char * param = "\0";
     
     while(first != NULL){
-        if(strcmp(first->name, root->child->value) == 0){
+        if(strcmp(first->name, root->child->value) == 0 && first->variable == 0){
             at_least_one =1;
             printf("%s<--\n", first->name);
             type = first->type;
@@ -423,23 +424,22 @@ void checkCallOperation(struct node * root, Sym * first, char * name){
             aux->anotation = tvar;
             printf("-->%s...%s\n", aux->anotation, tvar);
         }
-        /*
+        
         if(strcmp(aux->var,"Call")== 0 && aux->anotation == NULL){
-            if(strlen(param) == 0)
-                param = myStrCat(param, "none");
+            if(strlen(param_aux) == 0)
+                param_aux = myStrCat(param_aux, "none");
             else{
-                param = myStrCat(param, ",");
-                param = myStrCat(param, "none");
+                param_aux = myStrCat(param_aux, ",");
+                param_aux = myStrCat(param_aux, "none");
             }
-        }else{ 
-            if(strlen(param) == 0)
-                param = myStrCat(param, tolower_word(aux->anotation));
-            //FIXME: else if  
         }
-        */
+        
         aux = aux->brother;
     }
     
+    if(at_least_one == 1 && strcmp(param,param_aux ) != 0){
+        type = "undef";
+    }
 
     if(at_least_one == 0){
         root->child->anotation = "undef";
@@ -449,7 +449,8 @@ void checkCallOperation(struct node * root, Sym * first, char * name){
     if(strcmp(type, "none")!= 0){
         root->anotation = tolower_word(type);
     }
-
+    if (strcmp(param_aux, "\0") != 0)
+        free(param_aux);
 
 }
 
