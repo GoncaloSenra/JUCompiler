@@ -1,76 +1,162 @@
-===== Class Call_Me_Maybe Symbol Table =====
+Line 0, col 0: Symbol main already defined
+Line 0, col 0: Symbol funcao3 already defined
+Line 0, col 0: Symbol funcao3 already defined
+Line 43, col 20: Symbol i already defined
+Line 55, col 22: Symbol i already defined
+Line 57, col 26: Symbol funcao already defined
+===== Class Java Symbol Table =====
+funcao2	(String[])	void
+x	(double,int)	double
 main	(String[])	void
-f	()	void
-f	(boolean)	int
-f	(double)	boolean
-f	(int)	double
-f	(String[])	void
-f	(int,double)	boolean
-f	(int,double,boolean)	boolean
-f	(int,double,boolean,int)	boolean
-f	(double,int,double,int)	int
-f	(int,double,int,double)	double
+a		boolean
+funcao3	(int,int,double)	int
+funcao3	(int,int,boolean)	boolean
+funcao		boolean
+funcao	(int,double)	int
+funcao	(double,int)	void
+funcao	(double,double)	double
+funcao	(int,int)	int
+maine	()	void
+ola56	(int)	int
+ola56		boolean
+
+===== Method funcao2(String[]) Symbol Table =====
+return		void
+args		String[]	param
+a		boolean
+b		boolean
+c		int
+d		int
+
+===== Method x(double,int) Symbol Table =====
+return		double
+x		double	param
+a		int	param
 
 ===== Method main(String[]) Symbol Table =====
 return		void
 args		String[]	param
-i		int
-d		double
-b		boolean
+x		int
+b		int
 
-===== Method f() Symbol Table =====
-return		void
-
-===== Method f(boolean) Symbol Table =====
+===== Method funcao3(int,int,double) Symbol Table =====
 return		int
-a		boolean	param
-
-===== Method f(double) Symbol Table =====
-return		boolean
-a		double	param
-
-===== Method f(int) Symbol Table =====
-return		double
 a		int	param
-
-===== Method f(String[]) Symbol Table =====
-return		void
-a		String[]	param
-
-===== Method f(int,double) Symbol Table =====
-return		boolean
-a		int	param
-b		double	param
-
-===== Method f(int,double,boolean) Symbol Table =====
-return		boolean
-a		int	param
-b		double	param
-c		boolean	param
-
-===== Method f(int,double,boolean,int) Symbol Table =====
-return		boolean
-a		int	param
-b		double	param
-c		boolean	param
-d		int	param
-
-===== Method f(double,int,double,int) Symbol Table =====
-return		int
-a		double	param
 b		int	param
 c		double	param
-d		int	param
 
-===== Method f(int,double,int,double) Symbol Table =====
-return		double
+===== Method funcao3(int,int,boolean) Symbol Table =====
+return		boolean
 a		int	param
-b		double	param
-c		int	param
-d		double	param
+b		int	param
+c		boolean	param
+x		int
+y		int
+z		int
+w		int
+
+===== Method funcao(int,double) Symbol Table =====
+return		int
+i		int	param
+
+===== Method funcao(double,int) Symbol Table =====
+return		void
+i		double	param
+funcao		int	param
+m		boolean
+
+===== Method funcao(double,double) Symbol Table =====
+return		double
+i		double	param
+funcao		double	param
+m		int
+
+===== Method funcao(int,int) Symbol Table =====
+return		int
+i		int	param
+
+===== Method maine() Symbol Table =====
+return		void
+a		int
+b		int
+c		int
+d		int
+e		double
+f		double
+g		double
+h		double
+i		boolean
+j		boolean
+k		boolean
+l		boolean
+
+===== Method ola56(int) Symbol Table =====
+return		int
+x1		int	param
 
 Program
-..Id(Call_Me_Maybe)
+..Id(Java)
+..MethodDecl
+....MethodHeader
+......Void
+......Id(funcao2)
+......MethodParams
+........ParamDecl
+..........StringArray
+..........Id(args)
+....MethodBody
+......ParseArgs
+........Id(args)
+........DecLit(0)
+......VarDecl
+........Bool
+........Id(a)
+......VarDecl
+........Bool
+........Id(b)
+......VarDecl
+........Int
+........Id(c)
+......VarDecl
+........Int
+........Id(d)
+......Assign
+........Id(a)
+........BoolLit(true)
+......Assign
+........Id(b)
+........BoolLit(true)
+......Assign
+........Id(c)
+........DecLit(1)
+......Assign
+........Id(d)
+........DecLit(1)
+......If
+........Eq
+..........Add
+............Id(a)
+............BoolLit(true)
+..........DecLit(2)
+........Print
+..........StrLit("olaaaa\n")
+........Block
+......Assign
+........Id(a)
+........Length
+..........Id(args)
+..MethodDecl
+....MethodHeader
+......Double
+......Id(x)
+......MethodParams
+........ParamDecl
+..........Double
+..........Id(x)
+........ParamDecl
+..........Int
+..........Id(a)
+....MethodBody
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -82,256 +168,57 @@ Program
 ....MethodBody
 ......VarDecl
 ........Int
-........Id(i)
+........Id(x)
 ......VarDecl
-........Double
-........Id(d)
-......VarDecl
-........Bool
+........Int
 ........Id(b)
-......Call
-........Id(f)
-......Call
-........Id(f)
-........BoolLit(true)
-......Call
-........Id(f)
-........RealLit(0e0)
-......Call
-........Id(f)
-........DecLit(123)
-......Call
-........Id(f)
-........Id(args)
-......Call
-........Id(f)
-........Id(i)
-........Id(d)
-......Call
-........Id(f)
-........Id(i)
-........Id(d)
-........Id(b)
-......Call
-........Id(f)
-........Id(i)
-........Id(d)
-........Id(b)
-........Id(i)
-......Call
-........Id(f)
-........RealLit(0.)
-........DecLit(1)
-........RealLit(2.)
-........DecLit(3)
-......Call
-........Id(f)
-........DecLit(0)
-........RealLit(.1)
-........DecLit(2)
-........RealLit(.3)
-......Call
-........Id(f)
-........Id(i)
-........Id(i)
-......Call
-........Id(f)
-........Id(i)
-........Id(i)
-........Id(b)
-......Call
-........Id(f)
-........Id(i)
-........Id(i)
-........Id(b)
-........Id(i)
-......Call
-........Id(f)
-........RealLit(0.)
-........DecLit(1)
-........DecLit(2)
-........DecLit(3)
-......Call
-........Id(f)
-........DecLit(0)
-........DecLit(1)
-........RealLit(2.)
-........DecLit(3)
-......Call
-........Id(f)
-........DecLit(0)
-........RealLit(.1)
-........DecLit(2)
-........DecLit(3)
-......Call
-........Id(f)
-........DecLit(0)
-........DecLit(1)
-........DecLit(2)
-........RealLit(.3)
-......Call
-........Id(f)
-........Call
-..........Id(f)
-..........Call
-............Id(f)
-............Call
-..............Id(f)
-..............Call
-................Id(f)
-................Call
-..................Id(f)
-..................DecLit(0)
-......Call
-........Id(f)
-........Call
-..........Id(f)
-..........BoolLit(true)
-........Call
-..........Id(f)
-..........DecLit(0)
-........Call
-..........Id(f)
-..........RealLit(0.0)
-......Call
-........Id(f)
-........Call
-..........Id(f)
-..........BoolLit(true)
-........Call
-..........Id(f)
-..........BoolLit(false)
-........Call
-..........Id(f)
-..........RealLit(0.0)
-......Print
-........Call
-..........Id(f)
-..........Call
-............Id(f)
-............Call
-..............Id(f)
-..............Call
-................Id(f)
-................Call
-..................Id(f)
-..................Call
-....................Id(f)
-....................DecLit(0)
-......Print
-........Call
-..........Id(f)
-..........Call
-............Id(f)
-............BoolLit(true)
-..........Call
-............Id(f)
-............DecLit(0)
-..........Call
-............Id(f)
-............RealLit(0.0)
-......Print
-........Call
-..........Id(f)
-..........RealLit(0e0)
-......Print
-........Call
-..........Id(f)
-..........DecLit(123)
+......Assign
+........Id(x)
+........Lshift
+..........DecLit(1)
+..........Mul
+............Id(x)
+............DecLit(1)
 ..MethodDecl
 ....MethodHeader
 ......Void
-......Id(f)
-......MethodParams
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Int
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Bool
-..........Id(a)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Bool
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Double
-..........Id(a)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Double
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(a)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Void
-......Id(f)
+......Id(main)
 ......MethodParams
 ........ParamDecl
 ..........StringArray
-..........Id(a)
+..........Id(args)
 ....MethodBody
+......VarDecl
+........Int
+........Id(x)
+......Assign
+........Id(a)
+........Id(x)
+..FieldDecl
+....Bool
+....Id(a)
 ..MethodDecl
 ....MethodHeader
-......Bool
-......Id(f)
+......Int
+......Id(funcao3)
 ......MethodParams
 ........ParamDecl
 ..........Int
 ..........Id(a)
 ........ParamDecl
-..........Double
-..........Id(b)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Bool
-......Id(f)
-......MethodParams
-........ParamDecl
 ..........Int
-..........Id(a)
-........ParamDecl
-..........Double
 ..........Id(b)
 ........ParamDecl
-..........Bool
+..........Double
 ..........Id(c)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Bool
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(a)
-........ParamDecl
-..........Double
-..........Id(b)
-........ParamDecl
-..........Bool
-..........Id(c)
-........ParamDecl
-..........Int
-..........Id(d)
 ....MethodBody
 ..MethodDecl
 ....MethodHeader
 ......Int
-......Id(f)
+......Id(funcao3)
 ......MethodParams
 ........ParamDecl
-..........Double
+..........Int
 ..........Id(a)
 ........ParamDecl
 ..........Int
@@ -339,25 +226,235 @@ Program
 ........ParamDecl
 ..........Double
 ..........Id(c)
-........ParamDecl
-..........Int
-..........Id(d)
 ....MethodBody
 ..MethodDecl
 ....MethodHeader
-......Double
-......Id(f)
+......Int
+......Id(funcao3)
 ......MethodParams
 ........ParamDecl
 ..........Int
 ..........Id(a)
 ........ParamDecl
-..........Double
+..........Int
 ..........Id(b)
 ........ParamDecl
-..........Int
+..........Double
 ..........Id(c)
+....MethodBody
+..MethodDecl
+....MethodHeader
+......Bool
+......Id(funcao3)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(a)
+........ParamDecl
+..........Int
+..........Id(b)
+........ParamDecl
+..........Bool
+..........Id(c)
+....MethodBody
+......VarDecl
+........Int
+........Id(x)
+......VarDecl
+........Int
+........Id(y)
+......VarDecl
+........Int
+........Id(z)
+......VarDecl
+........Int
+........Id(w)
+..FieldDecl
+....Bool
+....Id(funcao)
+..MethodDecl
+....MethodHeader
+......Int
+......Id(funcao)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(i)
 ........ParamDecl
 ..........Double
-..........Id(d)
+..........Id(i)
 ....MethodBody
+..MethodDecl
+....MethodHeader
+......Void
+......Id(funcao)
+......MethodParams
+........ParamDecl
+..........Double
+..........Id(i)
+........ParamDecl
+..........Int
+..........Id(funcao)
+....MethodBody
+......VarDecl
+........Bool
+........Id(m)
+..MethodDecl
+....MethodHeader
+......Double
+......Id(funcao)
+......MethodParams
+........ParamDecl
+..........Double
+..........Id(i)
+........ParamDecl
+..........Double
+..........Id(funcao)
+....MethodBody
+......VarDecl
+........Int
+........Id(m)
+......If
+........Eq
+..........Id(m)
+..........DecLit(1)
+........Call
+..........Id(funcao)
+..........Id(m)
+..........Id(m)
+........Block
+..MethodDecl
+....MethodHeader
+......Int
+......Id(funcao)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(i)
+........ParamDecl
+..........Int
+..........Id(i)
+....MethodBody
+..FieldDecl
+....Double
+....Id(funcao)
+..MethodDecl
+....MethodHeader
+......Void
+......Id(maine)
+......MethodParams
+....MethodBody
+......VarDecl
+........Int
+........Id(a)
+......VarDecl
+........Int
+........Id(b)
+......VarDecl
+........Int
+........Id(c)
+......VarDecl
+........Int
+........Id(d)
+......VarDecl
+........Double
+........Id(e)
+......VarDecl
+........Double
+........Id(f)
+......VarDecl
+........Double
+........Id(g)
+......VarDecl
+........Double
+........Id(h)
+......VarDecl
+........Bool
+........Id(i)
+......VarDecl
+........Bool
+........Id(j)
+......VarDecl
+........Bool
+........Id(k)
+......VarDecl
+........Bool
+........Id(l)
+......Assign
+........Id(k)
+........Add
+..........Add
+............DecLit(1)
+............DecLit(1)
+..........Mod
+............Mul
+..............Div
+................Id(e)
+................DecLit(4)
+..............Minus
+................RealLit(4.3)
+............DecLit(10)
+......Assign
+........Id(a)
+........Add
+..........Add
+............DecLit(1)
+............DecLit(1)
+..........Mod
+............Mul
+..............Div
+................Id(e)
+................DecLit(4)
+..............Minus
+................RealLit(4.3)
+............DecLit(10)
+......Assign
+........Id(b)
+........Add
+..........Add
+............DecLit(1)
+............DecLit(1)
+..........Mod
+............Mul
+..............Div
+................Id(e)
+................DecLit(4)
+..............Minus
+................RealLit(4.3)
+............DecLit(10)
+......Assign
+........Id(i)
+........Not
+..........Not
+............Not
+..............Not
+................Not
+..................Not
+....................Not
+......................Id(l)
+......Assign
+........Id(f)
+........ParseArgs
+..........Id(i)
+..........Add
+............Add
+..............DecLit(1)
+..............RealLit(1.0)
+............DecLit(2)
+..MethodDecl
+....MethodHeader
+......Int
+......Id(ola56)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(x1)
+....MethodBody
+......Assign
+........Id(x1)
+........Id(ola56)
+......Print
+........StrLit("")
+..FieldDecl
+....Bool
+....Id(ola56)

@@ -79,7 +79,7 @@ void FieldDecl (struct node * root, Sym * last, Sym * first, int aux) {
                 aux2 = createSym(root->child->brother->value, changeType(root->child->var), "", 0, 0, 1);
                 last->next = aux2;
             } else {
-                printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);
+                //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);
             }
         }    
     }
@@ -97,7 +97,7 @@ void Vardecl (struct node * root, Sym * func) {
     if (root) {
         if (strcmp(root->var, "VarDecl") == 0) {
             if(strcmp(root->child->brother->value,"_")==0){
-                printf("Line %d, col %d: Symbol _ is reserved\n", root->child->brother->line, root->child->brother->col);            
+                //ERROR : printf("Line %d, col %d: Symbol _ is reserved\n", root->child->brother->line, root->child->brother->col);            
             }
             //printf("VARDECL %s\n", root->child->brother->value);
             else if (CheckIfAlreadyDefined(func, root->child->brother->value, 1) == NULL) {
@@ -113,7 +113,7 @@ void Vardecl (struct node * root, Sym * func) {
                 aux->in = aux_func;
                 aux = aux_func;
             } else {
-                printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);            
+                //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);            
             }
         }
         
@@ -156,7 +156,7 @@ void Header(struct node * root, Sym * first){
         }
         else if (CheckIfAlreadyDefined(first->in, aux_root->child->brother->value,1)!= NULL){
             aux_param = 1;
-            printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, aux_root->child->brother->value);            
+            //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, aux_root->child->brother->value);            
         }
             
         //printf("----%s : %d\n", aux_root->child->brother->value, aux_param);
@@ -216,7 +216,7 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
         //printf("AUX_PARAM: %s\n", aux->param);
         //printf("newmehod: %s\n", newMethod->param);
         //printf("Deus %d\n", flag);
-        printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, func_name);
+        //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, func_name);
         newMethod = NULL;
         return 1;
     }
