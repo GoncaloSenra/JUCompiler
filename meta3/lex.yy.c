@@ -2465,7 +2465,7 @@ int main(int argc, char * argv[])
                 Sym * table = createSym(prog->child->value, "", "", 0, 0, 0);
                 createTable(table, prog);
                 printTable(table);
-                checkTypes(prog, table, "");
+                //checkTypes(prog, table, "");
                 if (error==false){
                     printSTree(prog,0);
                 } else{
