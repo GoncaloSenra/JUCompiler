@@ -67,7 +67,7 @@ void FieldDecl (struct node * root, Sym * last, Sym * first, int aux) {
             if(strcmp(root->child->brother->value,"_")==0){
                 //printf("error underscore\n");
             }
-            else if ((aux3 = CheckIfAlreadyDefined(first, root->child->brother->value, 0)) == NULL || (aux3 != NULL && aux3->variable == 0)) {
+            else if ((aux3 = CheckIfAlreadyDefined(first, root->child->brother->value, 1, 0)) == NULL || (aux3 != NULL && aux3->variable == 0)) {
                 //printf("Line %d, col %d: Variable %s already defined\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);
                 /*if(strcmp(root->child->var,"Bool")==0){
                     root->child->var = "boolean";
@@ -100,7 +100,7 @@ void Vardecl (struct node * root, Sym * func) {
                 //ERROR : printf("Line %d, col %d: Symbol _ is reserved\n", root->child->brother->line, root->child->brother->col);            
             }
             //printf("VARDECL %s\n", root->child->brother->value);
-            else if (CheckIfAlreadyDefined(func, root->child->brother->value, 1) == NULL) {
+            else if (CheckIfAlreadyDefined(func, root->child->brother->value, 1, 1) == NULL) {
                 //printf("aqui\n");
                 /*if(strcmp(root->child->var,"Bool")==0){
                     root->child->var = "boolean";
@@ -149,7 +149,7 @@ void Header(struct node * root, Sym * first){
             //printf("error underscore\n");
             aux_param = 1;
         }
-        else if (CheckIfAlreadyDefined(first->in, aux_root->child->brother->value,1)!= NULL){
+        else if (CheckIfAlreadyDefined(first->in, aux_root->child->brother->value, 1, 1)!= NULL){
             aux_param = 1;
             //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, aux_root->child->brother->value);            
         }
@@ -192,13 +192,6 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
     //Sym * newMethod = createSym(root->child->child->brother->value, root->child->child->var, "", 0, 0, 0);
     
     char * func_name = root->child->child->brother->value;
-    Sym * aux = CheckIfAlreadyDefined(first, func_name, 0);
-    int flag = 0;
-    if (aux != NULL) {
-        //printf("MD ERROR ALREADY DEFINED %s : %d %d\n", func_name, root->child->child->brother->line, root->child->child->brother->col);
-        //printf("----Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, func_name);            
-        flag = 1;
-    }
     
     Sym * newMethod = createSym(func_name, changeType(root->child->child->var), "", 0, 0, 0);
     //printf("++++%s\n", newMethod->type);
@@ -208,13 +201,14 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
 
     //printf("Header\n");
     Header(root->child, newMethod);
-    
-    if (flag == 1 && strcmp(aux->param, newMethod->param) == 0) {
+
+    Sym * aux;
+    if ((aux = CheckIfAlreadyDefined(first, func_name, 1, 1)) != NULL && strcmp(aux->param, newMethod->param) == 0) {
         //printf("AUX_PARAM: %s\n", aux->param);
         //printf("newmehod: %s\n", newMethod->param);
         //printf("Deus %d\n", flag);
         //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, func_name);
-        newMethod = NULL;
+        //newMethod = NULL;
         return 1;
     }
     //printf("here %d\n", flag);
@@ -292,22 +286,26 @@ void printTable(Sym * first) {
     printf("\n");
 }
 
-Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux) {
-    int flag = 0;
+Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux, int flag) {
 
     while(simTab) {
         //printf("simTab->name: %s | %s\n", simTab->name, name);
-        if (strcmp(simTab->name, name) == 0 && flag == 1) {
-            return simTab;
+        if (aux == 1) {
+            if (simTab->variable == 0){
+                if (strcmp(name, simTab->name) == 0)
+                    return simTab;
+            }
         } else {
-            if (aux == 0) {
-                simTab = simTab->next;
-                flag = 1;
-            } else {
-                simTab = simTab->in;
-                flag = 1;
+            if (simTab->variable == 1) {
+                if (strcmp(name, simTab->name) == 0)
+                    return simTab;
             }
         }
+
+        if (flag == 0)
+            simTab = simTab->next;
+        else
+            simTab = simTab->in;
     }
     return NULL;
 }

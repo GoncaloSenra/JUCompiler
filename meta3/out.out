@@ -1,24 +1,201 @@
-===== Class Echo1 Symbol Table =====
-main	(String[])	void
+===== Class newClass Symbol Table =====
+i		int
+b		boolean
+main	(int,int,double)	int
+pI		int
+a	(int,int,boolean)	void
+a	()	void
+test	(int,int,double,boolean,boolean)	double
+sum	(int,int)	int
 
-===== Method main(String[]) Symbol Table =====
+===== Method main(int,int,double) Symbol Table =====
+return		int
+a		int	param
+c		int	param
+d		double	param
+b		boolean
+i1		int
+
+===== Method a(int,int,boolean) Symbol Table =====
 return		void
-args		String[]	param
+a		int	param
+b		int	param
+c		boolean	param
+d		int
+i		int
+f		double
+
+===== Method a() Symbol Table =====
+return		void
+
+===== Method test(int,int,double,boolean,boolean) Symbol Table =====
+return		double
+a		int	param
+b		int	param
+s		double	param
+e		boolean	param
+c		int
+d		int
+finalI		int
+
+===== Method sum(int,int) Symbol Table =====
+return		int
+k		int	param
+j		int	param
 
 Program
-..Id(Echo1)
+..Id(newClass)
+..FieldDecl
+....Int
+....Id(i)
+..FieldDecl
+....Bool
+....Id(b)
 ..MethodDecl
 ....MethodHeader
-......Void
+......Int
 ......Id(main)
 ......MethodParams
 ........ParamDecl
-..........StringArray
-..........Id(args)
+..........Int
+..........Id(a)
+........ParamDecl
+..........Int
+..........Id(c)
+........ParamDecl
+..........Double
+..........Id(d)
 ....MethodBody
-......Print
-........RealLit(2.5E-324)
-......Print
-........RealLit(0.002_4E-321)
-......Print
-........RealLit(0.5E-4965)
+......VarDecl
+........Bool
+........Id(b)
+......VarDecl
+........Int
+........Id(i1)
+......Return
+........DecLit(0)
+..FieldDecl
+....Int
+....Id(pI)
+..MethodDecl
+....MethodHeader
+......Void
+......Id(a)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(a)
+........ParamDecl
+..........Int
+..........Id(b)
+........ParamDecl
+..........Bool
+..........Id(c)
+....MethodBody
+......VarDecl
+........Int
+........Id(d)
+......Assign
+........Id(d)
+........Id(b)
+......VarDecl
+........Int
+........Id(i)
+......VarDecl
+........Bool
+........Id(b)
+......Assign
+........Id(b)
+........BoolLit(true)
+......VarDecl
+........Double
+........Id(f)
+......Assign
+........Id(f)
+........RealLit(0.03)
+......Return
+........Id(d)
+..MethodDecl
+....MethodHeader
+......Void
+......Id(a)
+......MethodParams
+....MethodBody
+..MethodDecl
+....MethodHeader
+......Double
+......Id(test)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(a)
+........ParamDecl
+..........Int
+..........Id(b)
+........ParamDecl
+..........Double
+..........Id(s)
+........ParamDecl
+..........Bool
+..........Id(e)
+........ParamDecl
+..........Bool
+..........Id(e)
+....MethodBody
+......Call
+........Id(a)
+........DecLit(2)
+........DecLit(3)
+........BoolLit(true)
+......VarDecl
+........Int
+........Id(a)
+......VarDecl
+........Int
+........Id(b)
+......VarDecl
+........Int
+........Id(c)
+......VarDecl
+........Int
+........Id(d)
+......VarDecl
+........Int
+........Id(e)
+......VarDecl
+........Int
+........Id(finalI)
+......Assign
+........Id(finalI)
+........Add
+..........DecLit(2)
+..........DecLit(3)
+......Return
+........Div
+..........Mul
+............RealLit(0.02)
+............RealLit(0.03)
+..........DecLit(5)
+..MethodDecl
+....MethodHeader
+......Int
+......Id(sum)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(k)
+........ParamDecl
+..........Int
+..........Id(j)
+....MethodBody
+......Call
+........Id(test)
+........DecLit(2)
+........DecLit(2)
+........RealLit(2.0)
+........BoolLit(true)
+........BoolLit(false)
+......Return
+........Add
+..........Id(k)
+..........Id(j)

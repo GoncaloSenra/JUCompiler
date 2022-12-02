@@ -14,7 +14,7 @@ typedef struct sym{
 
 
 Sym * createSym(char * name, char * type, char * param, int line, int col, int variable);
-Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux);
+Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux, int flag);
 void printTable(Sym * elem);
 int MethodDecl(Sym * last, Sym * first, struct node * root);
 void Header(struct node * root, Sym * first);
