@@ -2429,7 +2429,8 @@ void yyfree (void * ptr )
     
 int main(int argc, char * argv[])
 {
-    
+    //setlocale(LC_ALL,"Portuguese");
+
     if (argc == 1) {
         aux = 1;
         yacc = 0;

@@ -134,17 +134,12 @@ char* StringCat(char* aux, char* aux2){
 
 
 void Header(struct node * root, Sym * first){
-    /*if(strcmp(first->type,"Bool")==0){
-        first->type = "boolean";
-    }
-
-    if(strcmp(first->type,"StringArray")==0){
-        first->type = "String[]";
-    }*/
-
+    
+    char temp[1024];
+    strcpy(temp, "");
     first->in = createSym("return", changeType(first->type), "", 0, 0, 0); 
     //printf("---%s\n", first->in->type);
-    char * param = "";
+    char * param = NULL;
     node * aux_root = root->child->brother->brother->child;
     Sym * aux_first = first->in;
     int aux_param = 0;
@@ -159,13 +154,6 @@ void Header(struct node * root, Sym * first){
             //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, aux_root->child->brother->value);            
         }
             
-        //printf("----%s : %d\n", aux_root->child->brother->value, aux_param);
-        /*if(strcmp(aux_root->child->var,"Bool")==0){
-            aux_root->child->var = "boolean";
-        }
-        if(strcmp(aux_root->child->var,"StringArray")==0){
-            aux_root->child->var = "String[]";
-        }*/
 
         if (aux_param == 0) {
             Sym * aux;
@@ -176,17 +164,26 @@ void Header(struct node * root, Sym * first){
             aux_first = aux;
         }
         
-        if(strlen(param) == 0){
-            param = StringCat(param, changeType(aux_root->child->var));
+        if(strlen(temp) == 0){
+            //printf("++++%s\n", changeType(aux_root->child->var));
+            strcpy(temp, changeType(aux_root->child->var));
+
+            //printf("----%s\n", temp);
         }else{
-            param = StringCat(param, ",");
-            param = StringCat(param, changeType(aux_root->child->var));
+            //printf("....%s\n", changeType(aux_root->child->var));
+            strcat(temp, ",");
+            strcat(temp, changeType(aux_root->child->var));
+            //printf("-->>%s\n", temp);
         }
         aux_root = aux_root->brother;
         aux_param = 0;
     }
-    first->param = param;
-    //printf("PARAM: %s\n", param);
+    //printf("param: %s\n", temp);
+    char * temp2 = (char*) malloc(strlen(temp));
+    //printf("temp: %s\n", temp);
+    strcpy(temp2, temp);
+    first->param = temp2;
+    //printf("PARAM: %s\n", first->param);
 }
 
 int MethodDecl(Sym * last, Sym * first, struct node * root) {
