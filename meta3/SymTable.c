@@ -312,6 +312,9 @@ Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux, int flag) {
 
 char * tolower_word(char * param){
     char * temp = (char *) malloc(sizeof(char) * strlen(param));
+    if (strcmp(param, "String[]") == 0)
+        return "String[]";
+
     for(int i= 0; i< strlen(param); i++){
         if(param[i] >= 65 && param[i]<=90){
             temp[i] = param[i] + 32;
@@ -420,36 +423,38 @@ void Calls(struct node * root, Sym * first, char * name){
     Sym * first_aux = first;
     int at_least_one = 0;
     char * param = "\0";
-    
-    while(first != NULL){
-        if(strcmp(first->name, root->child->value) == 0 && first->variable == 0){
-
-            char* aux_p = "(";
-            at_least_one =1;
-            
-            type = first->type;
-         
-            param = tolower_word(first->param);
- 
-            aux_p = StringCat(aux_p, param);
-            aux_p = StringCat(aux_p, ")");
-
-            root->child->anotation = tolower_word(aux_p);
-           
-            break;
+    int count = 0;
+    /*
+    struct node * aux1 = root->child->brother;
+    //printf("+++++%s\n", aux1->brother->var);
+    char * test_param = "";
+    while (aux1 != NULL) {
+        
+        if (aux1->anotation){
+            if (strlen(test_param) == 0)
+                test_param = StringCat(test_param, aux1->anotation);
+            else {
+                test_param = StringCat(test_param, ",");
+                test_param = StringCat(test_param, aux1->anotation);
+                
+            }
         }
-        first = first->next;
+        aux1 = aux1->brother;
     }
-    
-    struct node * aux = root->child->brother;
+    test_param = tolower_word(test_param);
+    */
+
+   struct node * aux = root->child->brother;
     //printf("AUX: %s\n", aux->var);
     char * tvar;
     while(aux != NULL){
         
         if((aux->var[0] == 'I') && (aux->var[1] == 'd')){
             tvar = searchType(aux, first_aux, name, tvar, 1);
+            //printf("%s\n", tvar);
             
-            aux->anotation = tvar;
+            //if (strcasecmp(tvar, "String[]") != 0)      // se for strcmp() dá segfault nao sei porquê
+            aux->anotation = tolower_word(tvar);
            
         }
         
@@ -489,12 +494,41 @@ void Calls(struct node * root, Sym * first, char * name){
         aux = aux->brother;
         
     }
+
+
+
+
+    //printf("------%s\n", test_param);
+    while(first != NULL){
+        //printf("------>%s\n", first->param);
+        if(strcmp(first->name, root->child->value) == 0 && first->variable == 0 && strcmp(param_aux, tolower_word(first->param)) == 0){
+            //printf("-->%d\n", count);
+            char* aux_p = "(";
+            at_least_one =1;
+            
+            type = first->type;
+         
+            //if (strcasecmp("String[]", first->param) != 0)  // se for strcmp() dá segfault nao sei porquê
+            param = tolower_word(first->param);
+    
+            //printf("---->%s\n", param);
+            aux_p = StringCat(aux_p, param);
+            aux_p = StringCat(aux_p, ")");
+
+            root->child->anotation = aux_p;
+           
+            break;
+        }
+        first = first->next;
+        count ++;
+    }
+    
+    
     //printf("_____________________\n");
     
     //printf("at_:  %d\n", at_least_one);
     
     if(strcmp(param,param_aux) != 0){
-        //printf("ATENÇAO ATENÇAO MEU PAU ESTA DURAO %s | %s\n", param, param_aux);
         type = "undef";
         root->child->anotation = "undef";
     }
@@ -507,7 +541,7 @@ void Calls(struct node * root, Sym * first, char * name){
     }
     
     if(strcmp(type, "NULL")!= 0){
-        root->anotation = type;
+        root->anotation = tolower_word(type);
     }
     //free
 }
