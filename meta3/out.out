@@ -1,15 +1,58 @@
-===== Class sub_2_pewdiepie Symbol Table =====
+===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
 return		void
 args		String[]	param
+b		boolean
 i		int
 d		double
-b		boolean
 
+2MEMBER: And
+2MEMBER: And
+2MEMBER: And
+2MEMBER: And
+2MEMBER: Or
+2MEMBER: Or
+2MEMBER: Or
+2MEMBER: Or
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+root21 Id(b) boolean
+2MEMBER: Assign
+root Id(i) int
+2MEMBER: Assign
+root Id(i) int
+2MEMBER: Assign
+root Id(i) int
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
+2MEMBER: Assign
+root Id(b) boolean
 Program
-..Id(sub_2_pewdiepie)
+..Id(ClassTeste)
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -20,100 +63,105 @@ Program
 ..........Id(args)
 ....MethodBody
 ......VarDecl
+........Bool
+........Id(b)
+......VarDecl
 ........Int
 ........Id(i)
 ......VarDecl
 ........Double
 ........Id(d)
-......VarDecl
-........Bool
-........Id(b)
-......Assign - int
-........Id(i) - int
-........DecLit(1) - int
-......Assign - double
-........Id(d) - double
-........RealLit(1.1) - double
 ......Assign - boolean
 ........Id(b) - boolean
-........BoolLit(true) - boolean
+........And - boolean
+..........BoolLit(true) - boolean
+..........BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........And - boolean
+..........Not
+............BoolLit(true) - boolean
+..........BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........And - boolean
+..........BoolLit(true) - boolean
+..........Not
+............BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........And - boolean
+..........Not
+............BoolLit(true) - boolean
+..........Not
+............BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Or - boolean
+..........BoolLit(true) - boolean
+..........BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Or - boolean
+..........Not
+............BoolLit(true) - boolean
+..........BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Or - boolean
+..........BoolLit(true) - boolean
+..........Not
+............BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Or - boolean
+..........Not
+............BoolLit(true) - boolean
+..........Not
+............BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Xor
+..........BoolLit(true) - boolean
+..........BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Xor
+..........Not
+............BoolLit(true) - boolean
+..........BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Xor
+..........BoolLit(true) - boolean
+..........Not
+............BoolLit(true) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Xor
+..........Not
+............BoolLit(true) - boolean
+..........Not
+............BoolLit(true) - boolean
 ......Assign - int
 ........Id(i) - int
-........Add - int
-..........Id(i) - int
-..........Id(i) - int
+........Xor
+..........DecLit(10) - int
+..........DecLit(10) - int
 ......Assign - int
 ........Id(i) - int
-........Sub - int
-..........Id(i) - int
-..........Id(i) - int
+........Xor
+..........BoolLit(true) - boolean
+..........BoolLit(true) - boolean
 ......Assign - int
 ........Id(i) - int
-........Add - double
-..........Id(i) - int
-..........Id(d) - double
-......Assign - int
-........Id(i) - int
-........Sub - double
-..........Id(i) - int
-..........Id(d) - double
-......Assign - int
-........Id(i) - int
-........Add - undef
-..........Id(i) - int
-..........Id(b) - boolean
-......Assign - int
-........Id(i) - int
-........Sub - undef
-..........Id(i) - int
-..........Id(b) - boolean
-......Assign - int
-........Id(i) - int
-........Add - undef
-..........Id(i) - int
-..........Id(args) - String[]
-......Assign - int
-........Id(i) - int
-........Sub - undef
-..........Id(i) - int
-..........Id(args) - String[]
-......Assign - double
-........Id(d) - double
-........Add - int
-..........Id(i) - int
-..........Id(i) - int
-......Assign - double
-........Id(d) - double
-........Sub - int
-..........Id(i) - int
-..........Id(i) - int
-......Assign - double
-........Id(d) - double
-........Add - double
-..........Id(i) - int
-..........Id(d) - double
-......Assign - double
-........Id(d) - double
-........Sub - double
-..........Id(i) - int
-..........Id(d) - double
-......Assign - double
-........Id(d) - double
-........Add - undef
-..........Id(i) - int
-..........Id(b) - boolean
-......Assign - double
-........Id(d) - double
-........Sub - undef
-..........Id(i) - int
-..........Id(b) - boolean
-......Assign - double
-........Id(d) - double
-........Add - undef
-..........Id(i) - int
-..........Id(args) - String[]
-......Assign - double
-........Id(d) - double
-........Sub - undef
-..........Id(i) - int
-..........Id(args) - String[]
+........Xor
+..........RealLit(10.0) - double
+..........RealLit(10.0) - double
+......Assign - boolean
+........Id(b) - boolean
+........Id(b) - boolean
+......Assign - boolean
+........Id(b) - boolean
+........Not
+..........Id(b)

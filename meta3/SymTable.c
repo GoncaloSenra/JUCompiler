@@ -548,7 +548,7 @@ void Calls(struct node * root, Sym * first, char * name){
 
 void TwoMember(struct node * root, Sym * first, char * name, int flag){
     //printf("dfghjklç: name %s\n", name);
-    //printf("2MEMBER: %s\n", root->var);
+    printf("2MEMBER: %s\n", root->var);
     char * type, * type2;
     if ((root->child->var[0] == 'I')){
         //printf("INT: %s\n", type);
@@ -556,7 +556,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
         //printf("type: %s\n", type);
         root->child->anotation = tolower_word(type);
 
-        //printf("root %s %s\n", root->child->var, root->child->anotation);
+        printf("root %s %s\n", root->child->var, root->child->anotation);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type)); 
     } else {
         type = root->child->anotation;
@@ -569,7 +569,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
         //printf("type: %s\n", type);
         root->child->brother->anotation = tolower_word(type2);
-        //printf("root21 %s %s\n", root->child->brother->var, root->child->brother->anotation);
+        printf("root21 %s %s\n", root->child->brother->var, root->child->brother->anotation);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type)); 
     } else {
         type2 = root->child->brother->anotation;
@@ -581,20 +581,20 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
             if(flag == false){
                 root->anotation = "undef";
             }else{
-                root->anotation = "bool";
+                root->anotation = "boolean";
             }
         }else{
             if(flag == true){
                 if (strcmp(root->var, "And") == 0 || strcmp(root->var, "Or") == 0) {
-                    if (strcmp(tolower_word(type), "bool") != 0) {
+                    if (strcmp(tolower_word(type), "boolean") != 0) {
                         //ERROR
                     }
                 } else if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0) {
-                    if (strcmp(tolower_word(type), "bool") == 0) {
+                    if (strcmp(tolower_word(type), "boolean") == 0) {
                         //ERROR
                     }
                 }
-                root->anotation = "bool";
+                root->anotation = "boolean";
 
             }else{
                 //printf("BOIOLA!!! %s\n", root->var);
@@ -635,7 +635,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                     */
                 }else {
                     //printf("AQUIIIIIIIIIIIIIII\n");
-                    if (strcmp(tolower_word(type), "bool") != 0) {
+                    if (strcmp(tolower_word(type), "boolean") != 0) {
                         
                         root->anotation = tolower_word(type);
                     } else {
@@ -653,7 +653,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
             //ERROR 
             
         if(flag == true)
-            root->anotation = "bool";
+            root->anotation = "boolean";
         else{
             if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0){ 
                 //printf("BOIOLA!!!\n");
