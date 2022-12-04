@@ -547,6 +547,7 @@ void Calls(struct node * root, Sym * first, char * name){
 }
 
 void TwoMember(struct node * root, Sym * first, char * name, int flag){
+    //printf("dfghjklç: name %s\n", name);
     //printf("2MEMBER: %s\n", root->var);
     char * type, * type2;
     if ((root->child->var[0] == 'I')){
@@ -554,6 +555,8 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
         type = searchType(root, first, name, type, 0);
         //printf("type: %s\n", type);
         root->child->anotation = tolower_word(type);
+
+        //printf("root %s %s\n", root->child->var, root->child->anotation);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type)); 
     } else {
         type = root->child->anotation;
@@ -561,48 +564,114 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
     if ((root->child->brother->var[0] == 'I')){
         //printf("INT: %s\n", type);
-        type2 = searchType(root, first, name, type, 0);
+        type2 = searchType(root, first, name, type, 2);
+        //printf("-----------------------------------> %s\n", type2);
+
         //printf("type: %s\n", type);
         root->child->brother->anotation = tolower_word(type2);
+        //printf("root21 %s %s\n", root->child->brother->var, root->child->brother->anotation);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type)); 
     } else {
         type2 = root->child->brother->anotation;
-    }
+    } 
 
-    if (flag == false) {
-        if (strcmp(root->var, "Assign") == 0) {
-            root->anotation = tolower_word(type);
-        } else if (strcmp(root->var, "ParseArgs") == 0) {
-            if (strcmp(type, "int") == 0){
-                root->anotation = tolower_word(type);
-            } else {
-                //ERROR
+    //printf("types: 1->%s  2->%s var->%s\n", type, type2, root->var);
+    if(type != NULL && type2 != NULL && strcmp(tolower_word(type), tolower_word(type2))==0){
+        if(strcmp(tolower_word(type), "undef") == 0 && strcmp(tolower_word(type2), "undef") == 0){
+            if(flag == false){
+                root->anotation = "undef";
+            }else{
+                root->anotation = "bool";
             }
-        } else {
-            if (strcmp(type, "bool") != 0) {
+        }else{
+            if(flag == true){
+                if (strcmp(root->var, "And") == 0 || strcmp(root->var, "Or") == 0) {
+                    if (strcmp(tolower_word(type), "bool") != 0) {
+                        //ERROR
+                    }
+                } else if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0) {
+                    if (strcmp(tolower_word(type), "bool") == 0) {
+                        //ERROR
+                    }
+                }
+                root->anotation = "bool";
+
+            }else{
+                //printf("BOIOLA!!! %s\n", root->var);
+                //printf("OOOOOOOOOOOOOOO %s\n", root->var);
+                //printf("antes assign: %s\n", root->var);
+                if (strcmp(root->var, "Assign") == 0 ) {
+                    //printf("ASSIGN - anotation: %s\n", type);
+                    root->anotation = tolower_word(type);
+                } else if (strcmp(root->var, "ParseArgs") == 0) {
+                    if (strcmp(tolower_word(type), "int") == 0){
+                        root->anotation = tolower_word(type);
+                    } else {
+                        //ERROR
+                    }
+                    
+                } else if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0){ 
+                    //printf("BOIOLA!!!\n");
+                    if (strcmp(tolower_word(type), "int") == 0) {
+                        //printf("roooto: %s\n", root->var);
+                        root->anotation = "int";
+                    } else if (strcmp(tolower_word(type), "double") == 0) {
+                        //printf("roooto: %s\n", root->var);
+                        root->anotation = "double";    
+                    } else {
+                        root->anotation = "undef";
+                    }
+                    /*
+                    if ((strcmp(tolower_word(type), "double") != 0 && strcmp(tolower_word(type), "int") != 0) || (strcmp(tolower_word(type2), "double") != 0 && strcmp(tolower_word(type2), "int") != 0)) {
+                        printf("NOTA: %s----%s\n", type, type2);
+                        root->anotation = "undef";
+                    } else if (strcmp(tolower_word(type), "double") == 0 || strcmp(tolower_word(type2), "double") == 0) {
+                        //printf("roooto: %s\n", root->var);
+                        root->anotation = "double";
+                    } else {
+                        //printf("roooto: %s\n", root->var);
+                        root->anotation = "int";
+                    }
+                    */
+                }else {
+                    //printf("AQUIIIIIIIIIIIIIII\n");
+                    if (strcmp(tolower_word(type), "bool") != 0) {
+                        
+                        root->anotation = tolower_word(type);
+                    } else {
+                        //ERROR
+                        root->anotation = "undef";
+                    }
+                }
+            }
+        }
+    }else{
+        if(type == NULL)
+            type = "NULL";
+        if(type2 == NULL)
+            type2 = "NULL";
+            //ERROR 
+            
+        if(flag == true)
+            root->anotation = "bool";
+        else{
+            if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0){ 
+                //printf("BOIOLA!!!\n");
+                if ((strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0) || (strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0)) {
+                    //printf("roooto: %s\n", root->var);
+                    root->anotation = "double";    
+                } else {
+                    root->anotation = "undef";
+                }
+            }else if (strcmp(root->var, "Assign") == 0 && strcmp(type, "undef") != 0) {
+                //printf("ASSIGN - anotation: %s\n", type);
                 root->anotation = tolower_word(type);
-            } else {
-                //ERROR
+            }else {
                 root->anotation = "undef";
             }
         }
-    } else {
-        if (strcmp(root->var, "And") == 0 || strcmp(root->var, "Or") == 0) {
-            if (strcmp(type, "bool") != 0) {
-                //ERROR
-            }
-        } else if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0) {
-            if (strcmp(type, "bool") == 0) {
-                //ERROR
-            }
-        }
-        root->anotation = "bool";
+            
     }
-
-    
-
-    
-
 
 }
 
@@ -650,6 +719,11 @@ char * searchType(struct node * root, Sym * first, char * name, char * type, int
                     return type;
 
                 } else if (val == 1 && strcmp(root->value, aux->name) == 0) {
+                    //printf("11111type: %s\n", aux->type);
+                    type = aux->type;
+                    return type;
+                }
+                else if (val == 2 && strcmp(root->child->brother->value, aux->name) == 0) {
                     //printf("11111type: %s\n", aux->type);
                     type = aux->type;
                     return type;
