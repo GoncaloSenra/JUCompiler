@@ -36,3 +36,5 @@ char * searchType(struct node * root, Sym * first, char * name, char * type, int
 int isVAR(struct node * root);
 
 void TwoMember(struct node * root, Sym * first, char * name, int flag);
+
+int checkParameters(char * param, char * auxparam);

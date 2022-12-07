@@ -442,6 +442,37 @@ void checkTypes(struct node * root, Sym * first, char * name) {
     
 }
 
+int checkParameters(char * param, char * auxparam){
+    char * tok;
+    char * tok2;
+
+    char * tok3;
+    char * tok4;
+
+    //printf("<===== %s----%s\n", param, auxparam);
+    tok = strtok_r(param, ",", &tok3);
+    tok2 = strtok_r(auxparam, ",", &tok4);
+    //printf("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU (%s) -----> %s\n", auxparam, param);
+    while(tok != NULL && tok2 != NULL) {
+        //printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+        //if (strcmp(param, "int,int,int,double") == 0)
+        //printf("--->param2:%s    paramuax2:%s \n", tok, tok2);
+        if (!(strcmp(tok, "int") == 0 && strcmp(tok2, "double") == 0) && strcmp(tok, tok2) != 0){
+            //printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            return false;
+        }
+
+        //printf("param2:%s    paramuax2:%s \n", tok, tok2);
+        
+        tok = strtok_r(NULL, ",", &tok3);
+        tok2 = strtok_r(NULL, ",", &tok4);
+    }
+    if (tok == NULL && tok2 == NULL)
+        return true;
+    //printf("ACERTOUUUUUUUUUUUUUU MISERAVELLLLLLLLLLL\n");
+    return false;
+}
+
 void Calls(struct node * root, Sym * first, char * name){
     char *type = "undef";
     char * param_aux = "\0";
@@ -508,26 +539,48 @@ void Calls(struct node * root, Sym * first, char * name){
 
 
 
-    //printf("------%s\n", test_param);
-    while(first != NULL){
-        //printf("------>%s\n", first->param);
-        if(strcmp(first->name, root->child->value) == 0 && first->variable == 0 && strcmp(param_aux, tolower_word(first->param)) == 0){
-            //printf("-->%d\n", count);
-            char* aux_p = "(";
-            at_least_one =1;
-            
-            type = first->type;
-         
-            //if (strcasecmp("String[]", first->param) != 0)  // se for strcmp() dá segfault nao sei porquê
-            param = tolower_word(first->param);
     
-            //printf("---->%s\n", param);
-            aux_p = StringCat(aux_p, param);
-            aux_p = StringCat(aux_p, ")");
+    while(first != NULL){
+        //printf("------>%s %s\n", param_aux,first->param);
+        if(strcmp(first->name, root->child->value) == 0 && first->variable == 0){
+            //printf("-->%d\n", count);
+            //printf("CONAAAAAAAAAAAAAAAAA---%s---%s\n", param_aux, first->param);
+            
+            if (strcmp(param_aux, tolower_word(first->param)) == 0 ) {
 
-            root->child->anotation = aux_p;
-           
-            break;
+                char* aux_p = "(";
+                at_least_one =1;
+                //printf("pilaaaaaaaaaaaaaaaaaa\n");
+                type = first->type;
+            
+                //if (strcasecmp("String[]", first->param) != 0)  // se for strcmp() dá segfault nao sei porquê
+                param = tolower_word(first->param);
+        
+                //printf("---->%s\n", param);
+                aux_p = StringCat(aux_p, param);
+                aux_p = StringCat(aux_p, ")");
+
+                root->child->anotation = aux_p;
+            
+                break;
+                
+            } else if (checkParameters(param_aux, tolower_word(first->param)) == true) {
+                    char* aux_p = "(";
+                    at_least_one =1;
+                    //printf("pilaaaaaaaaaaaaaaaaaa\n");
+                    type = first->type;
+                
+                    //if (strcasecmp("String[]", first->param) != 0)  // se for strcmp() dá segfault nao sei porquê
+                    param = tolower_word(first->param);
+            
+                    //printf("---->%s\n", param);
+                    aux_p = StringCat(aux_p, param);
+                    aux_p = StringCat(aux_p, ")");
+
+                    root->child->anotation = aux_p;
+                
+                    
+            }
         }
         first = first->next;
         count ++;
@@ -537,11 +590,11 @@ void Calls(struct node * root, Sym * first, char * name){
     //printf("_____________________\n");
     
     //printf("at_:  %d\n", at_least_one);
-    
+    /*
     if(strcmp(param,param_aux) != 0){
         type = "undef";
         root->child->anotation = "undef";
-    }
+    }*/
 
     
     if(at_least_one == 0){
