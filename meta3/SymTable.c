@@ -76,7 +76,7 @@ void FieldDecl (struct node * root, Sym * last, Sym * first, int aux) {
                     root->child->var = "String[]";
                 }*/
                 
-                aux2 = createSym(root->child->brother->value, changeType(root->child->var), "", 0, 0, 1);
+                aux2 = createSym(root->child->brother->value, changeType(root->child->var), "", root->child->brother->line, root->child->brother->col, 1);
                 last->next = aux2;
             } else {
                 //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);
@@ -108,7 +108,7 @@ void Vardecl (struct node * root, Sym * func) {
                 if(strcmp(root->child->var,"StringArray")==0){
                     root->child->var = "String[]";
                 }*/
-                aux_func = createSym(root->child->brother->value, changeType(root->child->var), "", 0, 0, 1);
+                aux_func = createSym(root->child->brother->value, changeType(root->child->var), "", root->child->brother->line, root->child->brother->col, 1);
                 //printf("---%s\n", aux_func->type);
                 aux->in = aux_func;
                 aux = aux_func;
@@ -158,7 +158,7 @@ void Header(struct node * root, Sym * first){
         if (aux_param == 0) {
             Sym * aux;
 
-            aux = createSym(aux_root->child->brother->value, changeType(aux_root->child->var),"", 0, 0, 0); //FIXME: Verificar se correto
+            aux = createSym(aux_root->child->brother->value, changeType(aux_root->child->var),"", aux_root->child->brother->line, aux_root->child->brother->col, 0); //FIXME: Verificar se correto
             //printf("----%s\n", aux->type);
             aux_first->in = aux;
             aux_first = aux;
@@ -193,7 +193,7 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
     
     char * func_name = root->child->child->brother->value;
     
-    Sym * newMethod = createSym(func_name, changeType(root->child->child->var), "", 0, 0, 0);
+    Sym * newMethod = createSym(func_name, changeType(root->child->child->var), "", root->child->child->brother->line, root->child->child->brother->col, 0);
     //printf("++++%s\n", newMethod->type);
     last->next = newMethod;
 
@@ -291,14 +291,18 @@ Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux, int flag) {
     while(simTab) {
         //printf("simTab->name: %s | %s\n", simTab->name, name);
         if (aux == 1) {
-            if (simTab->variable == 0){
-                if (strcmp(name, simTab->name) == 0)
+            if (flag == 0){
+                if (strcmp(name, simTab->name) == 0) {
+                    printf("AQUI\n");
                     return simTab;
+                }
             }
         } else {
-            if (simTab->variable == 1) {
-                if (strcmp(name, simTab->name) == 0)
+            if (flag == 1) {
+                if (strcmp(name, simTab->name) == 0) {
+                    printf("ALI\n");
                     return simTab;
+                }
             }
         }
 
@@ -394,12 +398,13 @@ void checkTypes(struct node * root, Sym * first, char * name) {
         checkTypes(root->brother, first, name);
          
     if(TwoMemberOp(root->var)){
-        //printf("1%s\n", root->var); 
+        //printf("1%s = %s -- %s\n", root->var, root->child->var, root->child->brother->var); 
         TwoMember(root, first, name, false);
         
     } else if(Logical(root->var)){
+        //printf("2%s = %s -- %s\n", root->var, root->child->var, root->child->brother->var);  
         TwoMember(root, first, name, true);
-        //printf("2%s\n", root->var);      
+             
         //printf(" ");
     } else if(isVAR(root));                                       
         
@@ -450,6 +455,7 @@ void Calls(struct node * root, Sym * first, char * name){
     while(aux != NULL){
         
         if((aux->var[0] == 'I') && (aux->var[1] == 'd')){
+            
             tvar = searchType(aux, first_aux, name, tvar, 1);
             //printf("%s\n", tvar);
             
@@ -548,15 +554,17 @@ void Calls(struct node * root, Sym * first, char * name){
 
 void TwoMember(struct node * root, Sym * first, char * name, int flag){
     //printf("dfghjklç: name %s\n", name);
-    printf("2MEMBER: %s\n", root->var);
-    char * type, * type2;
+    //printf("2MEMBER: %s\n", root->var);
+    char * type="", * type2="";
     if ((root->child->var[0] == 'I')){
         //printf("INT: %s\n", type);
+        //printf("RIII\n");
         type = searchType(root, first, name, type, 0);
+        //printf("1 %s-----------------------------------> %s\n",root->child->value, type);
         //printf("type: %s\n", type);
         root->child->anotation = tolower_word(type);
 
-        printf("root %s %s\n", root->child->var, root->child->anotation);
+        //printf("root %s %s\n", root->child->var, root->child->anotation);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type)); 
     } else {
         type = root->child->anotation;
@@ -564,12 +572,13 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
     if ((root->child->brother->var[0] == 'I')){
         //printf("INT: %s\n", type);
+        //printf("Fudi-me\n");
         type2 = searchType(root, first, name, type, 2);
-        //printf("-----------------------------------> %s\n", type2);
+        //printf("2 %s-----------------------------------> %s\n",root->child->value,  type2);
 
         //printf("type: %s\n", type);
         root->child->brother->anotation = tolower_word(type2);
-        printf("root21 %s %s\n", root->child->brother->var, root->child->brother->anotation);
+        //printf("root21 %s %s\n", root->child->brother->var, root->child->brother->anotation);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type)); 
     } else {
         type2 = root->child->brother->anotation;
@@ -707,32 +716,40 @@ char * searchType(struct node * root, Sym * first, char * name, char * type, int
         }
          else 
          */
+        
          if (strcmp(name, first->name) == 0){
             Sym * aux = first->in;
             while (aux != NULL) {
                 //printf("first->name: %s\n", aux->name);
                 //printf("cvbnm,.cvbnm,.\n");
-                //printf("aux->name: %s---%s\n", aux->name, root->value);
-                if (val == 0 && strcmp(root->child->value, aux->name) == 0) {
-                    //printf("11111type: %s\n", aux->type);
+                //printf("aux->name: %s---%s\n", aux->name, root->child->value);
+                if (val == 0 && strcmp(root->child->value, aux->name) == 0 && root->child->line > aux->line) {
+                    //printf("11111typeroot: %s\n", root->child->value);
+                    //printf("1%s: %d --- %s: %d\n", root->child->var, root->child->line, aux->name, aux->line);
                     type = aux->type;
                     return type;
 
-                } else if (val == 1 && strcmp(root->value, aux->name) == 0) {
+                } else if (val == 1 && strcmp(root->value, aux->name) == 0 && root->child->line > aux->line) {
                     //printf("11111type: %s\n", aux->type);
-                    type = aux->type;
-                    return type;
-                }
-                else if (val == 2 && strcmp(root->child->brother->value, aux->name) == 0) {
-                    //printf("11111type: %s\n", aux->type);
+                    //printf("2%s: %d --- %s: %d\n", root->child->var, root->child->line, aux->name, aux->line);
                     type = aux->type;
                     return type;
                 }
+                else if (val == 2 && strcmp(root->child->brother->value, aux->name) == 0 && root->child->line > aux->line) {
+                    //printf("11111type: %s\n", aux->type);
+                    //printf("3%s: %d --- %s: %d\n", root->child->var, root->child->line, aux->name, aux->line);
+                    type = aux->type;
+                    return type;
+                }
 
 
-
+               // printf("22222type: %s\n", type);
                 aux = aux->in;
-                //printf("22222type: %s\n", type);
+                if (aux == NULL){
+                    //printf("MUITO UNDEF MANO\n");
+                    return "undef";
+                }
+                
             }
         }
 
