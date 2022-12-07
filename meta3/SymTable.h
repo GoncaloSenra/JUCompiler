@@ -32,7 +32,7 @@ void checkTypes(struct node * root, Sym * first, char * name);
 
 void OneMemberNL(struct node * root, Sym * first, char * name, int flag);
 
-char * searchType(struct node * root, Sym * first, char * name, char * type, int val);
+char * searchType(struct node * root, Sym * first, char * name, char * id, int line, int val);
 
 int isVAR(struct node * root);
 
