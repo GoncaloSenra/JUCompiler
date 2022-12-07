@@ -17,6 +17,8 @@ Sym * createSym(char * name, char * type, char * param, int line, int col, int v
     newSym->next = NULL;
     newSym->in = NULL;
 
+    newSym->auxparam = 0;
+
     return newSym;
 }
 
@@ -158,8 +160,8 @@ void Header(struct node * root, Sym * first){
         if (aux_param == 0) {
             Sym * aux;
 
-            aux = createSym(aux_root->child->brother->value, changeType(aux_root->child->var),"", aux_root->child->brother->line, aux_root->child->brother->col, 0); //FIXME: Verificar se correto
-            //printf("----%s\n", aux->type);
+            aux = createSym(aux_root->child->brother->value, changeType(aux_root->child->var),"", aux_root->child->brother->line, aux_root->child->brother->col, 1); //FIXME: Verificar se correto
+            aux->auxparam = 1;
             aux_first->in = aux;
             aux_first = aux;
         }
@@ -272,7 +274,7 @@ void printTable(Sym * first) {
                     printf("%s\t\t%s\n", method->name, temp_type);
                     contador = 1;
                 } else {
-                    if (method->variable == 0) {
+                    if (method->auxparam == 1) {
                         printf("%s\t\t%s\tparam\n", method->name, temp_type);
                     } else {
                         printf("%s\t\t%s\n", method->name, temp_type);
@@ -289,18 +291,18 @@ void printTable(Sym * first) {
 Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux, int flag) {
 
     while(simTab) {
-        //printf("simTab->name: %s | %s\n", simTab->name, name);
+        //printf("simTab->name: %s | %s - aux: %d - var: %d - flag: %d\n", simTab->name, name, aux, simTab->variable, flag);
         if (aux == 1) {
-            if (flag == 0){
-                if (strcmp(name, simTab->name) == 0) {
-                    printf("AQUI\n");
+            if (simTab->variable == 1){
+                if (strcmp(simTab->name, name) == 0) {
+                    //printf("AQUI\n");
                     return simTab;
                 }
             }
         } else {
-            if (flag == 1) {
+            if (simTab->variable == 0) {
                 if (strcmp(name, simTab->name) == 0) {
-                    printf("ALI\n");
+                    //printf("ALI\n");
                     return simTab;
                 }
             }
@@ -354,9 +356,9 @@ int OneLogical(char* type){
         return true;
     else if(strcmp(type, "While") == 0)
         return true;
-    /*    
+        
     else if(strcmp(type, "If") == 0)
-        return true;*/
+        return true;
     else 
         return false;
 }
@@ -368,6 +370,7 @@ int NotLogical(char* type){
         return true;
     else if(strcmp(type, "Print") == 0)
         return true;
+        
     else if(strcmp(type, "Return") == 0)
         return true;
     else if(strcmp(type, "Length") == 0)

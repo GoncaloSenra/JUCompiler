@@ -1,363 +1,113 @@
-===== Class Call_Me_Maybe Symbol Table =====
-main	(String[])	void
-f	()	void
-f	(boolean)	int
-f	(double)	boolean
-f	(int)	double
-f	(String[])	void
-f	(int,double)	boolean
-f	(int,double,boolean)	boolean
-f	(int,double,boolean,int)	boolean
-f	(double,int,double,int)	int
-f	(int,double,int,double)	double
+===== Class errors Symbol Table =====
+a		int
+b		int
+c		int
+underscore	(int)	int
+factorial	(int,int)	void
+factorial	(int,int,int)	void
 
-===== Method main(String[]) Symbol Table =====
-return		void
-args		String[]	param
-i		int
-d		double
-b		boolean
-
-===== Method f() Symbol Table =====
-return		void
-
-===== Method f(boolean) Symbol Table =====
+===== Method underscore(int) Symbol Table =====
 return		int
-a		boolean	param
+ola		int	param
 
-===== Method f(double) Symbol Table =====
-return		boolean
-a		double	param
-
-===== Method f(int) Symbol Table =====
-return		double
-a		int	param
-
-===== Method f(String[]) Symbol Table =====
+===== Method factorial(int,int) Symbol Table =====
 return		void
-a		String[]	param
+i		int	param
+argument		int
+a		int
 
-===== Method f(int,double) Symbol Table =====
-return		boolean
-a		int	param
-b		double	param
-
-===== Method f(int,double,boolean) Symbol Table =====
-return		boolean
-a		int	param
-b		double	param
-c		boolean	param
-
-===== Method f(int,double,boolean,int) Symbol Table =====
-return		boolean
-a		int	param
-b		double	param
-c		boolean	param
-d		int	param
-
-===== Method f(double,int,double,int) Symbol Table =====
-return		int
-a		double	param
-b		int	param
-c		double	param
-d		int	param
-
-===== Method f(int,double,int,double) Symbol Table =====
-return		double
-a		int	param
-b		double	param
-c		int	param
-d		double	param
+===== Method factorial(int,int,int) Symbol Table =====
+return		void
+i		int	param
 
 Program
-..Id(Call_Me_Maybe)
+..Id(errors)
+..FieldDecl
+....Int
+....Id(a)
+..FieldDecl
+....Int
+....Id(b)
+..FieldDecl
+....Int
+....Id(c)
+..FieldDecl
+....Int
+....Id(c)
+..FieldDecl
+....Int
+....Id(a)
+..FieldDecl
+....Int
+....Id(b)
+..FieldDecl
+....Double
+....Id(_)
+..MethodDecl
+....MethodHeader
+......Int
+......Id(underscore)
+......MethodParams
+........ParamDecl
+..........Int
+..........Id(ola)
+....MethodBody
+......If
+........Id(ola) - int
+........Return
+..........Id(ola) - int
+........Return
+..........Id(ola) - int
+......VarDecl
+........Int
+........Id(ola)
 ..MethodDecl
 ....MethodHeader
 ......Void
-......Id(main)
+......Id(factorial)
 ......MethodParams
 ........ParamDecl
-..........StringArray
-..........Id(args)
+..........Int
+..........Id(i)
+........ParamDecl
+..........Int
+..........Id(i)
 ....MethodBody
+......VarDecl
+........Int
+........Id(argument)
 ......VarDecl
 ........Int
 ........Id(i)
 ......VarDecl
-........Double
-........Id(d)
+........Int
+........Id(argument)
 ......VarDecl
-........Bool
-........Id(b)
-......Call - void
-........Id(f) - ()
-......Call - int
-........Id(f) - (boolean)
-........BoolLit(true) - boolean
-......Call - boolean
-........Id(f) - (double)
-........RealLit(0e0) - double
-......Call - double
-........Id(f) - (int)
-........DecLit(123) - int
-......Call - void
-........Id(f) - (String[])
-........Id(args) - String[]
-......Call - double
-........Id(f) - (int)
-........Id(i) - int
-........Id(d) - double
-......Call - double
-........Id(f) - (int)
-........Id(i) - int
-........Id(d) - double
-........Id(b) - boolean
-......Call - double
-........Id(f) - (int)
-........Id(i) - int
-........Id(d) - double
-........Id(b) - boolean
-........Id(i) - int
-......Call - boolean
-........Id(f) - (double)
-........RealLit(0.) - double
-........DecLit(1) - int
-........RealLit(2.) - double
-........DecLit(3) - int
-......Call - double
-........Id(f) - (int)
-........DecLit(0) - int
-........RealLit(.1) - double
-........DecLit(2) - int
-........RealLit(.3) - double
-......Call - double
-........Id(f) - (int)
-........Id(i) - int
-........Id(i) - int
-......Call - double
-........Id(f) - (int)
-........Id(i) - int
-........Id(i) - int
-........Id(b) - boolean
-......Call - double
-........Id(f) - (int)
-........Id(i) - int
-........Id(i) - int
-........Id(b) - boolean
-........Id(i) - int
-......Call - boolean
-........Id(f) - (double)
-........RealLit(0.) - double
-........DecLit(1) - int
-........DecLit(2) - int
-........DecLit(3) - int
-......Call - double
-........Id(f) - (int)
-........DecLit(0) - int
-........DecLit(1) - int
-........RealLit(2.) - double
-........DecLit(3) - int
-......Call - double
-........Id(f) - (int)
-........DecLit(0) - int
-........RealLit(.1) - double
-........DecLit(2) - int
-........DecLit(3) - int
-......Call - double
-........Id(f) - (int)
-........DecLit(0) - int
-........DecLit(1) - int
-........DecLit(2) - int
-........RealLit(.3) - double
-......Call - int
-........Id(f) - (boolean)
-........Call - boolean
-..........Id(f) - (double)
-..........Call - double
-............Id(f) - (int)
-............Call - int
-..............Id(f) - (boolean)
-..............Call - boolean
-................Id(f) - (double)
-................Call - double
-..................Id(f) - (int)
-..................DecLit(0) - int
-......Call - double
-........Id(f) - (int)
-........Call - int
-..........Id(f) - (boolean)
-..........BoolLit(true) - boolean
-........Call - double
-..........Id(f) - (int)
-..........DecLit(0) - int
-........Call - boolean
-..........Id(f) - (double)
-..........RealLit(0.0) - double
-......Call - double
-........Id(f) - (int)
-........Call - int
-..........Id(f) - (boolean)
-..........BoolLit(true) - boolean
-........Call - int
-..........Id(f) - (boolean)
-..........BoolLit(false) - boolean
-........Call - boolean
-..........Id(f) - (double)
-..........RealLit(0.0) - double
-......Print
-........Call - int
-..........Id(f) - (boolean)
-..........Call - boolean
-............Id(f) - (double)
-............Call - double
-..............Id(f) - (int)
-..............Call - int
-................Id(f) - (boolean)
-................Call - boolean
-..................Id(f) - (double)
-..................Call - double
-....................Id(f) - (int)
-....................DecLit(0) - int
-......Print
-........Call - double
-..........Id(f) - (int)
-..........Call - int
-............Id(f) - (boolean)
-............BoolLit(true) - boolean
-..........Call - double
-............Id(f) - (int)
-............DecLit(0) - int
-..........Call - boolean
-............Id(f) - (double)
-............RealLit(0.0) - double
-......Print
-........Call - boolean
-..........Id(f) - (double)
-..........RealLit(0e0) - double
-......Print
-........Call - double
-..........Id(f) - (int)
-..........DecLit(123) - int
+........Int
+........Id(a)
+......VarDecl
+........Double
+........Id(i)
+......VarDecl
+........Double
+........Id(_)
 ..MethodDecl
 ....MethodHeader
 ......Void
-......Id(f)
-......MethodParams
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Int
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Bool
-..........Id(a)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Bool
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Double
-..........Id(a)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Double
-......Id(f)
+......Id(factorial)
 ......MethodParams
 ........ParamDecl
 ..........Int
-..........Id(a)
+..........Id(i)
+........ParamDecl
+..........Int
+..........Id(i)
+........ParamDecl
+..........Int
+..........Id(_)
 ....MethodBody
-..MethodDecl
-....MethodHeader
-......Void
-......Id(f)
-......MethodParams
-........ParamDecl
-..........StringArray
-..........Id(a)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Bool
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(a)
-........ParamDecl
-..........Double
-..........Id(b)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Bool
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(a)
-........ParamDecl
-..........Double
-..........Id(b)
-........ParamDecl
-..........Bool
-..........Id(c)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Bool
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(a)
-........ParamDecl
-..........Double
-..........Id(b)
-........ParamDecl
-..........Bool
-..........Id(c)
-........ParamDecl
-..........Int
-..........Id(d)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Int
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Double
-..........Id(a)
-........ParamDecl
-..........Int
-..........Id(b)
-........ParamDecl
-..........Double
-..........Id(c)
-........ParamDecl
-..........Int
-..........Id(d)
-....MethodBody
-..MethodDecl
-....MethodHeader
-......Double
-......Id(f)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(a)
-........ParamDecl
-..........Double
-..........Id(b)
-........ParamDecl
-..........Int
-..........Id(c)
-........ParamDecl
-..........Double
-..........Id(d)
-....MethodBody
+......Assign - int
+........Id(i) - int
+........Add - int
+..........Id(i) - int
+..........Id(i) - int

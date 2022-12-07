@@ -8,6 +8,7 @@ typedef struct sym{
     struct sym * next;
     struct sym * in;
     int variable;
+    int auxparam;
     int line;
     int col;
 }Sym;
