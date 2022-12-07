@@ -1,113 +1,165 @@
-===== Class errors Symbol Table =====
-a		int
-b		int
-c		int
-underscore	(int)	int
-factorial	(int,int)	void
-factorial	(int,int,int)	void
+===== Class ClassTeste Symbol Table =====
+main	(String[])	void
 
-===== Method underscore(int) Symbol Table =====
-return		int
-ola		int	param
-
-===== Method factorial(int,int) Symbol Table =====
+===== Method main(String[]) Symbol Table =====
 return		void
-i		int	param
-argument		int
+args		String[]	param
 a		int
-
-===== Method factorial(int,int,int) Symbol Table =====
-return		void
-i		int	param
 
 Program
-..Id(errors)
-..FieldDecl
-....Int
-....Id(a)
-..FieldDecl
-....Int
-....Id(b)
-..FieldDecl
-....Int
-....Id(c)
-..FieldDecl
-....Int
-....Id(c)
-..FieldDecl
-....Int
-....Id(a)
-..FieldDecl
-....Int
-....Id(b)
-..FieldDecl
-....Double
-....Id(_)
-..MethodDecl
-....MethodHeader
-......Int
-......Id(underscore)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(ola)
-....MethodBody
-......If
-........Id(ola) - int
-........Return
-..........Id(ola) - int
-........Return
-..........Id(ola) - int
-......VarDecl
-........Int
-........Id(ola)
+..Id(ClassTeste)
 ..MethodDecl
 ....MethodHeader
 ......Void
-......Id(factorial)
+......Id(main)
 ......MethodParams
 ........ParamDecl
-..........Int
-..........Id(i)
-........ParamDecl
-..........Int
-..........Id(i)
+..........StringArray
+..........Id(args)
 ....MethodBody
-......VarDecl
-........Int
-........Id(argument)
-......VarDecl
-........Int
-........Id(i)
-......VarDecl
-........Int
-........Id(argument)
 ......VarDecl
 ........Int
 ........Id(a)
-......VarDecl
-........Double
-........Id(i)
-......VarDecl
-........Double
-........Id(_)
-..MethodDecl
-....MethodHeader
-......Void
-......Id(factorial)
-......MethodParams
-........ParamDecl
-..........Int
-..........Id(i)
-........ParamDecl
-..........Int
-..........Id(i)
-........ParamDecl
-..........Int
-..........Id(_)
-....MethodBody
 ......Assign - int
-........Id(i) - int
-........Add - int
-..........Id(i) - int
-..........Id(i) - int
+........Id(a) - int
+........DecLit(10_0000_00000) - int
+......Assign - int
+........Id(a) - int
+........DecLit(100) - int
+......Assign - int
+........Id(a) - int
+........DecLit(100000) - int
+......Assign - int
+........Id(a) - int
+........DecLit(2147483647) - int
+......Assign - int
+........Id(a) - int
+........DecLit(2147483648) - int
+......Assign - int
+........Id(a) - int
+........DecLit(2147483649) - int
+......Assign - int
+........Id(a) - int
+........DecLit(12147483649) - int
+......Assign - int
+........Id(a) - int
+........DecLit(1___0___0) - int
+......Assign - int
+........Id(a) - int
+........DecLit(10___00____00) - int
+......Assign - int
+........Id(a) - int
+........DecLit(214__748_3647) - int
+......Assign - int
+........Id(a) - int
+........DecLit(214__748_3648) - int
+......Assign - int
+........Id(a) - int
+........DecLit(214__748_3649) - int
+......Assign - int
+........Id(a) - int
+........DecLit(1214748364__9) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(10_0000_00000) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(100) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(100000) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(2147483647) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(2147483648) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(2147483649) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(12147483649) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(1___0___0) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(10___00____00) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(214__748_3647) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(214__748_3648) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(214__748_3649) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(1214748364__9) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(10_0000_00000) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(100) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(100000) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(2147483647) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(2147483648) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(2147483649) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(12147483649) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(1___0___0) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(10___00____00) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(214__748_3647) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(214__748_3648) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(214__748_3649) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(1214748364__9) - int

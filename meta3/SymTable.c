@@ -370,7 +370,6 @@ int NotLogical(char* type){
         return true;
     else if(strcmp(type, "Print") == 0)
         return true;
-        
     else if(strcmp(type, "Return") == 0)
         return true;
     else if(strcmp(type, "Length") == 0)
@@ -788,8 +787,19 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
         }else{
             if(flag == false){
                 if (strcmp(root->var, "Length") == 0) {
-                    root->anotation = tolower_word(type);
-
+                    if (strcmp(root->child->anotation, "int") != 0){
+                        root->anotation = "int";
+                    }else {
+                        //ERROR
+                        root->anotation = "undef";
+                    }
+                }else if (strcmp(root->var, "Plus") == 0 || strcmp(root->var, "Minus") == 0) {
+                    if (strcmp(root->child->anotation, "int") == 0 || strcmp(root->child->anotation, "double") == 0){
+                        root->anotation = tolower_word(type);
+                    } else {
+                        //ERROR
+                        root->anotation = "undef";
+                    }
                 }
             } else{
                 if (strcmp(root->var, "Not") == 0) {
