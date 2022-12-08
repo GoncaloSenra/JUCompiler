@@ -13,6 +13,8 @@ struct node * createNode(char * value, char * var, int line, int col) {
     aux2->line = line;
     aux2->col = col;
 
+    aux2->valid = 1;
+
     return aux2;
 
 }

@@ -17,6 +17,8 @@ typedef struct node{
     struct node * child;
     int line;
     int col;
+
+    int valid;
 }node;
 
 struct node * createNode(char * value, char * var, int line, int col);

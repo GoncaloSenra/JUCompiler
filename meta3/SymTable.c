@@ -2,6 +2,7 @@
 
 Sym * table;
 int test = 0;
+int funcline = 0;
 
 Sym * createSym(char * name, char * type, char * param, int line, int col, int variable) {
     Sym * newSym = (Sym *) malloc(sizeof(Sym));
@@ -144,6 +145,7 @@ void Header(struct node * root, Sym * first){
     char * param = NULL;
     node * aux_root = root->child->brother->brother->child;
     Sym * aux_first = first->in;
+    Sym * aux2;
     int aux_param = 0;
     
     while(aux_root != NULL && aux_root->child != NULL){
@@ -151,7 +153,8 @@ void Header(struct node * root, Sym * first){
             //printf("error underscore\n");
             aux_param = 1;
         }
-        else if (CheckIfAlreadyDefined(first->in, aux_root->child->brother->value, 1, 1)!= NULL){
+        else if ((aux2 = CheckIfAlreadyDefined(first->in, aux_root->child->brother->value, 1, 1)) != NULL){
+            //printf("----->%s\n",aux2->param);
             aux_param = 1;
             //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, aux_root->child->brother->value);            
         }
@@ -167,15 +170,14 @@ void Header(struct node * root, Sym * first){
         }
         
         if(strlen(temp) == 0){
-            //printf("++++%s\n", changeType(aux_root->child->var));
+
             strcpy(temp, changeType(aux_root->child->var));
 
-            //printf("----%s\n", temp);
         }else{
-            //printf("....%s\n", changeType(aux_root->child->var));
+
             strcat(temp, ",");
             strcat(temp, changeType(aux_root->child->var));
-            //printf("-->>%s\n", temp);
+
         }
         aux_root = aux_root->brother;
         aux_param = 0;
@@ -184,6 +186,9 @@ void Header(struct node * root, Sym * first){
     char * temp2 = (char*) malloc(strlen(temp));
     //printf("temp: %s\n", temp);
     strcpy(temp2, temp);
+
+
+    //if (strcmp(tolower_word(temp2), aux2.) )
     first->param = temp2;
     //printf("PARAM: %s\n", first->param);
 }
@@ -204,15 +209,38 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
     //printf("Header\n");
     Header(root->child, newMethod);
 
-    Sym * aux;
-    if ((aux = CheckIfAlreadyDefined(first, func_name, 1, 1)) != NULL && strcmp(aux->param, newMethod->param) == 0) {
-        //printf("AUX_PARAM: %s\n", aux->param);
-        //printf("newmehod: %s\n", newMethod->param);
+    /*
+    Sym * aux= CheckIfAlreadyDefined(last, func_name, 1, 1);
+    if(aux ==NULL){
+        printf("Sou nulo!!\n");
+    }
+
+
+    if (aux != NULL){
+    printf("AUX_PARAM: %s\n", aux->in->param);
+    printf("newmehod: %s\n-------------------------------\n", newMethod->param);
+
+    }*/
+
+    while (first) {
+        if (first->variable == 0) {
+            if (strcmp (first->name, func_name) == 0 && strcmp(newMethod->param, first->param) == 0 && first->next != NULL){
+                root->child->child->brother->valid = 0;
+                //printf("ENTREI AHAHAHAHHHAHAHA %s -- %s | %s -- %s |\n", first->name, func_name, newMethod->param, first->param);
+                return 1;
+            }
+        }
+        first = first->next;
+    }
+
+    /*if ((aux ) != NULL && strcmp(aux->param, newMethod->param) == 0) {
+        printf("AUX_PARAM1: %s\n", aux->param);
+        printf("newmehod1: %s\n", newMethod->param);
         //printf("Deus %d\n", flag);
         //ERROR : printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, func_name);
         //newMethod = NULL;
         return 1;
-    }
+    }*/
     //printf("here %d\n", flag);
     //printf("VarDecl\n");
     Vardecl(root->child->brother->child, last->next);
@@ -347,6 +375,10 @@ int TwoMemberOp(char* type){
         return true;
     else if(strcmp(type, "ParseArgs")==0)
         return true;
+    else if(strcmp(type, "Lshift")==0)
+        return true;
+    else if(strcmp(type, "Rshift")==0)
+        return true;
     else 
         return false;
 }
@@ -404,11 +436,17 @@ int Logical(char* type){
 
 
 void checkTypes(struct node * root, Sym * first, char * name) {
+    
     //printf("CHECK TYPES %s\n", root->var);
     if (strcmp("MethodHeader", root->var) == 0){ 
         //printf("MethodHeader: %s\n", root->child->brother->value);
         name = root->child->brother->value;
+        funcline = root->line;
+        if (root->child->brother->valid == 0)
+            return;
     }
+
+
     if (root->child != NULL)
         checkTypes(root->child, first, name);
     if (root->brother != NULL)
@@ -429,15 +467,18 @@ void checkTypes(struct node * root, Sym * first, char * name) {
         //printf("3%s:%s\n", root->child->var, root->child->value);
         //printf("NAME2: %s\n", methodName);
         //printf("NAME3: %s\n", name);
+        //printf("NL============> %s\n", root->var);
         OneMemberNL(root, first, name, 0);
     } else if(OneLogical(root->var)){
         //printf("3%s:%s\n", root->child->var, root->child->value);
         //printf("NAME2: %s\n", methodName);
         //printf("NAME3: %s\n", name);
+        //printf("OL============> %s\n", root->var);
         OneMemberNL(root, first, name, 1);
     }
     else if(strcmp(root->var, "Call") == 0){
         //printf("CALL:  %s\n", root->var);
+        
         Calls(root, first, name);
         //printf(" ");
     }
@@ -468,10 +509,16 @@ int checkParameters(char * param, char * auxparam){
         
         tok = strtok_r(NULL, ",", &tok3);
         tok2 = strtok_r(NULL, ",", &tok4);
+
     }
-    if (tok == NULL && tok2 == NULL)
+
+
+    //printf("param3:%s    paramuax3:%s \n", tok, tok2);
+    if (tok == NULL && tok2 == NULL){
+        //printf("ACERTOUUUUUUUUUUUUUU MISERAVELLLLLLLLLLL: %s------%s\n", param , auxparam);
         return true;
-    //printf("ACERTOUUUUUUUUUUUUUU MISERAVELLLLLLLLLLL\n");
+        
+    }
     return false;
 }
 
@@ -493,11 +540,12 @@ void Calls(struct node * root, Sym * first, char * name){
         if((aux->var[0] == 'I') && (aux->var[1] == 'd')){
             //printf("pila3\n");
             tvar = searchType(aux, first_aux, name, aux->value, aux->line, 1);
-            //printf("pila3.5\n");
-            //printf("%s\n", tvar);
+            printf("pila3.5\n");
+            printf("%s\n", tvar);
             
             //if (strcasecmp(tvar, "String[]") != 0)      // se for strcmp() dá segfault nao sei porquê
             aux->anotation = tolower_word(tvar);
+            //printf("tvar: %s  root: %s\n",aux->anotation, aux->value);
             //printf("pila4\n");
         }
         
@@ -533,22 +581,22 @@ void Calls(struct node * root, Sym * first, char * name){
                 param_aux = StringCat(param_aux, aux->anotation);
                 
             }
+            
         }
+        //printf("parammm: %s\n",param_aux);
         aux = aux->brother;
         
     }
-
-
-
-
     
     while(first != NULL){
         //printf("------>%s %s\n", param_aux,first->param);
-        if(strcmp(first->name, root->child->value) == 0 && first->variable == 0){
+        if(strcmp(first->name, root->child->value) == 0 && first->variable == 0 ){
             //printf("-->%d\n", count);
             //printf("CONAAAAAAAAAAAAAAAAA---%s---%s\n", param_aux, first->param);
             
-            if (strcmp(param_aux, tolower_word(first->param)) == 0 ) {
+
+           // printf("-->param: %s\n",param_aux);
+            if (strcmp(param_aux, tolower_word(first->param)) == 0) {
 
                 char* aux_p = "(";
                 at_least_one =1;
@@ -563,11 +611,17 @@ void Calls(struct node * root, Sym * first, char * name){
                 aux_p = StringCat(aux_p, ")");
 
                 root->child->anotation = aux_p;
-            
+                count = 0;
+                //printf("PILA PILA PILA : %s +++++ %s \n", aux_p, tolower_word(first->param));
                 break;
                 
-            } else if (checkParameters(param_aux, tolower_word(first->param)) == true) {
-                    char* aux_p = "(";
+            } else { 
+                char* temp = strdup(param_aux); 
+                char* temp2 = strdup(tolower_word(first->param));      
+                //strcpy(temp, param_aux);
+                //strcpy(temp2, tolower_word(first->param));
+                if (checkParameters(temp, temp2) == true) {
+                    char* aux_p2 = "(";
                     at_least_one =1;
                     //printf("pilaaaaaaaaaaaaaaaaaa\n");
                     type = first->type;
@@ -576,16 +630,22 @@ void Calls(struct node * root, Sym * first, char * name){
                     param = tolower_word(first->param);
             
                     //printf("---->%s\n", param);
-                    aux_p = StringCat(aux_p, param);
-                    aux_p = StringCat(aux_p, ")");
+                    aux_p2 = StringCat(aux_p2, param);
+                    aux_p2 = StringCat(aux_p2, ")");
 
-                    root->child->anotation = aux_p;
-                
-                    
+                    if (count == 0)
+                        root->child->anotation = aux_p2;
+                    else {
+                        //ERROR
+                        //root->anotation = "undef";
+                        root->child->anotation = "undef";
+                    }
+                    //printf("ATENCAO ATENCAO : %s +++++ %s \n", aux_p2, tolower_word(first->param));
+                    count ++;
+                }   
             }
         }
         first = first->next;
-        count ++;
     }
     
     
@@ -604,9 +664,16 @@ void Calls(struct node * root, Sym * first, char * name){
         root->child->anotation = "undef";
         type = "undef";
     }
+
+    
     
     if(strcmp(type, "NULL")!= 0){
-        root->anotation = tolower_word(type);
+        if(count > 1 ){  //HERERERERE
+            root->anotation = "undef";
+        }else{
+            root->anotation = tolower_word(type);
+        }
+        
     }
     //free
 }
@@ -618,7 +685,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
     if ((root->child->var[0] == 'I')){
         //printf("INT: %s\n", type);
         //printf("RIII\n");
-        type = searchType(root, first, name, root->child->value, root->child->line, 0);
+        type = searchType(root, first, name, root->child->value, root->child->line, 1);
         //printf("1 %s-----------------------------------> %s\n",root->child->value, type);
         //printf("type: %s\n", type);
         root->child->anotation = tolower_word(type);
@@ -632,7 +699,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
     if ((root->child->brother->var[0] == 'I')){
         //printf("INT: %s\n", type);
         //printf("Fudi-me\n");
-        type2 = searchType(root, first, name, root->child->brother->value, root->child->brother->line,2);
+        type2 = searchType(root, first, name, root->child->brother->value, root->child->brother->line,1);
         //printf("2 %s-----------------------------------> %s\n",root->child->value,  type2);
 
         //printf("type: %s\n", type);
@@ -645,7 +712,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
     //printf("types: 1->%s  2->%s var->%s\n", type, type2, root->var);
     if(type != NULL && type2 != NULL && strcmp(tolower_word(type), tolower_word(type2))==0){
-        if(strcmp(tolower_word(type), "undef") == 0 && strcmp(tolower_word(type2), "undef") == 0){
+        if(strcmp(tolower_word(type), "undef") == 0 && strcmp(tolower_word(type2), "undef") == 0 && strcmp(root->var, "ParseArgs") != 0){
             if(flag == false){
                 root->anotation = "undef";
             }else{
@@ -661,7 +728,8 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                     }
                 } else if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0) {
                     if (strcmp(tolower_word(type), "boolean") == 0) {
-                        //ERROR
+                        //ERROR ???
+                        root->anotation = "boolean";
                     }else {
                         root->anotation = "boolean";
                     }
@@ -684,7 +752,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                 if (strcmp(root->var, "Assign") == 0 ) {
                     //printf("ASSIGN - anotation: %s\n", type);
                     root->anotation = tolower_word(type);
-                } else if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0 || strcmp(root->var, "Div")){ 
+                } else if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0 || strcmp(root->var, "Div") == 0 || strcmp(root->var, "Mul") == 0 || strcmp(root->var, "Mod") == 0){ 
                     //printf("BOIOLA!!!\n");
                     if (strcmp(tolower_word(type), "int") == 0) {
                         //printf("roooto: %s\n", root->var);
@@ -696,7 +764,18 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                         root->anotation = "undef";
                     }
                     
-                }else {
+                } else if (strcmp(root->var, "Lshift") == 0 || strcmp(root->var, "Rshift") == 0) {
+                    //printf("ASSIGN - anotation: %s\n", type);
+                    if (strcmp(tolower_word(type), "int") == 0)
+                        root->anotation = tolower_word(type);
+                    else {
+                        root->anotation = "undef";
+                        //ERROR
+                    }
+                } else if (strcmp(root->var, "ParseArgs") == 0) {
+                    //ERROR
+                    root->anotation = "int";
+                } else {
                     //printf("AQUIIIIIIIIIIIIIII\n");
                     if (strcmp(tolower_word(type), "boolean") != 0) {
                         
@@ -718,7 +797,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
         if(flag == true)
             root->anotation = "boolean";
         else{
-            if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0){ 
+            if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0 || strcmp(root->var, "Div") == 0 || strcmp(root->var, "Mul") == 0 || strcmp(root->var, "Mod") == 0){ 
                 //printf("BOIOLA!!!\n");
                 if ((strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0) || (strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0)) {
                     //printf("roooto: %s\n", root->var);
@@ -733,7 +812,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                     if (strcmp(tolower_word(type), "String[]") == 0 && strcmp(tolower_word(type2), "int") == 0){
                         root->anotation = "int";
                     } else {
-                        root->anotation = "undef";
+                        root->anotation = "int";
                         //ERROR
                     }
                     
@@ -754,7 +833,7 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
         type = "NULL";
     } else if ((root->child->var[0] == 'I')){
         //printf("INT: %s\n", type);
-        type = searchType(root, first, name, root->child->value, root->child->line,0);
+        type = searchType(root, first, name, root->child->value, root->child->line,1);
         //printf("type: %s\n", type);
         root->child->anotation = tolower_word(type);
         //sprintf(root->child->var, "%s - %s", root->child->var, tolower_word(type));      
@@ -767,7 +846,16 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
     }
     
     if(type != NULL){
-        if(strcmp(tolower_word(type),"undef") == 0){
+        if (strcmp(root->var, "Length") == 0) {
+            if (strcmp(root->child->anotation, "int") != 0){
+                root->anotation = "int";
+            }else {
+                //ERROR
+                root->anotation = "int";
+            }
+        }else if (strcmp(root->var, "Return") == 0){
+            return;
+        }else if(strcmp(tolower_word(type),"undef") == 0 && strcmp(root->var,"Print") != 0){
             if(flag == false){
                 root->anotation = "undef";
             }else{
@@ -775,14 +863,7 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
             }
         }else{
             if(flag == false){
-                if (strcmp(root->var, "Length") == 0) {
-                    if (strcmp(root->child->anotation, "int") != 0){
-                        root->anotation = "int";
-                    }else {
-                        //ERROR
-                        root->anotation = "undef";
-                    }
-                }else if (strcmp(root->var, "Plus") == 0 || strcmp(root->var, "Minus") == 0 || strcmp(root->var, "Div")==0) {
+                if (strcmp(root->var, "Plus") == 0 || strcmp(root->var, "Minus") == 0) {
                     
                     if (strcmp(root->child->anotation, "int") == 0 || strcmp(root->child->anotation, "double") == 0){
                         root->anotation = tolower_word(type);
@@ -796,7 +877,7 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
                     if (strcmp(root->child->anotation, "boolean") == 0){
                         root->anotation = "boolean";
                     } else {
-                        root->anotation = "undef";
+                        root->anotation = "boolean";
                         //ERRO
                     }
                 }
@@ -807,7 +888,7 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
 }
 
 char * searchType(struct node * root, Sym * first, char * name, char * id, int line, int val) {
-    //printf("searchType----%s:::::%s\n", name, root->var);
+    //printf("----%s:::::%s\n", name, root->var);
     char * type = "";
     //printf("----->%s\n", id);
     while (first != NULL) {
@@ -819,42 +900,22 @@ char * searchType(struct node * root, Sym * first, char * name, char * id, int l
          */
         if (strcmp(id, first->name) == 0) {
             type = first->type;
-            return type;
+            
         }
-
-        if (strcmp(name, first->name) == 0){
+        //printf("OOOOO%s: %d -- %d\n", name, funcline, first->line);
+        if (strcmp(name, first->name) == 0 && first->line == funcline){
 
             Sym * aux = first->in;
+            printf("aux: %s\n", aux->name);
             while (aux != NULL) {
                 //printf("first->name: %s\n", aux->name);
                 //printf("cvbnm,.cvbnm,.\n");
                 //printf("aux->name: %s---%s\n", aux->name, root->child->value);
-                
+                printf("-------> %s : %s\n", id , aux->name);
                 if (strcmp(id, aux->name) == 0 && line > aux->line) {
                     type = aux->type;
                     return type;
                 }
-                
-                /*
-                if (val == 0 && strcmp(root->child->value, aux->name) == 0 && root->child->line > aux->line) {
-                    //printf("11111typeroot: %s\n", root->child->value);
-                    //printf("1%s: %d --- %s: %d\n", root->child->var, root->child->line, aux->name, aux->line);
-                    type = aux->type;
-                    return type;
-
-                } else if (val == 1 && strcmp(root->value, aux->name) == 0 && root->line > aux->line) {
-                    //printf("11111type: %s\n", aux->type);
-                    //printf("2%s: %d --- %s: %d\n", root->child->var, root->child->line, aux->name, aux->line);
-                    type = aux->type;
-                    return type;
-                }
-                else if (val == 2 && strcmp(root->child->brother->value, aux->name) == 0 && root->child->brother->line > aux->line) {
-                    //printf("11111type: %s\n", aux->type);
-                    //printf("3%s: %d --- %s: %d\n", root->child->var, root->child->line, aux->name, aux->line);
-                    type = aux->type;
-                    return type;
-                }
-                */
 
                // printf("22222type: %s\n", type);
                 aux = aux->in;
@@ -869,7 +930,7 @@ char * searchType(struct node * root, Sym * first, char * name, char * id, int l
         if (first != NULL)
             first = first->next;                                
     }
-    
+    return type;
 }
 
 int isVAR(struct node * root) {
@@ -891,6 +952,12 @@ int isVAR(struct node * root) {
             return true;
         } else if (root->var[0] == 'R' && root->var[1] == 'e' && root->var[2] == 'a') {
             type = "double";
+            //printf("type: %s\n", type);
+            root->anotation = type;
+            //sprintf(root->var, "%s - %s", root->var, type);
+            return true;
+        } else if (root->var[0] == 'S' && root->var[1] == 't' && root->var[2] == 'r') {
+            type = "String";
             //printf("type: %s\n", type);
             root->anotation = type;
             //sprintf(root->var, "%s - %s", root->var, type);

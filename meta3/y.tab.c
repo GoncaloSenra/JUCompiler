@@ -1551,25 +1551,25 @@ yyreduce:
 
   case 15: /* MethodHeader: Type ID LPAR FormalParams RPAR  */
 #line 160 "jucompiler.y"
-                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", 0, 0); (yyval.no)->child = (yyvsp[-4].no); sprintf(aux3, "Id(%s)", (yyvsp[-3].tok).id); newBrother((yyvsp[-4].no), createNode((yyvsp[-3].tok).id, strdup(aux3), (yyvsp[-3].tok).line, (yyvsp[-3].tok).col)); newBrother((yyvsp[-4].no), (yyvsp[-1].no));if(debug)printf("MethodHeader\n");}
+                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", (yyvsp[-3].tok).line, (yyvsp[-3].tok).col); (yyval.no)->child = (yyvsp[-4].no); sprintf(aux3, "Id(%s)", (yyvsp[-3].tok).id); newBrother((yyvsp[-4].no), createNode((yyvsp[-3].tok).id, strdup(aux3), (yyvsp[-3].tok).line, (yyvsp[-3].tok).col)); newBrother((yyvsp[-4].no), (yyvsp[-1].no));if(debug)printf("MethodHeader\n");}
 #line 1556 "y.tab.c"
     break;
 
   case 16: /* MethodHeader: Type ID LPAR RPAR  */
 #line 161 "jucompiler.y"
-                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", 0, 0); (yyval.no)->child = (yyvsp[-3].no); sprintf(aux3, "Id(%s)", (yyvsp[-2].tok).id); newBrother((yyvsp[-3].no), createNode((yyvsp[-2].tok).id, strdup(aux3), (yyvsp[-2].tok).line, (yyvsp[-2].tok).col)); newBrother((yyvsp[-3].no), createNode(NULL,"MethodParams", 0, 0));if(debug)printf("MethodHeader2\n");}
+                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", (yyvsp[-2].tok).line, (yyvsp[-2].tok).col); (yyval.no)->child = (yyvsp[-3].no); sprintf(aux3, "Id(%s)", (yyvsp[-2].tok).id); newBrother((yyvsp[-3].no), createNode((yyvsp[-2].tok).id, strdup(aux3), (yyvsp[-2].tok).line, (yyvsp[-2].tok).col)); newBrother((yyvsp[-3].no), createNode(NULL,"MethodParams", 0, 0));if(debug)printf("MethodHeader2\n");}
 #line 1562 "y.tab.c"
     break;
 
   case 17: /* MethodHeader: VOID ID LPAR FormalParams RPAR  */
 #line 162 "jucompiler.y"
-                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", 0, 0); (yyval.no)->child = createNode(NULL,"Void", 0, 0); sprintf(aux3, "Id(%s)", (yyvsp[-3].tok).id); newBrother((yyval.no)->child, createNode((yyvsp[-3].tok).id, strdup(aux3), (yyvsp[-3].tok).line, (yyvsp[-3].tok).col)); newBrother((yyval.no)->child, (yyvsp[-1].no));if(debug)printf("MethodHeader3\n");}
+                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", (yyvsp[-3].tok).line, (yyvsp[-3].tok).col); (yyval.no)->child = createNode(NULL,"Void", 0, 0); sprintf(aux3, "Id(%s)", (yyvsp[-3].tok).id); newBrother((yyval.no)->child, createNode((yyvsp[-3].tok).id, strdup(aux3), (yyvsp[-3].tok).line, (yyvsp[-3].tok).col)); newBrother((yyval.no)->child, (yyvsp[-1].no));if(debug)printf("MethodHeader3\n");}
 #line 1568 "y.tab.c"
     break;
 
   case 18: /* MethodHeader: VOID ID LPAR RPAR  */
 #line 163 "jucompiler.y"
-                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", 0, 0);(yyval.no)->child = createNode(NULL,"Void", 0, 0); sprintf(aux3, "Id(%s)", (yyvsp[-2].tok).id); newBrother((yyval.no)->child, createNode((yyvsp[-2].tok).id, strdup(aux3), (yyvsp[-2].tok).line, (yyvsp[-2].tok).col));newBrother((yyval.no)->child,createNode(NULL,"MethodParams", 0, 0));if(debug)printf("MethodHeader4\n");}
+                                                                                {(yyval.no) = createNode(NULL,"MethodHeader", (yyvsp[-2].tok).line, (yyvsp[-2].tok).col);(yyval.no)->child = createNode(NULL,"Void", 0, 0); sprintf(aux3, "Id(%s)", (yyvsp[-2].tok).id); newBrother((yyval.no)->child, createNode((yyvsp[-2].tok).id, strdup(aux3), (yyvsp[-2].tok).line, (yyvsp[-2].tok).col));newBrother((yyval.no)->child,createNode(NULL,"MethodParams", 0, 0));if(debug)printf("MethodHeader4\n");}
 #line 1574 "y.tab.c"
     break;
 
