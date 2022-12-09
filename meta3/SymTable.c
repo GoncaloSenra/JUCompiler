@@ -137,8 +137,9 @@ char* StringCat(char* aux, char* aux2){
 
 void Header(struct node * root, Sym * first){
     
-    char temp[1024];
-    strcpy(temp, "");
+    char * temp;
+    temp = (char*) malloc(sizeof(char) * 1024);
+    //strcpy(temp, "");
     first->in = createSym("return", changeType(first->type), "", 0, 0, 0); 
     //printf("---%s\n", first->in->type);
     char * param = NULL;
@@ -167,28 +168,28 @@ void Header(struct node * root, Sym * first){
             aux_first->in = aux;
             aux_first = aux;
         }
-        
-        if(strlen(temp) == 0){
-
-            strcpy(temp, changeType(aux_root->child->var));
+        //printf("AAFAFAFSA\n");
+        if(strcmp(temp, "") == 0){
+            
+            temp = StringCat(temp, changeType(aux_root->child->var));
 
         }else{
 
-            strcat(temp, ",");
-            strcat(temp, changeType(aux_root->child->var));
+            temp = StringCat(temp, ",");
+            temp = StringCat(temp, changeType(aux_root->child->var));
 
         }
         aux_root = aux_root->brother;
         aux_param = 0;
     }
     //printf("param: %s\n", temp);
-    char * temp2 = (char*) malloc(strlen(temp));
+    
     //printf("temp: %s\n", temp);
-    strcpy(temp2, temp);
+    //strcpy(temp2, temp);
 
-
+    //printf("---------> %s\n", temp);
     //if (strcmp(tolower_word(temp2), aux2.) )
-    first->param = temp2;
+    first->param = strdup(temp);
     //printf("PARAM: %s\n", first->param);
 }
 
@@ -207,7 +208,7 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
 
     //printf("Header\n");
     Header(root->child, newMethod);
-
+    
     /*
     Sym * aux= CheckIfAlreadyDefined(last, func_name, 1, 1);
     if(aux ==NULL){
@@ -266,6 +267,7 @@ void printTable(Sym * first) {
         if (strcmp(first->param, "String[]") == 0){
             printf("%s\t(%s)\t%s\n", first->name, first->param, temptype);
         }else{
+            //printf("param: %s\n", first->param);
             printf("%s\t(%s)\t%s\n", first->name, tolower_word(first->param), temptype);
         }
             
@@ -344,7 +346,7 @@ Sym * CheckIfAlreadyDefined(Sym * simTab, char * name, int aux, int flag) {
 }
 
 char * tolower_word(char * param){
-    char * temp = (char *) malloc(sizeof(char) * strlen(param));
+    char * temp = (char *) malloc(sizeof(char) * 1024);
     if (strcmp(param, "String[]") == 0)
         return "String[]";
 
@@ -356,7 +358,7 @@ char * tolower_word(char * param){
             temp[i] = param[i];
         }
     }
-    return temp;
+    return strdup(temp);
 }
 
 int TwoMemberOp(char* type){
@@ -720,6 +722,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                 if (strcmp(root->var, "And") == 0 || strcmp(root->var, "Or") == 0) {
                     if (strcmp(tolower_word(type), "boolean") != 0) {
                         //ERROR
+                        root->anotation = "boolean";
                     }else {
                         root->anotation = "boolean";
                     }
@@ -805,6 +808,9 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
             }else if (strcmp(root->var, "Assign") == 0 && strcmp(type, "undef") != 0) {
                 //printf("ASSIGN - anotation: %s\n", type);
                 root->anotation = tolower_word(type);
+                //printf("%s ---- %s\n", type, type2);
+                if(!(strcmp(type, "Double") == 0 && strcmp(type2, "int") == 0))
+                    printf("Line %d, col %d: Operator = cannot be applied to types %s, %s\n", root->line, root->col, tolower_word(type), tolower_word(type2));
             }else if (strcmp(root->var, "ParseArgs") == 0) {
                     if (strcmp(tolower_word(type), "String[]") == 0 && strcmp(tolower_word(type2), "int") == 0){
                         root->anotation = "int";
@@ -941,9 +947,26 @@ int isVAR(struct node * root) {
             //printf("isVAR: %s\n", root->var);
         if (root->var[0] == 'D' && root->var[1] == 'e') {
             type = "int";
-            //printf("type: %s\n", type);
             root->anotation = type;
-            //sprintf(root->var, "%s - %s", root->var, type);
+            char * dec_aux = strdup(root->value);
+            int len = strlen(dec_aux);
+            int is_negative = 0;
+
+            for (int i = 0; i < len; i++){
+                if (dec_aux[i] == '_'){
+                    for (int j = i; j < strlen(dec_aux); j++){
+                        dec_aux[j] = dec_aux[j+1];
+                    }
+                    len--;
+                    i--;
+                }
+            }
+            //convert string to signed long
+            long dec = atol(dec_aux);
+            if (dec >= 2147483648) {
+                //ERROR
+                printf("Line %d, col %d: Number %s out of bounds\n", root->line, root->col, root->value);
+            }
             return true;
         } else if (root->var[0] == 'B' && root->var[1] == 'o' ) {   //FIXME: BoolLit e Bool, uma historia de amor...
             type = "boolean";
