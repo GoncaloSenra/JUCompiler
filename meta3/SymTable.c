@@ -135,7 +135,6 @@ char* StringCat(char* aux, char* aux2){
     strcat(temp, temp2);
 }
 
-
 void Header(struct node * root, Sym * first){
     
     char temp[1024];
@@ -388,7 +387,6 @@ int OneLogical(char* type){
         return true;
     else if(strcmp(type, "While") == 0)
         return true;
-        
     else if(strcmp(type, "If") == 0)
         return true;
     else 
@@ -432,8 +430,6 @@ int Logical(char* type){
     else 
         return false;
 }
-
-
 
 void checkTypes(struct node * root, Sym * first, char * name) {
     
@@ -540,8 +536,8 @@ void Calls(struct node * root, Sym * first, char * name){
         if((aux->var[0] == 'I') && (aux->var[1] == 'd')){
             //printf("pila3\n");
             tvar = searchType(aux, first_aux, name, aux->value, aux->line, 1);
-            printf("pila3.5\n");
-            printf("%s\n", tvar);
+            //printf("pila3.5\n");
+            //printf("%s\n", tvar);
             
             //if (strcasecmp(tvar, "String[]") != 0)      // se for strcmp() dá segfault nao sei porquê
             aux->anotation = tolower_word(tvar);
@@ -699,6 +695,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
     if ((root->child->brother->var[0] == 'I')){
         //printf("INT: %s\n", type);
         //printf("Fudi-me\n");
+        //printf("++++++ %s\n", root->child->brother->value);
         type2 = searchType(root, first, name, root->child->brother->value, root->child->brother->line,1);
         //printf("2 %s-----------------------------------> %s\n",root->child->value,  type2);
 
@@ -855,7 +852,12 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
             }
         }else if (strcmp(root->var, "Return") == 0){
             return;
-        }else if(strcmp(tolower_word(type),"undef") == 0 && strcmp(root->var,"Print") != 0){
+        }else if (strcmp(root->var, "While") == 0){
+            return;
+        }else if (strcmp(root->var, "If") == 0){
+            return;
+        }
+        else if(strcmp(tolower_word(type),"undef") == 0 && strcmp(root->var,"Print") != 0){
             if(flag == false){
                 root->anotation = "undef";
             }else{
@@ -900,18 +902,17 @@ char * searchType(struct node * root, Sym * first, char * name, char * id, int l
          */
         if (strcmp(id, first->name) == 0) {
             type = first->type;
-            
         }
         //printf("OOOOO%s: %d -- %d\n", name, funcline, first->line);
         if (strcmp(name, first->name) == 0 && first->line == funcline){
 
             Sym * aux = first->in;
-            printf("aux: %s\n", aux->name);
+            //printf("aux: %s\n", aux->name);
             while (aux != NULL) {
                 //printf("first->name: %s\n", aux->name);
                 //printf("cvbnm,.cvbnm,.\n");
                 //printf("aux->name: %s---%s\n", aux->name, root->child->value);
-                printf("-------> %s : %s\n", id , aux->name);
+                //printf("-------> %s : %s\n", id , aux->name);
                 if (strcmp(id, aux->name) == 0 && line > aux->line) {
                     type = aux->type;
                     return type;
@@ -919,9 +920,9 @@ char * searchType(struct node * root, Sym * first, char * name, char * id, int l
 
                // printf("22222type: %s\n", type);
                 aux = aux->in;
-                if (aux == NULL){
+                if (aux == NULL && strcmp(type, "") == 0){
                     //printf("MUITO UNDEF MANO\n");
-                    return "undef";
+                    type = "undef";
                 }
                 
             }
