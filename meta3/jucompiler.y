@@ -268,7 +268,7 @@ recCOMMAEXP                 :   COMMA Expr recCOMMAEXP                          
 Assignment                  :   ID ASSIGN Expr                                  {$$ = createNode(NULL,"Assign", $2.line, $2.col); sprintf(aux3, "Id(%s)", $1.id); $$->child = createNode($1.id, strdup(aux3), $1.line, $1.col); newBrother($$->child, $3);if(debug)printf("Assign\n");}
                             ;
 
-ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              {$$ = createNode(NULL,"ParseArgs", 0, 0); sprintf(aux3, "Id(%s)", $3.id); $$->child = createNode($3.id, strdup(aux3), $3.line, $3.col); newBrother($$->child, $5);if(debug)printf("ParseArgs + id(%s)\n",aux3);}
+ParseArgs                   :   PARSEINT LPAR ID LSQ Expr RSQ RPAR              {$$ = createNode(NULL,"ParseArgs", $1.line, $1.col); sprintf(aux3, "Id(%s)", $3.id); $$->child = createNode($3.id, strdup(aux3), $3.line, $3.col); newBrother($$->child, $5);if(debug)printf("ParseArgs + id(%s)\n",aux3);}
                             |   PARSEINT LPAR error RPAR                        {$$ = NULL;$$=createNode(NULL,NULL, 0, 0);error=true;if(debug)printf("ParseArgs2\n");}
                             ;
 

@@ -1817,7 +1817,7 @@ yyreduce:
 
   case 51: /* ParseArgs: PARSEINT LPAR ID LSQ Expr RSQ RPAR  */
 #line 271 "jucompiler.y"
-                                                                                {(yyval.no) = createNode(NULL,"ParseArgs", 0, 0); sprintf(aux3, "Id(%s)", (yyvsp[-4].tok).id); (yyval.no)->child = createNode((yyvsp[-4].tok).id, strdup(aux3), (yyvsp[-4].tok).line, (yyvsp[-4].tok).col); newBrother((yyval.no)->child, (yyvsp[-2].no));if(debug)printf("ParseArgs + id(%s)\n",aux3);}
+                                                                                {(yyval.no) = createNode(NULL,"ParseArgs", (yyvsp[-6].tok).line, (yyvsp[-6].tok).col); sprintf(aux3, "Id(%s)", (yyvsp[-4].tok).id); (yyval.no)->child = createNode((yyvsp[-4].tok).id, strdup(aux3), (yyvsp[-4].tok).line, (yyvsp[-4].tok).col); newBrother((yyval.no)->child, (yyvsp[-2].no));if(debug)printf("ParseArgs + id(%s)\n",aux3);}
 #line 1822 "y.tab.c"
     break;
 

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <locale.h>
+#include <float.h>
 
 #define true 1
 #define false 0

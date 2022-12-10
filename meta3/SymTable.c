@@ -180,6 +180,7 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
         if (first->variable == 0) {
             if (strcmp (first->name, func_name) == 0 && strcmp(newMethod->param, first->param) == 0 && first->next != NULL){
                 root->child->child->brother->valid = 0;
+                printf("Line %d, col %d: Cannot find symbol %s(%s)\n", root->child->child->brother->line, root->child->child->brother->col, root->child->child->brother->value, tolower_word(first->param));
                 return 1;
             }
         }
@@ -493,7 +494,7 @@ void Calls(struct node * root, Sym * first, char * name){
 
             aux->anotation = tolower_word(tvar);
             
-            if (strcmp(tvar, "NULL") == 0 || strcmp(tvar, "undef") == 0) {
+            if (strcmp(tvar, "none") == 0 || strcmp(tvar, "undef") == 0) {
                 printf("Line %d, col %d: Cannot find symbol %s\n", aux->line, aux->col, aux->value);
             }
             
@@ -504,12 +505,12 @@ void Calls(struct node * root, Sym * first, char * name){
           
 
             if(strlen(param_aux) == 0){
-                param_aux = StringCat(param_aux, "NULL");
+                param_aux = StringCat(param_aux, "none");
 
             }
             else{
                 param_aux = StringCat(param_aux, ",");
-                param_aux = StringCat(param_aux, "NULL");
+                param_aux = StringCat(param_aux, "none");
             }
         }else{
 
@@ -563,8 +564,7 @@ void Calls(struct node * root, Sym * first, char * name){
                     if (count == 0)
                         root->child->anotation = aux_p2;
                     else {
-                        //ERROR
-
+                        //error                        
                         root->child->anotation = "undef";
                     }
                     count ++;
@@ -582,8 +582,10 @@ void Calls(struct node * root, Sym * first, char * name){
 
     
     
-    if(strcmp(type, "NULL")!= 0){
-        if(count > 1 ){ 
+    if(strcmp(type, "none")!= 0){
+        if(count > 1 ){
+            printf("Line %d, col %d: Reference to method %s(%s) is ambiguous\n", root->child->line, root->child->col, root->child->value, param_aux);
+            
             root->anotation = "undef";
         }else{
             root->anotation = tolower_word(type);
@@ -602,7 +604,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
         root->child->anotation = tolower_word(type);
 
-        if (strcmp(type, "NULL") == 0 || strcmp(type, "undef") == 0) {
+        if (strcmp(type, "none") == 0 || strcmp(type, "undef") == 0) {
             printf("Line %d, col %d: Cannot find symbol %s\n", root->child->line, root->child->col, root->child->value);
         }
 
@@ -616,7 +618,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
         root->child->brother->anotation = tolower_word(type2);
 
-        if (strcmp(type2, "NULL") == 0 || strcmp(type2, "undef") == 0) {
+        if (strcmp(type2, "none") == 0 || strcmp(type2, "undef") == 0) {
             printf("Line %d, col %d: Cannot find symbol %s\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);
         }
         
@@ -645,10 +647,11 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                         root->anotation = "boolean";
                     }
                 } else if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0) {
-                    if (strcmp(tolower_word(type), "boolean") == 0) {
-                        //ERROR ???
+                    if (strcmp(tolower_word(type), "int") == 0 || strcmp(tolower_word(type), "double") == 0) {
+                        
                         root->anotation = "boolean";
                     }else {
+                        printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
                         root->anotation = "boolean";
                     }
                 } else if (strcmp(root->var, "Xor") == 0) {
@@ -681,11 +684,11 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                     }
                     
                 } else if (strcmp(root->var, "Lshift") == 0 || strcmp(root->var, "Rshift") == 0) {
-                    if (strcmp(tolower_word(type), "int") == 0)
+                    if (strcmp(tolower_word(type), "int") == 0){
                         root->anotation = tolower_word(type);
-                    else {
+                        //printf("hjkldf \n");
+                    }else {
                         root->anotation = "undef";
-                        //ERROR
                         
                     }
                 } else if (strcmp(root->var, "ParseArgs") == 0) {
@@ -706,19 +709,27 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
         }
     }else{
         if(type == NULL)
-            type = "NULL";
+            type = "none";
         if(type2 == NULL)
-            type2 = "NULL";
+            type2 = "none";
             //ERROR 
             
-        if(flag == true)
+        if(flag == true) {
+            if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0){
+                if (!((strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0) || (strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0)))
+                    printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+            }
             root->anotation = "boolean";
-        else{
+        }else{
+            //printf("olaaa\n");
+            
             if (strcmp(root->var, "Add") == 0 || strcmp(root->var, "Sub") == 0 || strcmp(root->var, "Div") == 0 || strcmp(root->var, "Mul") == 0 || strcmp(root->var, "Mod") == 0){ 
+                //printf("%s\n", root->var);
                 if ((strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0) || (strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0)) {
                     root->anotation = "double";    
                 } else {
                     root->anotation = "undef";
+                    
                 }
                 if (!((strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0) || (strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0)))
                     printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
@@ -733,7 +744,8 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                         root->anotation = "int";
                     } else {
                         root->anotation = "int";
-                        //ERROR
+                        printf("Line %d, col %d: Operator Integer.parseInt cannot be applied to types %s, %s\n",root->child->line, root->child->col-17,tolower_word(type), type2);
+
                     }
                     
             }else {
@@ -750,14 +762,14 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
     
 
     if(root->child == NULL){
-        type = "NULL";
+        type = "none";
     } else if ((root->child->var[0] == 'I')){
 
         type = searchType(root, first, name, root->child->value, root->child->line,1);
 
         root->child->anotation = tolower_word(type);
 
-        if (strcmp(type, "NULL") == 0 || strcmp(type, "undef") == 0) {
+        if (strcmp(type, "none") == 0 || strcmp(type, "undef") == 0) {
             printf("Line %d, col %d: Cannot find symbol %s\n", root->child->line, root->child->col, root->child->value);
         }//este
       
@@ -781,12 +793,15 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
                 root->anotation = "int";
             }
         }else if (strcmp(root->var, "Return") == 0){
+            //printf("RETURNS: %s - %s\n", root->child->anotation, auxreturn);
             if (root->child == NULL){
                 //printf("-------> %s\n", auxreturn);
                 if (strcmp(auxreturn, "Void") != 0)
                     printf("Line %d, col %d: Incompatible type void in return statement\n", root->line, root->col);
             } else if (strcmp(tolower_word(root->child->anotation), tolower_word(auxreturn)) != 0 && !(strcmp(auxreturn, "Double") == 0 && strcmp(root->child->anotation, "int") == 0)) {
                 //printf("VAR: %s\n", root->child->var);
+                printf("Line %d, col %d: Incompatible type %s in return statement\n", root->child->line, root->child->col, tolower_word(root->child->anotation));
+            } else if (strcmp(tolower_word(root->child->anotation), tolower_word(auxreturn)) == 0 && strcmp(auxreturn, "Void") == 0) {
                 printf("Line %d, col %d: Incompatible type %s in return statement\n", root->child->line, root->child->col, tolower_word(root->child->anotation));
             }
         }else if (strcmp(root->var, "While") == 0){
@@ -797,13 +812,15 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
         }else if(strcmp(tolower_word(type),"undef") == 0 && strcmp(root->var,"Print") != 0){
             if(flag == false){
                 root->anotation = "undef";
+                
                
             }else{
                 root->anotation = "boolean";
                 
+                
             }
         }else{
-            
+           
 
             if(flag == false){
                 if (strcmp(root->var, "Plus") == 0 || strcmp(root->var, "Minus") == 0) {
@@ -811,9 +828,12 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
                     if (strcmp(root->child->anotation, "int") == 0 || strcmp(root->child->anotation, "double") == 0){
                         root->anotation = tolower_word(type);
                     } else {
-                        //ERROR
+                        printf("Line %d, col %d: Operator %s cannot be applied to types %s\n", root->line, root->col, Operadores(root->var),tolower_word(type));
                         root->anotation = "undef";
                     }
+                } else if(strcmp(root->var, "Print") == 0 && (strcmp(tolower_word(type),"undef") == 0 || strcmp(tolower_word(type),"String[]") == 0 || strcmp(tolower_word(type),"void") == 0)){
+                    printf("Line %d, col %d: Incompatible type %s in System.out.print statement\n",root->child->line, root->child->col,  type);
+                    
                 }
             } else{
                 if (strcmp(root->var, "Not") == 0) {
@@ -821,7 +841,8 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
                         root->anotation = "boolean";
                     } else {
                         root->anotation = "boolean";
-                        //erro
+                        //error
+                        printf("Line %d, col %d: Operator ! cannot be applied to types %s\n", root->line, root->col, tolower_word(type));
                     }
                 }
             }
@@ -833,7 +854,7 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
 char * searchType(struct node * root, Sym * first, char * name, char * id, int line, int val) {
 
     char * type = "";
-
+    //printf("ID: %s\n", id);
     while (first != NULL) {
 
         if (strcmp(id, first->name) == 0) {
@@ -841,12 +862,12 @@ char * searchType(struct node * root, Sym * first, char * name, char * id, int l
         }
 
         if (strcmp(name, first->name) == 0 && first->line == funcline){
-
+            
             Sym * aux = first->in;
 
             while (aux != NULL) {
-
-                if (strcmp(id, aux->name) == 0 && line > aux->line) {
+                //printf("VAR: %s - %d + %d\n", aux->name, line, aux->line);
+                if (strcmp(id, aux->name) == 0 && line >= aux->line) {
                     type = aux->type;
                     return type;
                 }
@@ -898,6 +919,57 @@ int isVAR(struct node * root) {
         } else if (root->var[0] == 'R' && root->var[1] == 'e' && root->var[2] == 'a') {
             type = "double";
             root->anotation = type;
+
+            char * dec_aux = strdup(root->value);
+            int len = strlen(dec_aux);
+            int is_negative = 0;
+            int power = 0;
+            double reallit = 0;
+
+            for (int i = 0; i < len; i++){
+                if (dec_aux[i] == '_'){
+                    for (int j = i; j < strlen(dec_aux); j++){
+                        dec_aux[j] = dec_aux[j+1];
+                    }
+                    len--;
+                    i--;
+                }
+            }
+
+            //split string
+            char * token = strtok(dec_aux, "Ee");
+
+            if (token != NULL) {
+                reallit = atof(token);
+                token = strtok(NULL, "Ee");
+                if (token != NULL) {
+                    power = atof(token);
+                }
+            }
+
+            //printf("RALLIT: %f ^ %d\n", reallit, power);
+            
+            if (power > 0) {
+                
+                for (int k = 0; k < power; ++k) {
+                    reallit = reallit *10.0;
+                }
+            } else if (power < 0) {
+                //printf("power:%d\n", -power);
+                power = -power;
+                for (int j = 0; j < power; ++j) {
+                    reallit = reallit /10.0;
+                }
+            }
+
+            //printf("RALLIT2: %f\n", reallit);
+
+            if (reallit >= DBL_MAX || reallit <= DBL_MIN) {
+               
+
+                //ERROR
+                printf("Line %d, col %d: Number %s out of bounds\n", root->line, root->col, root->value);
+            }
             return true;
         } else if (root->var[0] == 'S' && root->var[1] == 't' && root->var[2] == 'r') {
             type = "String";
