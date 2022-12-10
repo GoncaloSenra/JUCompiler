@@ -19,6 +19,7 @@
 
     extern struct node * prog;
     extern int error;
+    extern int semerror;
 
     int yacc;
     int lexicalError = 0;
@@ -193,6 +194,19 @@ int main(int argc, char * argv[])
         aux = 1;
         yacc = 0;
         yyparse();
+        if (lexicalError != 1) {
+            if (error==false){
+                Sym * table = createSym(prog->child->value, "", "", 0, 0, 0);
+                createTable(table, prog);
+                checkTypes(prog, table, "");
+                if (semerror==false) {
+                    printTable(table);
+                    printSTree(prog,0);
+                }
+            } else{
+                freeSTree(prog);
+            }
+        }
     } else if (argc == 2) {
         if (strcmp(argv[1], "-l") == 0){
             aux = 0;
@@ -221,12 +235,27 @@ int main(int argc, char * argv[])
             yacc = 0;
             yyparse();
             if (lexicalError != 1) {
-                Sym * table = createSym(prog->child->value, "", "", 0, 0, 0);
-                createTable(table, prog);
-                checkTypes(prog, table, "");
-                printTable(table);
                 if (error==false){
+                    Sym * table = createSym(prog->child->value, "", "", 0, 0, 0);
+                    createTable(table, prog);
+                    checkTypes(prog, table, "");
+                    printTable(table);
                     printSTree(prog,0);
+                } else{
+                    freeSTree(prog);
+                }
+            }
+        }else if (strcmp(argv[1], "-e3") == 0){
+            aux = 1;
+            yacc = 0;
+            yyparse();
+            if (lexicalError != 1) {
+                if (error==false){
+                    Sym * table = createSym(prog->child->value, "", "", 0, 0, 0);
+                    createTable(table, prog);
+                    checkTypes(prog, table, "");
+                    //printTable(table);
+                    //printSTree(prog,0);
                 } else{
                     freeSTree(prog);
                 }

@@ -1,6 +1,13 @@
- #include "SymTable.h"
+
+//Gonçalo Senra 2020213750
+//Henique Costa 2020214120
+
+#include "SymTable.h"
 
 Sym * table;
+
+int semerror = 0;
+
 int test = 0;
 int funcline = 0;
 char * auxreturn = "";
@@ -65,13 +72,15 @@ void FieldDecl (struct node * root, Sym * last, Sym * first, int aux) {
     if (root) {
         if (strcmp(root->var, "FieldDecl") == 0) {
             if(strcmp(root->child->brother->value,"_")==0){
-                printf("Line %d, col %d: Symbol _ is reserved\n", root->child->brother->line, root->child->brother->col);            
+                printf("Line %d, col %d: Symbol _ is reserved\n", root->child->brother->line, root->child->brother->col);
+                semerror = 1;            
             }
             else if ((aux3 = CheckIfAlreadyDefined(first, root->child->brother->value, 1, 0)) == NULL || (aux3 != NULL && aux3->variable == 0)) {
                 aux2 = createSym(root->child->brother->value, changeType(root->child->var), "", root->child->brother->line, root->child->brother->col, 1);
                 last->next = aux2;
             } else {
                 printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line , root->child->brother->col, root->child->brother->value);
+                semerror = 1;
             }
         }    
     }
@@ -90,6 +99,7 @@ void Vardecl (struct node * root, Sym * func) {
         if (strcmp(root->var, "VarDecl") == 0) {
             if(strcmp(root->child->brother->value,"_")==0){
                 printf("Line %d, col %d: Symbol _ is reserved\n", root->child->brother->line, root->child->brother->col);            
+                semerror = 1;
             }
             else if (CheckIfAlreadyDefined(func, root->child->brother->value, 1, 1) == NULL) {
 
@@ -98,6 +108,7 @@ void Vardecl (struct node * root, Sym * func) {
                 aux = aux_func;
             } else {
                 printf("Line %d, col %d: Symbol %s already defined\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);            
+                semerror = 1;
             }
         }
         
@@ -132,12 +143,13 @@ void Header(struct node * root, Sym * first){
         if(strcmp(aux_root->child->brother->value,"_")==0){
             //printf("________ %s ---- %d\n", aux_root->child->brother->var, aux_root->child->brother->col);
             printf("Line %d, col %d: Symbol _ is reserved\n", aux_root->child->brother->line, aux_root->child->brother->col);            
-            
+            semerror = 1;
             aux_param = 1;
         }
         else if ((aux2 = CheckIfAlreadyDefined(first->in, aux_root->child->brother->value, 1, 1)) != NULL){
             aux_param = 1;
             printf("Line %d, col %d: Symbol %s already defined\n", aux_root->child->brother->line, aux_root->child->brother->col, aux_root->child->brother->value);            
+            semerror = 1;
         }
             
 
@@ -180,7 +192,8 @@ int MethodDecl(Sym * last, Sym * first, struct node * root) {
         if (first->variable == 0) {
             if (strcmp (first->name, func_name) == 0 && strcmp(newMethod->param, first->param) == 0 && first->next != NULL){
                 root->child->child->brother->valid = 0;
-                printf("Line %d, col %d: Cannot find symbol %s(%s)\n", root->child->child->brother->line, root->child->child->brother->col, root->child->child->brother->value, tolower_word(first->param));
+                printf("Line %d, col %d: Symbol %s(%s) already defined\n", root->child->child->brother->line, root->child->child->brother->col, root->child->child->brother->value, tolower_word(first->param));
+                semerror = 1;
                 return 1;
             }
         }
@@ -336,6 +349,10 @@ char* Operadores(char* string){
         return "==";
     else if(strcmp(string, "Xor") == 0)
         return "^";
+    else if(strcmp(string, "Lshift") == 0)
+        return "<<";
+    else if(strcmp(string, "Rshift") == 0)
+        return ">>";
     else return NULL;    
 }
 
@@ -496,6 +513,7 @@ void Calls(struct node * root, Sym * first, char * name){
             
             if (strcmp(tvar, "none") == 0 || strcmp(tvar, "undef") == 0) {
                 printf("Line %d, col %d: Cannot find symbol %s\n", aux->line, aux->col, aux->value);
+                semerror = 1;
             }
             
 
@@ -575,18 +593,19 @@ void Calls(struct node * root, Sym * first, char * name){
     }
     
     if(at_least_one == 0){
-        printf("Line %d, col %d: Cannot find symbol %s(%s)\n", root->child->line, root->child->col, root->child->value, param_aux);
         root->child->anotation = "undef";
         type = "undef";
+        printf("Line %d, col %d: Cannot find symbol %s(%s)\n", root->child->line, root->child->col, root->child->value, param_aux);
+        semerror = 1;
     }
 
     
     
     if(strcmp(type, "none")!= 0){
         if(count > 1 ){
-            printf("Line %d, col %d: Reference to method %s(%s) is ambiguous\n", root->child->line, root->child->col, root->child->value, param_aux);
-            
             root->anotation = "undef";
+            printf("Line %d, col %d: Reference to method %s(%s) is ambiguous\n", root->child->line, root->child->col, root->child->value, param_aux);
+            semerror = 1;
         }else{
             root->anotation = tolower_word(type);
         }
@@ -606,6 +625,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
         if (strcmp(type, "none") == 0 || strcmp(type, "undef") == 0) {
             printf("Line %d, col %d: Cannot find symbol %s\n", root->child->line, root->child->col, root->child->value);
+            semerror = 1;
         }
 
     } else {
@@ -620,6 +640,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
 
         if (strcmp(type2, "none") == 0 || strcmp(type2, "undef") == 0) {
             printf("Line %d, col %d: Cannot find symbol %s\n", root->child->brother->line, root->child->brother->col, root->child->brother->value);
+            semerror = 1;
         }
         
 
@@ -632,8 +653,8 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
         if(strcmp(tolower_word(type), "undef") == 0 && strcmp(tolower_word(type2), "undef") == 0 && strcmp(root->var, "ParseArgs") != 0){
             if(flag == false){
                 root->anotation = "undef";
-                
                 printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                semerror = 1;
             }else{
                 root->anotation = "boolean";
             }
@@ -643,26 +664,34 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                     if (strcmp(tolower_word(type), "boolean") != 0) {
                         //ERROR
                         root->anotation = "boolean";
+                        printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                        
                     }else {
                         root->anotation = "boolean";
                     }
                 } else if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0) {
-                    if (strcmp(tolower_word(type), "int") == 0 || strcmp(tolower_word(type), "double") == 0) {
-                        
+                    if (strcmp(tolower_word(type), "int") == 0 || strcmp(tolower_word(type), "double") == 0 || strcmp(tolower_word(type), "boolean") == 0) {
                         root->anotation = "boolean";
+                        if (strcmp(root->var, "Eq") != 0 && strcmp(root->var, "Ne") != 0 && strcmp(tolower_word(type), "boolean") == 0){
+                            printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                            semerror = 1;
+                        }
                     }else {
-                        printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
                         root->anotation = "boolean";
+                        printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                        semerror = 1;
                     }
                 } else if (strcmp(root->var, "Xor") == 0) {
                     if (strcmp(tolower_word(type), "int") != 0 && strcmp(tolower_word(type), "boolean") != 0) {
                         root->anotation = "undef";
                         //ERROR
                         printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type));
+                        semerror = 1;
                     } else if (strcmp(tolower_word(type), "int") == 0){
                         root->anotation = "int";
                     }else if (strcmp(tolower_word(type), "boolean") == 0){
                         root->anotation = "boolean";
+                        semerror = 1;
                     }
                 }
                 
@@ -681,6 +710,7 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                     } else {
                         root->anotation = "undef";
                         printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                        semerror = 1;
                     }
                     
                 } else if (strcmp(root->var, "Lshift") == 0 || strcmp(root->var, "Rshift") == 0) {
@@ -689,13 +719,15 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                         //printf("hjkldf \n");
                     }else {
                         root->anotation = "undef";
-                        
+                        printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                        semerror = 1;
                     }
                 } else if (strcmp(root->var, "ParseArgs") == 0) {
                     //ERROR
-                    printf("Line %d, col %d: Operator Integer.parseInt cannot be applied to types %s, %s\n",root->child->line, root->child->col-17,tolower_word(type), type2);
-
                     root->anotation = "int";
+                    printf("Line %d, col %d: Operator Integer.parseInt cannot be applied to types %s, %s\n",root->child->line, root->child->col-17,tolower_word(type), type2);
+                    semerror = 1;
+                    
                 } else {
                     if (strcmp(tolower_word(type), "boolean") != 0) {
                         
@@ -715,11 +747,17 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
             //ERROR 
             
         if(flag == true) {
-            if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0){
-                if (!((strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0) || (strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0)))
-                    printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
-            }
             root->anotation = "boolean";
+            if (strcmp(root->var, "Eq") == 0 || strcmp(root->var, "Ne") == 0 || strcmp(root->var, "Lt") == 0 || strcmp(root->var, "Gt") == 0 || strcmp(root->var, "Le") == 0 || strcmp(root->var, "Ge") == 0){
+                if (!((strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0) || (strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0))){
+                    printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                    semerror = 1;
+                }
+            }else if(strcmp(root->var, "And") == 0 || strcmp(root->var, "Or") == 0) {
+                printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                semerror = 1;
+            }
+            
         }else{
             //printf("olaaa\n");
             
@@ -731,24 +769,31 @@ void TwoMember(struct node * root, Sym * first, char * name, int flag){
                     root->anotation = "undef";
                     
                 }
-                if (!((strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0) || (strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0)))
+                if (!((strcmp(tolower_word(type), "int") == 0 && strcmp(tolower_word(type2), "double") == 0) || (strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0))){
                     printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                    semerror = 1;
+                }
             }else if (strcmp(root->var, "Assign") == 0) {
 
-                if(!(strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0))
+                if(!(strcmp(tolower_word(type), "double") == 0 && strcmp(tolower_word(type2), "int") == 0)){
                     printf("Line %d, col %d: Operator = cannot be applied to types %s, %s\n", root->line, root->col, tolower_word(type), tolower_word(type2));
-            
+                    semerror = 1;
+                }
                 root->anotation = tolower_word(type);
             }else if (strcmp(root->var, "ParseArgs") == 0) {
-                    if (strcmp(tolower_word(type), "String[]") == 0 && strcmp(tolower_word(type2), "int") == 0){
-                        root->anotation = "int";
-                    } else {
-                        root->anotation = "int";
-                        printf("Line %d, col %d: Operator Integer.parseInt cannot be applied to types %s, %s\n",root->child->line, root->child->col-17,tolower_word(type), type2);
-
-                    }
-                    
+                if (strcmp(tolower_word(type), "String[]") == 0 && strcmp(tolower_word(type2), "int") == 0){
+                    root->anotation = "int";
+                } else {
+                    root->anotation = "int";
+                    printf("Line %d, col %d: Operator Integer.parseInt cannot be applied to types %s, %s\n",root->child->line, root->child->col-17,tolower_word(type), tolower_word(type2));
+                    semerror = 1;
+                }
+            }else if(strcmp(root->var, "Lshift") == 0 || strcmp(root->var, "Rshift") == 0){
+                root->anotation = "undef";
+                printf("Line %d, col %d: Operator %s cannot be applied to types %s, %s\n", root->line, root->col, Operadores(root->var), tolower_word(type), tolower_word(type2));
+                semerror = 1;
             }else {
+                
                 root->anotation = "undef";
             }
         }
@@ -771,6 +816,7 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
 
         if (strcmp(type, "none") == 0 || strcmp(type, "undef") == 0) {
             printf("Line %d, col %d: Cannot find symbol %s\n", root->child->line, root->child->col, root->child->value);
+            semerror = 1;
         }//este
       
     }else {
@@ -786,8 +832,10 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
                 //ERROR (tive de adicionar 1 à coluna)
                 if(strcmp(root->child->anotation, "undef") == 0){
                     printf("Line %d, col %d: Operator .%s cannot be applied to type %s\n", root->child->line,root->child->col + 5,tolower_word(root->var),tolower_word(type));
+                    semerror = 1;
                 }else{
                     printf("Line %d, col %d: Operator .%s cannot be applied to type %s\n", root->child->line,root->child->col + 1,tolower_word(root->var),tolower_word(type));
+                    semerror = 1;
                 }
 
                 root->anotation = "int";
@@ -796,19 +844,28 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
             //printf("RETURNS: %s - %s\n", root->child->anotation, auxreturn);
             if (root->child == NULL){
                 //printf("-------> %s\n", auxreturn);
-                if (strcmp(auxreturn, "Void") != 0)
+                if (strcmp(auxreturn, "Void") != 0){
                     printf("Line %d, col %d: Incompatible type void in return statement\n", root->line, root->col);
+                    semerror = 1;
+                }
             } else if (strcmp(tolower_word(root->child->anotation), tolower_word(auxreturn)) != 0 && !(strcmp(auxreturn, "Double") == 0 && strcmp(root->child->anotation, "int") == 0)) {
                 //printf("VAR: %s\n", root->child->var);
                 printf("Line %d, col %d: Incompatible type %s in return statement\n", root->child->line, root->child->col, tolower_word(root->child->anotation));
+                semerror = 1;
             } else if (strcmp(tolower_word(root->child->anotation), tolower_word(auxreturn)) == 0 && strcmp(auxreturn, "Void") == 0) {
                 printf("Line %d, col %d: Incompatible type %s in return statement\n", root->child->line, root->child->col, tolower_word(root->child->anotation));
+                semerror = 1;
             }
         }else if (strcmp(root->var, "While") == 0){
-            return;
+            if (root->child != NULL && strcmp(root->child->anotation, "boolean") != 0){
+                printf("Line %d, col %d: Incompatible type %s in while statement\n",root->child->line, root->child->col,  tolower_word(type));
+                semerror = 1;
+            }
         }else if (strcmp(root->var, "If") == 0 ){
-            if (root->child != NULL && strcmp(root->child->anotation, "boolean") != 0)
-                printf("Line %d, col %d: Incompatible type %s in if statement\n",root->child->line, root->child->col,  type);
+            if (root->child != NULL && strcmp(root->child->anotation, "boolean") != 0){
+                printf("Line %d, col %d: Incompatible type %s in if statement\n",root->child->line, root->child->col,  tolower_word(type));
+                semerror = 1;
+            }
         }else if(strcmp(tolower_word(type),"undef") == 0 && strcmp(root->var,"Print") != 0){
             if(flag == false){
                 root->anotation = "undef";
@@ -828,12 +885,13 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
                     if (strcmp(root->child->anotation, "int") == 0 || strcmp(root->child->anotation, "double") == 0){
                         root->anotation = tolower_word(type);
                     } else {
-                        printf("Line %d, col %d: Operator %s cannot be applied to types %s\n", root->line, root->col, Operadores(root->var),tolower_word(type));
                         root->anotation = "undef";
+                        printf("Line %d, col %d: Operator %s cannot be applied to types %s\n", root->line, root->col, Operadores(root->var),tolower_word(type));
+                        semerror = 1;   
                     }
                 } else if(strcmp(root->var, "Print") == 0 && (strcmp(tolower_word(type),"undef") == 0 || strcmp(tolower_word(type),"String[]") == 0 || strcmp(tolower_word(type),"void") == 0)){
-                    printf("Line %d, col %d: Incompatible type %s in System.out.print statement\n",root->child->line, root->child->col,  type);
-                    
+                    printf("Line %d, col %d: Incompatible type %s in System.out.print statement\n",root->child->line, root->child->col,  tolower_word(type));
+                    semerror = 1;
                 }
             } else{
                 if (strcmp(root->var, "Not") == 0) {
@@ -843,6 +901,7 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
                         root->anotation = "boolean";
                         //error
                         printf("Line %d, col %d: Operator ! cannot be applied to types %s\n", root->line, root->col, tolower_word(type));
+                        semerror = 1;
                     }
                 }
             }
@@ -910,6 +969,7 @@ int isVAR(struct node * root) {
             if (dec >= 2147483648) {
                 //ERROR
                 printf("Line %d, col %d: Number %s out of bounds\n", root->line, root->col, root->value);
+                semerror = 1;
             }
             return true;
         } else if (root->var[0] == 'B' && root->var[1] == 'o' ) {   //FIXME: BoolLit e Bool, uma historia de amor...
