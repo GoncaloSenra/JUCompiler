@@ -792,15 +792,19 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
         }else if (strcmp(root->var, "While") == 0){
             return;
         }else if (strcmp(root->var, "If") == 0 ){
-            if (root->child != NULL && (root->child->anotation, "boolean") != 0)
+            if (root->child != NULL && strcmp(root->child->anotation, "boolean") != 0)
                 printf("Line %d, col %d: Incompatible type %s in if statement\n",root->child->line, root->child->col,  type);
         }else if(strcmp(tolower_word(type),"undef") == 0 && strcmp(root->var,"Print") != 0){
             if(flag == false){
                 root->anotation = "undef";
+               
             }else{
                 root->anotation = "boolean";
+                
             }
         }else{
+            
+
             if(flag == false){
                 if (strcmp(root->var, "Plus") == 0 || strcmp(root->var, "Minus") == 0) {
                     

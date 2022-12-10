@@ -1,22 +1,30 @@
-Line 8, col 14: Operator .length cannot be applied to type int
-Line 9, col 14: Operator .length cannot be applied to type boolean
-Line 10, col 14: Operator .length cannot be applied to type double
-Line 12, col 13: Cannot find symbol undef
-Line 12, col 18: Operator .length cannot be applied to type undef
-Line 14, col 14: Operator .length cannot be applied to type int
-Line 14, col 11: Operator = cannot be applied to types boolean, int
-===== Class ClassTeste Symbol Table =====
+Line 5, col 23: Symbol teste2 already defined
+Line 11, col 26: Cannot find symbol factorial(int)
+Line 11, col 26: Incompatible type undef in System.out.print statement===== Class ClassTeste Symbol Table =====
+teste0		int
+teste1		int
+teste2		int
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
 return		void
 args		String[]	param
-b		boolean
-i		int
-d		double
+argument		int
 
 Program
 ..Id(ClassTeste)
+..FieldDecl
+....Int
+....Id(teste0)
+..FieldDecl
+....Int
+....Id(teste1)
+..FieldDecl
+....Int
+....Id(teste2)
+..FieldDecl
+....Int
+....Id(teste2)
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -27,35 +35,14 @@ Program
 ..........Id(args)
 ....MethodBody
 ......VarDecl
-........Bool
-........Id(b)
-......VarDecl
 ........Int
-........Id(i)
-......VarDecl
-........Double
-........Id(d)
+........Id(argument)
 ......Assign - int
-........Id(i) - int
-........Length - int
-..........Id(i) - int
-......Assign - int
-........Id(i) - int
-........Length - int
-..........Id(b) - boolean
-......Assign - int
-........Id(i) - int
-........Length - int
-..........Id(d) - double
-......Assign - int
-........Id(i) - int
-........Length - int
+........Id(argument) - int
+........ParseArgs - int
 ..........Id(args) - String[]
-......Assign - int
-........Id(i) - int
-........Length - int
-..........Id(undef) - undef
-......Assign - boolean
-........Id(b) - boolean
-........Length - int
-..........Id(i) - int
+..........DecLit(0) - int
+......Print
+........Call - undef
+..........Id(factorial) - undef
+..........Id(argument) - int
