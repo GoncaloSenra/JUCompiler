@@ -758,8 +758,8 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
         root->child->anotation = tolower_word(type);
 
         if (strcmp(type, "NULL") == 0 || strcmp(type, "undef") == 0) {
-            printf("Line %d, col %d: Cannot find symbol %s\n", root->child->line, root->child->col, root->value);
-        }
+            printf("Line %d, col %d: Cannot find symbol %s\n", root->child->line, root->child->col, root->child->value);
+        }//este
       
     }else {
         type = root->child->anotation;
@@ -768,11 +768,16 @@ void OneMemberNL(struct node * root, Sym * first, char * name, int flag){
    
     if(type != NULL){
         if (strcmp(root->var, "Length") == 0) {
-            if (strcmp(root->child->anotation, "int") != 0){
+            if (strcmp(root->child->anotation, "int") != 0 && strcmp(root->child->anotation, "boolean") != 0 && strcmp(root->child->anotation, "undef") != 0 && strcmp(root->child->anotation, "double") != 0){
                 root->anotation = "int";
             }else {
                 //ERROR (tive de adicionar 1 à coluna)
-                printf("Line %d, col %d: Operator .%s cannot be applied to type %s\n", root->child->line,root->child->col + 1,tolower_word(root->var),tolower_word(type));
+                if(strcmp(root->child->anotation, "undef") == 0){
+                    printf("Line %d, col %d: Operator .%s cannot be applied to type %s\n", root->child->line,root->child->col + 5,tolower_word(root->var),tolower_word(type));
+                }else{
+                    printf("Line %d, col %d: Operator .%s cannot be applied to type %s\n", root->child->line,root->child->col + 1,tolower_word(root->var),tolower_word(type));
+                }
+
                 root->anotation = "int";
             }
         }else if (strcmp(root->var, "Return") == 0){
