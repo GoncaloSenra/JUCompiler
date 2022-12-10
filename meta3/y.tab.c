@@ -1781,13 +1781,13 @@ yyreduce:
 
   case 45: /* MethodInvocation: ID LPAR Expr recCOMMAEXP RPAR  */
 #line 259 "jucompiler.y"
-                                                                                {(yyval.no) = createNode(NULL,"Call", 0, 0); sprintf(aux3, "Id(%s)", (yyvsp[-4].tok).id); (yyval.no)->child = createNode((yyvsp[-4].tok).id, strdup(aux3), (yyvsp[-4].tok).line, (yyvsp[-4].tok).col); newBrother((yyval.no)->child, (yyvsp[-2].no)); newBrother((yyvsp[-2].no), (yyvsp[-1].no));if(debug)printf("MethodInvocation\n");}
+                                                                                {(yyval.no) = createNode(NULL,"Call", (yyvsp[-4].tok).line, (yyvsp[-4].tok).col); sprintf(aux3, "Id(%s)", (yyvsp[-4].tok).id); (yyval.no)->child = createNode((yyvsp[-4].tok).id, strdup(aux3), (yyvsp[-4].tok).line, (yyvsp[-4].tok).col); newBrother((yyval.no)->child, (yyvsp[-2].no)); newBrother((yyvsp[-2].no), (yyvsp[-1].no));if(debug)printf("MethodInvocation\n");}
 #line 1786 "y.tab.c"
     break;
 
   case 46: /* MethodInvocation: ID LPAR RPAR  */
 #line 260 "jucompiler.y"
-                                                                                {(yyval.no) = createNode(NULL,"Call", 0, 0); sprintf(aux3, "Id(%s)", (yyvsp[-2].tok).id); (yyval.no)->child = createNode((yyvsp[-2].tok).id, strdup(aux3), (yyvsp[-2].tok).line, (yyvsp[-2].tok).col);if(debug)printf("MethodInvocation3\n");}
+                                                                                {(yyval.no) = createNode(NULL,"Call", (yyvsp[-2].tok).line, (yyvsp[-2].tok).col); sprintf(aux3, "Id(%s)", (yyvsp[-2].tok).id); (yyval.no)->child = createNode((yyvsp[-2].tok).id, strdup(aux3), (yyvsp[-2].tok).line, (yyvsp[-2].tok).col);if(debug)printf("MethodInvocation3\n");}
 #line 1792 "y.tab.c"
     break;
 

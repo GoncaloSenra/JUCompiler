@@ -39,3 +39,5 @@ int isVAR(struct node * root);
 void TwoMember(struct node * root, Sym * first, char * name, int flag);
 
 int checkParameters(char * param, char * auxparam);
+
+char * Operadores(char* string);

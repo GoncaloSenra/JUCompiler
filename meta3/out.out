@@ -1,25 +1,34 @@
-Line 33, col 11: Operator = cannot be applied to types double, undef
-Line 32, col 11: Operator = cannot be applied to types double, undef
-Line 30, col 11: Operator = cannot be applied to types double, undef
-Line 29, col 11: Operator = cannot be applied to types double, undef
-Line 21, col 11: Operator = cannot be applied to types int, undef
-Line 20, col 11: Operator = cannot be applied to types int, undef
-Line 18, col 11: Operator = cannot be applied to types int, undef
-Line 17, col 11: Operator = cannot be applied to types int, undef
-Line 15, col 11: Operator = cannot be applied to types int, double
-Line 14, col 11: Operator = cannot be applied to types int, double
-===== Class sub_2_pewdiepie Symbol Table =====
+Line 5, col 13: Number 10_0000_00000 out of bounds
+Line 9, col 13: Number 2147483648 out of bounds
+Line 10, col 13: Number 2147483649 out of bounds
+Line 11, col 13: Number 12147483649 out of bounds
+Line 15, col 13: Number 214__748_3648 out of bounds
+Line 16, col 13: Number 214__748_3649 out of bounds
+Line 17, col 13: Number 1214748364__9 out of bounds
+Line 19, col 14: Number 10_0000_00000 out of bounds
+Line 23, col 14: Number 2147483648 out of bounds
+Line 24, col 14: Number 2147483649 out of bounds
+Line 25, col 14: Number 12147483649 out of bounds
+Line 29, col 14: Number 214__748_3648 out of bounds
+Line 30, col 14: Number 214__748_3649 out of bounds
+Line 31, col 14: Number 1214748364__9 out of bounds
+Line 33, col 14: Number 10_0000_00000 out of bounds
+Line 37, col 14: Number 2147483648 out of bounds
+Line 38, col 14: Number 2147483649 out of bounds
+Line 39, col 14: Number 12147483649 out of bounds
+Line 43, col 14: Number 214__748_3648 out of bounds
+Line 44, col 14: Number 214__748_3649 out of bounds
+Line 45, col 14: Number 1214748364__9 out of bounds
+===== Class ClassTeste Symbol Table =====
 main	(String[])	void
 
 ===== Method main(String[]) Symbol Table =====
 return		void
 args		String[]	param
-i		int
-d		double
-b		boolean
+a		int
 
 Program
-..Id(sub_2_pewdiepie)
+..Id(ClassTeste)
 ..MethodDecl
 ....MethodHeader
 ......Void
@@ -31,99 +40,147 @@ Program
 ....MethodBody
 ......VarDecl
 ........Int
-........Id(i)
-......VarDecl
-........Double
-........Id(d)
-......VarDecl
-........Bool
-........Id(b)
+........Id(a)
 ......Assign - int
-........Id(i) - int
-........DecLit(1) - int
-......Assign - double
-........Id(d) - double
-........RealLit(1.1) - double
-......Assign - boolean
-........Id(b) - boolean
-........BoolLit(true) - boolean
+........Id(a) - int
+........DecLit(10_0000_00000) - int
 ......Assign - int
-........Id(i) - int
-........Add - int
-..........Id(i) - int
-..........Id(i) - int
+........Id(a) - int
+........DecLit(100) - int
 ......Assign - int
-........Id(i) - int
-........Sub - int
-..........Id(i) - int
-..........Id(i) - int
+........Id(a) - int
+........DecLit(100000) - int
 ......Assign - int
-........Id(i) - int
-........Add - double
-..........Id(i) - int
-..........Id(d) - double
+........Id(a) - int
+........DecLit(2147483647) - int
 ......Assign - int
-........Id(i) - int
-........Sub - double
-..........Id(i) - int
-..........Id(d) - double
+........Id(a) - int
+........DecLit(2147483648) - int
 ......Assign - int
-........Id(i) - int
-........Add - undef
-..........Id(i) - int
-..........Id(b) - boolean
+........Id(a) - int
+........DecLit(2147483649) - int
 ......Assign - int
-........Id(i) - int
-........Sub - undef
-..........Id(i) - int
-..........Id(b) - boolean
+........Id(a) - int
+........DecLit(12147483649) - int
 ......Assign - int
-........Id(i) - int
-........Add - undef
-..........Id(i) - int
-..........Id(args) - String[]
+........Id(a) - int
+........DecLit(1___0___0) - int
 ......Assign - int
-........Id(i) - int
-........Sub - undef
-..........Id(i) - int
-..........Id(args) - String[]
-......Assign - double
-........Id(d) - double
-........Add - int
-..........Id(i) - int
-..........Id(i) - int
-......Assign - double
-........Id(d) - double
-........Sub - int
-..........Id(i) - int
-..........Id(i) - int
-......Assign - double
-........Id(d) - double
-........Add - double
-..........Id(i) - int
-..........Id(d) - double
-......Assign - double
-........Id(d) - double
-........Sub - double
-..........Id(i) - int
-..........Id(d) - double
-......Assign - double
-........Id(d) - double
-........Add - undef
-..........Id(i) - int
-..........Id(b) - boolean
-......Assign - double
-........Id(d) - double
-........Sub - undef
-..........Id(i) - int
-..........Id(b) - boolean
-......Assign - double
-........Id(d) - double
-........Add - undef
-..........Id(i) - int
-..........Id(args) - String[]
-......Assign - double
-........Id(d) - double
-........Sub - undef
-..........Id(i) - int
-..........Id(args) - String[]
+........Id(a) - int
+........DecLit(10___00____00) - int
+......Assign - int
+........Id(a) - int
+........DecLit(214__748_3647) - int
+......Assign - int
+........Id(a) - int
+........DecLit(214__748_3648) - int
+......Assign - int
+........Id(a) - int
+........DecLit(214__748_3649) - int
+......Assign - int
+........Id(a) - int
+........DecLit(1214748364__9) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(10_0000_00000) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(100) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(100000) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(2147483647) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(2147483648) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(2147483649) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(12147483649) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(1___0___0) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(10___00____00) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(214__748_3647) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(214__748_3648) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(214__748_3649) - int
+......Assign - int
+........Id(a) - int
+........Minus - int
+..........DecLit(1214748364__9) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(10_0000_00000) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(100) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(100000) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(2147483647) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(2147483648) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(2147483649) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(12147483649) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(1___0___0) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(10___00____00) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(214__748_3647) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(214__748_3648) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(214__748_3649) - int
+......Assign - int
+........Id(a) - int
+........Plus - int
+..........DecLit(1214748364__9) - int

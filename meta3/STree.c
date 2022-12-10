@@ -37,7 +37,7 @@ void printSTree(struct node *node, int prof){
     }
     pontos [2 * prof] = '\0';
 
-    if (node->anotation == NULL) {
+    if (node->anotation == NULL || node->anotation[0] == '\0') {
         printf("%s%s\n", pontos, node->var);
     } else {
         printf("%s%s - %s\n", pontos, node->var, node->anotation);

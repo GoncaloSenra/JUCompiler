@@ -256,8 +256,8 @@ recSTAT                     :   Statement recSTAT                               
                             |                                                   {$$ = NULL;}
                             ;
 
-MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   {$$ = createNode(NULL,"Call", 0, 0); sprintf(aux3, "Id(%s)", $1.id); $$->child = createNode($1.id, strdup(aux3), $1.line, $1.col); newBrother($$->child, $3); newBrother($3, $4);if(debug)printf("MethodInvocation\n");}
-                            |   ID LPAR RPAR                                    {$$ = createNode(NULL,"Call", 0, 0); sprintf(aux3, "Id(%s)", $1.id); $$->child = createNode($1.id, strdup(aux3), $1.line, $1.col);if(debug)printf("MethodInvocation3\n");}
+MethodInvocation            :   ID LPAR Expr recCOMMAEXP RPAR                   {$$ = createNode(NULL,"Call", $1.line, $1.col); sprintf(aux3, "Id(%s)", $1.id); $$->child = createNode($1.id, strdup(aux3), $1.line, $1.col); newBrother($$->child, $3); newBrother($3, $4);if(debug)printf("MethodInvocation\n");}
+                            |   ID LPAR RPAR                                    {$$ = createNode(NULL,"Call", $1.line, $1.col); sprintf(aux3, "Id(%s)", $1.id); $$->child = createNode($1.id, strdup(aux3), $1.line, $1.col);if(debug)printf("MethodInvocation3\n");}
                             |   ID LPAR error RPAR                              {$$=createNode(NULL, NULL, 0, 0);error=true;if(debug)printf("MethodInvocation4\n");}
                             ;
 
