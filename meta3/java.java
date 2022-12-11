@@ -1,2 +1,9 @@
-class A {
-    public static int main(int x) {return x;} }
+class Echo1 {
+    public static void main (String[] args) {
+    System.out.print(2.5E-324);                
+    System.out.print(0.002_4E-321);            
+    System.out.print(0.5E-4965);            
+    System.out.print(0.000005E190);            
+
+    }
+}

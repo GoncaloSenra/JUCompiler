@@ -1,4 +1,3 @@
-
 //Gonçalo Senra 2020213750
 //Henique Costa 2020214120
 
@@ -979,12 +978,13 @@ int isVAR(struct node * root) {
         } else if (root->var[0] == 'R' && root->var[1] == 'e' && root->var[2] == 'a') {
             type = "double";
             root->anotation = type;
-
+            
             char * dec_aux = strdup(root->value);
             int len = strlen(dec_aux);
             int is_negative = 0;
             int power = 0;
-            double reallit = 0;
+            char * real;
+            long double reallit = 0;
 
             for (int i = 0; i < len; i++){
                 if (dec_aux[i] == '_'){
@@ -1000,17 +1000,43 @@ int isVAR(struct node * root) {
             char * token = strtok(dec_aux, "Ee");
 
             if (token != NULL) {
-                reallit = atof(token);
+                reallit = strtold(token, NULL);
                 token = strtok(NULL, "Ee");
                 if (token != NULL) {
                     power = atof(token);
                 }
             }
 
-            //printf("RALLIT: %f ^ %d\n", reallit, power);
+            if (reallit == 0 || reallit == 1 || reallit == -1){
+                return 0;
+            }
+            //printf("RALLIT: %Lf ^ %d\n", reallit, power);
+            if (reallit > 1 || reallit < -1){
+                //printf("CIMA\n");
+                for (int i = 0; i < 10; ++i) {
+                    reallit = reallit /10.0;
+                    power++;
+                    if (reallit < 1 && reallit > -1){
+                        reallit = reallit *10.0;
+                        break;
+                    }
+                }
+            }else if (reallit < 1 && reallit > -1){
+                //printf("BAIXO\n");
+                for (int i = 0; i < 10; ++i) {
+                    reallit = reallit *10.0;
+                    power--;
+                    if (reallit > 1 || reallit < -1){
+                        break;
+                    }
+                }
+            }
+
+            //printf("RALLIT2: %Lf ^ %d\n", reallit, power);
             
-            if (power > 0) {
-                
+
+
+            /*if (power > 0) {
                 for (int k = 0; k < power; ++k) {
                     reallit = reallit *10.0;
                 }
@@ -1020,15 +1046,14 @@ int isVAR(struct node * root) {
                 for (int j = 0; j < power; ++j) {
                     reallit = reallit /10.0;
                 }
-            }
+            }*/
 
-            //printf("RALLIT2: %f\n", reallit);
+            //printf("RALLIT3: %Lf\n", reallit);
 
-            if (reallit >= DBL_MAX || reallit <= DBL_MIN) {
-               
-
+            if (power < -323  || power > 323) {
                 //ERROR
                 printf("Line %d, col %d: Number %s out of bounds\n", root->line, root->col, root->value);
+                semerror = 1;
             }
             return true;
         } else if (root->var[0] == 'S' && root->var[1] == 't' && root->var[2] == 'r') {
@@ -1039,5 +1064,6 @@ int isVAR(struct node * root) {
     }    
     return false;
 }
+
 
 
