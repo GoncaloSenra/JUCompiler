@@ -310,121 +310,127 @@ char * tolower_word(char * param){
 }
 
 char* Operadores(char* string){
-    if(strcmp(string, "Assign")==0)
+    if(strcmp(string, "Assign")==0){
         return "=";
-    else if(strcmp(string, "Add")==0)
-        return "+";
-    else if(strcmp(string, "Sub")==0)
-        return "-";
-    else if(strcmp(string, "Mul")==0)
-        return "*";
-    else if(strcmp(string, "Div")==0)
-        return "/";
-    else if(strcmp(string, "Mod")==0)
-        return "%";
-    else if(strcmp(string, "And")==0)
+    }else if(strcmp(string, "And")==0){
         return "&&";
-    else if(strcmp(string, "Or")==0)
+    }else if(strcmp(string, "Or")==0){
         return "||";
-    else if(strcmp(string, "Ne")==0)
-        return "!=";
-    else if(strcmp(string, "Lt")==0)
-        return "<";
-    else if(strcmp(string, "Gt")==0)
-        return ">";
-    else if(strcmp(string, "Ge")==0)
-        return ">=";
-    else if(strcmp(string, "Le")==0)
-        return "<=";
-    else if(strcmp(string, "Return")==0)
-        return "return";
-    else if(strcmp(string, "Not") == 0)
-        return "!";
-    else if(strcmp(string, "Plus") == 0)
-        return "+";
-    else if(strcmp(string, "Minus") == 0)
-        return "-";
-    else if(strcmp(string, "Eq") == 0)
+    }else if(strcmp(string, "Eq") == 0){
         return "==";
-    else if(strcmp(string, "Xor") == 0)
+    }else if(strcmp(string, "Ne")==0){
+        return "!=";
+    }else if(strcmp(string, "Lt")==0){
+        return "<";
+    }else if(strcmp(string, "Gt")==0){
+        return ">";
+    }else if(strcmp(string, "Ge")==0){
+        return ">=";
+    }else if(strcmp(string, "Le")==0){
+        return "<=";
+    }else if(strcmp(string, "Add")==0){
+        return "+";
+    }else if(strcmp(string, "Sub")==0){
+        return "-";
+    }else if(strcmp(string, "Mul")==0){
+        return "*";
+    }else if(strcmp(string, "Div")==0){
+        return "/";
+    }else if(strcmp(string, "Mod")==0){
+        return "%";
+    }else if(strcmp(string, "Return")==0){
+        return "return";
+    }else if(strcmp(string, "Not") == 0){
+        return "!";
+    }else if(strcmp(string, "Plus") == 0){
+        return "+";
+    }else if(strcmp(string, "Minus") == 0){
+        return "-";
+    }else if(strcmp(string, "Xor") == 0){
         return "^";
-    else if(strcmp(string, "Lshift") == 0)
+    }else if(strcmp(string, "Lshift") == 0){
         return "<<";
-    else if(strcmp(string, "Rshift") == 0)
+    }else if(strcmp(string, "Rshift") == 0){
         return ">>";
-    else return NULL;    
+    }else{
+        return NULL;
+    }    
 }
 
 int TwoMemberOp(char* type){
-    if(strcmp(type, "Add") == 0)
+    if(strcmp(type, "Add") == 0){
         return true;
-    else if(strcmp(type, "Sub") == 0)
+    }else if(strcmp(type, "Sub") == 0){
         return true;
-    else if(strcmp(type, "Mul") == 0)
+    }else if(strcmp(type, "Mul") == 0){
         return true;
-    else if(strcmp(type, "Div") == 0)
+    }else if(strcmp(type, "Div") == 0){
         return true;
-    else if(strcmp(type, "Mod") == 0)
+    }else if(strcmp(type, "Mod") == 0){
         return true;
-    else if(strcmp(type, "Assign")==0)
+    }else if(strcmp(type, "Assign")==0){
         return true;
-    else if(strcmp(type, "ParseArgs")==0)
+    }else if(strcmp(type, "ParseArgs")==0){
         return true;
-    else if(strcmp(type, "Lshift")==0)
+    }else if(strcmp(type, "Lshift")==0){
         return true;
-    else if(strcmp(type, "Rshift")==0)
+    }else if(strcmp(type, "Rshift")==0){
         return true;
-    else 
+    }else{ 
         return false;
+    }
 }
 
 int OneLogical(char* type){
-    if(strcmp(type, "Not") == 0)
+    if(strcmp(type, "Not") == 0){
         return true;
-    else if(strcmp(type, "While") == 0)
+    }else if(strcmp(type, "While") == 0){
         return true;
-    else if(strcmp(type, "If") == 0)
+    }else if(strcmp(type, "If") == 0){
         return true;
-    else 
+    }else {
         return false;
+    }
 }
 
 int NotLogical(char* type){
-    if(strcmp(type, "Plus") == 0)
+    if(strcmp(type, "Plus") == 0){
         return true;
-    else if(strcmp(type, "Minus") == 0)
+    }else if(strcmp(type, "Minus") == 0){
         return true;
-    else if(strcmp(type, "Print") == 0)
+    }else if(strcmp(type, "Print") == 0){
         return true;
-    else if(strcmp(type, "Return") == 0)
+    }else if(strcmp(type, "Return") == 0){
         return true;
-    else if(strcmp(type, "Length") == 0)
+    }else if(strcmp(type, "Length") == 0){
         return true;
-    else 
+    }else {
         return false;
+    }
 }
 
 int Logical(char* type){
-    if(strcmp(type, "And") == 0)
+    if(strcmp(type, "And") == 0){
         return true;
-    else if(strcmp(type, "Or") == 0)
+    }else if(strcmp(type, "Or") == 0){
         return true;
-    else if(strcmp(type, "Lt") == 0)
+    }else if(strcmp(type, "Eq") == 0){
         return true;
-    else if(strcmp(type, "Gt") == 0)
+    }else if(strcmp(type, "Ne") == 0){
         return true;
-    else if(strcmp(type, "Le") == 0)
+    }else if(strcmp(type, "Lt") == 0){
         return true;
-    else if(strcmp(type, "Ge") == 0)
+    }else if(strcmp(type, "Gt") == 0){
         return true;
-    else if(strcmp(type, "Eq") == 0)
+    }else if(strcmp(type, "Le") == 0){     
         return true;
-    else if(strcmp(type, "Ne") == 0)
+    }else if(strcmp(type, "Ge") == 0){
+        return true;    
+    }else if(strcmp(type, "Xor") == 0){
         return true;
-    else if(strcmp(type, "Xor") == 0)
-        return true;
-    else 
+    }else {
         return false;
+    }
 }
 
 void checkTypes(struct node * root, Sym * first, char * name) {

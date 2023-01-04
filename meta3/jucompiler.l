@@ -214,7 +214,7 @@ int main(int argc, char * argv[])
             yylex();
         }else if (strcmp(argv[1], "-e1") == 0){
             aux = 1;
-            yacc = 0;
+            yacc = 1;
             yylex();
         }else if (strcmp(argv[1], "-t") == 0){
             aux = 1;
